@@ -1,0 +1,36 @@
+:root{
+    --bg: #ffffff;
+    --hover-light: #f2f3f4;
+    --hover-medium: #dddddd;
+    --hover-dark: #c4c4c4;
+
+    --blue-light:#2d7de9;
+    --blue-medium:rgb(27, 122, 231);
+    --blue-dark: #1967d2;
+    --google-blue: #4486f7;
+
+    --red-medium: rgb(253,29,29);
+    --yellow-medium: rgb(255,205,0);
+    --green-light: rgb(6, 146, 6);
+
+    --title: #1f2024;
+
+    --font-light: rgb(187, 183, 183) ;
+    --font-medium: rgb(122, 122, 122);
+    --font-dark: #5F6368;
+    --font-very-dark: #212224;
+
+    --tooltiptext-bg: rgba(89, 93, 97, 0.89);
+
+    --userTextInput:#090a0ab2;
+
+    --shadow: rgb(211, 211, 211);
+    --border-light: rgba(0,0,0,.16);
+    --border-medium: #D1D1D1;
+    --border-dark: rgba(0,0,0,.26);
+    --border-input: #E0E0E0;
+
+    --imageDefaultSize: 1rem;
+
+    --side-bar-active: #e3edfd;
+}
