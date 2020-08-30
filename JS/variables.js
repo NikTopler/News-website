@@ -8,7 +8,7 @@
     const colors = ['rgb(211, 47, 47)','rgb(123, 31, 162)','rgb(81, 45, 168)','rgb(48, 63, 159)','rgb(25, 118, 210)','rgb(2, 136, 209)','rgb(0, 151, 167)','rgb(0, 121, 107)','rgb(56, 142, 60)','rgb(104, 159, 56)','rgb(175, 180, 43)','rgb(251, 192, 45)','rgb(255, 160, 0)','rgb(245, 124, 0)','rgb(230, 74, 25)','rgb(93, 64, 55)','rgb(97, 97, 97)']
     const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
     const daysAcronyms = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
-    const websiteURL = 'http://localhost:8080/newsWebiste/'
+    const websiteURL = 'http://localhost:8080/News-website/'
     // const websiteURL = 'https://news.niktopler.com'
 
 

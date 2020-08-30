@@ -29,6 +29,27 @@
 
         <?php include 'add-ons/side-bar.php' ?>
 
+        <section class="main-content-section full" id="main-content-section">
+            <header id="main-content-header" class="header-main-content search">
+                    <h1 class="search">Slovenia</h1>
+                    <section>
+                        <div>
+                            <figure class="circle" onclick="saveSearchWord(this)">
+                                <i class="fal fa-bookmark"></i>
+                            </figure>
+                            <figure class="rectangle" onclick="followSearchWord(this)">
+                                <i class="fa fa-star"></i> Follow
+                            </figure>
+                        </div>
+                    </section>
+                </header>
+            <div class="main-content-container">
+                
+            </div>
+            <aside id="main-side-content-container">
+
+            </aside>
+        </section>
     </main>
 
     <?php include 'add-ons/navigation-bar.php' ?>

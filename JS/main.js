@@ -205,8 +205,8 @@ function fahrenheitToKelvin(number) { return (number - 32) * 5/9 + 273 }
 /* HEADLINES */
 
 async function headlines() {
-    await getWeather()   
-    updateWeather()
+    // await getWeather()   
+    // updateWeather()
     sidebarCategorySelect(document.querySelector('.fa-newspaper').parentElement)
 }
 
@@ -219,13 +219,17 @@ async function headlines() {
 
         if(mainSearchInput.value.length === 0) return
         let selectedCountryAcronym = getCountryAcronym(selectedCountry.innerHTML)
-        if(extraSearchOptions.classList.contains('disable')) searchQuery = addCharacterBetweenSpaceInString(mainSearchInput.value, ' ','+')
+        if(extraSearchOptions.classList.contains('disable')) searchQuery = addCharacterBetweenSpaceInString(mainSearchInput.value,' ','+')
         if(window.location.pathname.includes('search')) historyPushState(location.origin + location.pathname, `?q=${searchQuery}&`, `cou=${selectedCountryAcronym}&`,`bg=${backgroundColor}`)
         else createUrlPath('search', searchQuery)
+        document.querySelectorAll('h1.search')[0].innerHTML = mainSearchInput.value.charAt(0).toUpperCase() + mainSearchInput.value.slice(1)
     }
     function search() {
+        if(window.location.search.match(regularExpressions.url.query) === null) return openLinks(filePath.headlines)
+
         searchInputValue = window.location.search.match(regularExpressions.url.query)[0].slice(3, -1)
         mainSearchInput.value = addCharacterBetweenSpaceInString(searchInputValue, '+', ' ')
+        document.querySelectorAll('h1.search')[0].innerHTML = mainSearchInput.value.charAt(0).toUpperCase() + mainSearchInput.value.slice(1)
         /* Search news articles */
     }
     function mobileVersionNavigationBar() {
@@ -293,7 +297,10 @@ const regularExpressions = {
         query : /[\?|\&]+[q]+[=].*?[&]/g,
         country : /[\?|\&]+[c]+[o]+[u]+[=].{2}/g,
         backgroundColor : /[\&]+[b]+[g]+[=].*/g
-    } 
+    },
+    string : {
+        symbols : /[@_!#$%^&*()<>?/|}{~:]/g
+    }
 }
 
 
@@ -321,7 +328,10 @@ mainSearchInput.oninput = () => {
 }
 let place = 0
 mainSearchInput.onkeyup = (e) => {
-    if(e.keyCode === 13) return searchArticles()
+    if(e.keyCode === 13) {
+        if(!suggestMainInput.classList.contains('disable')) hideSuggestWords()
+        return searchArticles()
+    } 
     if(suggestMainInput.classList.contains('disable') || suggestMainInput.querySelectorAll('div').length === 0) return
 
     let suggestDivs = suggestMainInput.querySelectorAll('div')
@@ -400,7 +410,11 @@ function selectSuggestedSearchOption(element) {
 
 } 
 
-function addCharacterBetweenSpaceInString(word ,replace ,character) { return word.replace(replace, character) }
+function addCharacterBetweenSpaceInString(word ,replace ,character) { 
+    word = word.trim().replace(/\s\s+/g, ' ');
+    if(replace === ' ') return word.replace(/\s/g, character) 
+    else if(replace === '+')return word.replace(/\+/g, character)
+}
 
 function updateCountrySelect(country) {
     selectedCountry.innerHTML = country
@@ -616,6 +630,38 @@ function inputExtraSearchOptionChange() {
         submitButton.classList.add('ext-opt-submit')
     }
 }
+
+
+function saveSearchWord(element) {
+    
+    if(element.firstElementChild.classList.contains('yellow-color')) {
+        element.firstElementChild.classList.remove('yellow-color', 'fa')
+        element.firstElementChild.classList.add('fal')
+
+    } 
+    else {
+        element.firstElementChild.classList.add('yellow-color', 'fa')
+        element.firstElementChild.classList.remove('fal')
+    }
+}
+function followSearchWord(element) {
+    console.log(element)
+    if(element.firstElementChild.classList.contains('blue-color')) {
+        element.innerHTML = ' <i class="fa fa-star"></i> Follow'
+        element.firstElementChild.classList.remove('blue-color')
+        element.classList.remove('blue-color')
+    } else {
+        element.innerHTML = ' <i class="fa fa-star"></i> Following'
+         element.firstElementChild.classList.add('blue-color')
+         element.classList.add('blue-color')
+    }
+} 
+
+
+
+
+
+
 
 /* API */
 

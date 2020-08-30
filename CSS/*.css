@@ -230,7 +230,7 @@ body{
         color: var(--blue-light);
     }
     .green-link{
-        color: var(--green-light);
+        color: var(--green-light) !important;
     }
 
     .radio-button{
@@ -276,8 +276,14 @@ body{
     }
 
     .red-color {
-        color: var(--red-medium);
+        color: var(--red-medium) !important;
     }
     .yellow-color{
-        color: var(--yellow-medium);
+        color: var(--yellow-medium) !important;
+    }
+    .light-green-color {
+        color: var(--light-green) !important;
+    }
+    .blue-color{
+        color: var(--blue-medium) !important;
     }

@@ -29,7 +29,7 @@
 
         <?php include 'add-ons/side-bar.php' ?>
 
-        <section class="main-content-section grid" id="main-content-section">
+        <!-- <section class="main-content-section grid" id="main-content-section">
             
             <figure id="main-content-container">
                 <header id="main-content-header" class="section-main-header header-main-content">
@@ -102,22 +102,9 @@
                             </section>
                         </footer>
                     </article>
-
-                    <!-- <article>
-                        <header>
-                            <h1>Popular news articles</h1>
-                        </header>
-                        <section>
-                            <div></div>
-                            <hr>
-                            <div></div>
-                            <hr>
-                        </section>
-                    </article> -->
-
                 </aside>
 
-        </section>
+        </section> -->
 
     </main>
 
