@@ -47,7 +47,16 @@
                 
             </div>
             <aside id="main-side-content-container">
-
+                <article class="suggested-words" class="disable">
+                    <header>
+                        <h1>Suggested Words</h1>
+                    </header>
+                    <section>
+                    </section>
+                    <footer onclick="moreSuggestWords()">
+                       More
+                    </footer>
+                </article>
             </aside>
         </section>
     </main>

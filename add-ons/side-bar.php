@@ -2,14 +2,14 @@
             <div class="side-bar-content grid fixed" id="side-bar-content">
                 <a href="#" class="side-menu-categories" onclick="createUrlPath('headlines')"><i
                         class="fal fa-newspaper fa-lg"></i>Top Stories</a>
-                <a href="#" class="side-menu-categories" onclick="createUrlPath('forYou')"><i
+                <a href="#" class="side-menu-categories" onclick="createUrlPath('for-you')"><i
                         class="fas fa-user-alt fa-lg"></i>For you</a>
                 <a href="#" class="side-menu-categories" onclick="createUrlPath('following')"><i
                         class="fal fa-star fa-lg"></i>Following</a>
                 <a href="#" class="side-menu-categories" onclick="createUrlPath('library')"><i
                         class="fas fa-bookmark fa-lg"></i>Saved news</a>
                 <hr>
-                <a href="#" class="side-menu-categories" onclick="createUrlPath('covid19')"><i
+                <a href="#" class="side-menu-categories" onclick="createUrlPath('covid-19')"><i
                         class="fad fa-shield-cross fa-lg"></i>COVID-19</a>
                 <hr>
                 <a href="#" class="side-menu-categories" onclick="createUrlPath('world')"><i

@@ -45,12 +45,14 @@ window.onclick = (e) => {
     else if(!extraSearchOptions.classList.contains('disable')) clickInOutCheck(extraSearchOptions,e.target)
 }
 
-window.onkeydown = (e) => {
-    // console.log(e.keyCode === 91 || e.keyCode === 93)
+window.onkeydown = test
+
+function test() {
+    // alert(this)
 }
 
-for(let i = 0; i < document.querySelectorAll('a').length; i++)
-    document.querySelectorAll('a')[i].addEventListener('click', (e) => { e.preventDefault() })
+// for(let i = 0; i < document.querySelectorAll('a').length; i++)
+//     document.querySelectorAll('a')[i].addEventListener('click', (e) => { e.preventDefault() })
 
 function openLinks(string) { window.location.replace(websiteURL + string) }
 
@@ -72,6 +74,10 @@ async function getUsersCountry() {
     const userTimeZone = data.timezone
     return [userCountry,userCountryAcronym,userCity,userRegion,userLocation,userTimeZone]
 }
+
+let weatherArrayToday
+let weatherArrayTommorow
+let weatherArray2Days
 async function getWeather() {
     city = changeDiacritics(userLocationInformationValue[3])
     const response = await fetch(`https://cors-anywhere.herokuapp.com/https://api.weatherapi.com/v1/forecast.json?key=4d93fac43abe41dda15152718201307&q=${city}&days=7`)
@@ -94,6 +100,7 @@ function getLanguageAcronym(target) {
         if(language[i] === target)
             return languageAcronyms[i]
 }
+
 
 function getCountryAcronym(target) {
     for(let i = 0; i < countries.length; i++)
@@ -222,14 +229,17 @@ async function headlines() {
         if(extraSearchOptions.classList.contains('disable')) searchQuery = addCharacterBetweenSpaceInString(mainSearchInput.value,' ','+')
         if(window.location.pathname.includes('search')) historyPushState(location.origin + location.pathname, `?q=${searchQuery}&`, `cou=${selectedCountryAcronym}&`,`bg=${backgroundColor}`)
         else createUrlPath('search', searchQuery)
+
         document.querySelectorAll('h1.search')[0].innerHTML = mainSearchInput.value.charAt(0).toUpperCase() + mainSearchInput.value.slice(1)
+        addDisableSideElements()
     }
     function search() {
-        if(window.location.search.match(regularExpressions.url.query) === null) return openLinks(filePath.headlines)
+        if(window.location.search.match(regularExpressions.url.query) === null) return openLinks(filePath.headlines) 
 
         searchInputValue = window.location.search.match(regularExpressions.url.query)[0].slice(3, -1)
         mainSearchInput.value = addCharacterBetweenSpaceInString(searchInputValue, '+', ' ')
         document.querySelectorAll('h1.search')[0].innerHTML = mainSearchInput.value.charAt(0).toUpperCase() + mainSearchInput.value.slice(1)
+        suggestWords()
         /* Search news articles */
     }
     function mobileVersionNavigationBar() {
@@ -365,12 +375,12 @@ let resultArray = []
 let searchSuggestOptionSelectedWord
 const maxNumberSuggestWords = 6
 
-async function fetchWords() {
-    const res = await fetch(`https://api.datamuse.com/sug?s=${mainSearchInput.value}`)
+async function fetchWords(input) {
+    const res = await fetch(`https://api.datamuse.com/sug?s=${input}`)
     return words = await res.json()
 }
 async function manageSuggestWords() {
-    let  suggestWordsArray = await fetchWords()
+    let  suggestWordsArray = await fetchWords(mainSearchInput.value)
     if(suggestWordsArray.length === 0) return hideSuggestWords()
     
     if(suggestWordsArray.length > 6) suggestWordsArray = removeCharactersInString(suggestWordsArray, 4, suggestWordsArray.length)
@@ -407,7 +417,6 @@ function selectSuggestedSearchOption(element) {
     let elementInnerHTML = addCharacterBetweenSpaceInString(element.firstElementChild.innerHTML, ' ', '+')
         mainSearchInput.value = element.firstElementChild.innerHTML
     searchArticles()
-
 } 
 
 function addCharacterBetweenSpaceInString(word ,replace ,character) { 
@@ -424,7 +433,8 @@ function updateCountrySelect(country) {
     hideSelectCountry()
 }
 
-function createUrlPath(type,search) {
+function createUrlPath(type, search) {
+    if(search === undefined && location.pathname.includes(type)) return 
     let path 
     let query = ''
     if(type === 'headlines') path = filePath.headlines
@@ -433,9 +443,9 @@ function createUrlPath(type,search) {
         query = `q=${search}&`
     } 
     else if(type === 'following') path = filePath.following
-    else if(type === 'forYou') path = filePath.forYou
+    else if(type === 'for-you') path = filePath.forYou
     else if(type === 'library') path = filePath.library
-    else if(type === 'covid19') path = filePath.covid19
+    else if(type === 'covid-19') path = filePath.covid19
     else if(type === 'world') path = filePath.world
     else if(type === 'business') path = filePath.business
     else if(type === 'technology') path = filePath.technology
@@ -477,7 +487,7 @@ function generateCountries() {
     
     let newCountriesArray = removeSelectedValuesFromArray(suggestCountriesArray, countries)
     for(let i = 0; i < newCountriesArray.length; i++) 
-        createElementsForCountry(newCountriesArray[i],'not-active','normal') 
+        createElementsForCountry(newCountriesArray[i], 'not-active', 'normal') 
 }
 function removeDuplicates(array) { array.splice(0, array.length, ...(new Set(array))) }
 function removeSelectedValuesFromArray(array, target) { return target.filter(val => !array.includes(val)) }
@@ -549,8 +559,8 @@ searchCountriesInput.oninput = () => {
 
     newCountriesArray = newCountriesArray.filter((e) => { return e != null })
     for(let i = 0; i < newCountriesArray.length; i++) {
-        if(newCountriesArray[i] === lastSelectedCountry) createElementsForCountry(newCountriesArray[i],'active','list')
-        else createElementsForCountry(newCountriesArray[i],'no','list')
+        if(newCountriesArray[i] === lastSelectedCountry) createElementsForCountry(newCountriesArray[i], 'active', 'list')
+        else createElementsForCountry(newCountriesArray[i], 'no', 'list')
     }
 }
 
@@ -633,11 +643,9 @@ function inputExtraSearchOptionChange() {
 
 
 function saveSearchWord(element) {
-    
     if(element.firstElementChild.classList.contains('yellow-color')) {
         element.firstElementChild.classList.remove('yellow-color', 'fa')
         element.firstElementChild.classList.add('fal')
-
     } 
     else {
         element.firstElementChild.classList.add('yellow-color', 'fa')
@@ -645,7 +653,6 @@ function saveSearchWord(element) {
     }
 }
 function followSearchWord(element) {
-    console.log(element)
     if(element.firstElementChild.classList.contains('blue-color')) {
         element.innerHTML = ' <i class="fa fa-star"></i> Follow'
         element.firstElementChild.classList.remove('blue-color')
@@ -657,6 +664,60 @@ function followSearchWord(element) {
     }
 } 
 
+
+async function suggestWords() {
+    let fetchArray = []
+    let suggestWordsArray = []
+    let input = mainSearchInput.value.split(' ')
+    let n = 0
+    while(suggestWordsArray.length < 8) { 
+        fetchArray = await fetchWords(input[n])
+
+        for(let i = 0; i < fetchArray.length; i++)
+            if(suggestWordsArray.indexOf(fetchArray[i].word) === -1 && fetchArray[i].word !== mainSearchInput.value) suggestWordsArray.push(fetchArray[i].word)
+        
+        input[n] = removeCharactersInString(input[n], 0, -1)
+        if(input.length === 0) break
+        if(n == input.length) n = 0
+        else n++
+    }
+    document.querySelector('.suggested-words footer').innerHTML = 'More'    
+    removeDisableSideElements()
+    generateSuggestWords(suggestWordsArray)
+}
+
+let moreSuggestWordsArray = []
+function generateSuggestWords(array) {
+    let section = document.querySelector('.suggested-words section')
+        section.innerHTML = ''
+
+    for(let i = 0; i < array.length; i++) {
+        let div = document.createElement('div')
+            div.innerHTML = array[i]
+            // div.onclick = selectSuggestedSearchOption
+        let hr = document.createElement('hr')
+
+        if(i > 5) {
+            div.classList.add('disable')
+            hr.classList.add('disable')
+            moreSuggestWordsArray.push(div, hr)
+        } 
+        section.appendChild(div)
+        section.appendChild(hr)
+    }
+}
+function moreSuggestWords() { 
+    if(document.querySelector('.suggested-words footer').innerHTML.trim() === 'More') {
+        moreSuggestWordsArray.forEach(element => element.classList.remove('disable')) 
+        document.querySelector('.suggested-words footer').innerHTML = 'Less'    
+    } else {
+        moreSuggestWordsArray.forEach(element => element.classList.add('disable')) 
+        document.querySelector('.suggested-words footer').innerHTML = 'More'    
+    }
+}
+
+function addDisableSideElements() { mainAsideContent.querySelectorAll('article.disable').forEach(article => article.classList.add('disable')) }
+function removeDisableSideElements() { mainAsideContent.querySelectorAll('article.disable').forEach(article => article.classList.remove('disable')) }
 
 
 
@@ -684,3 +745,24 @@ function followSearchWord(element) {
 // }
 
 
+
+
+
+function sayHello (name, age) {
+    // console.log(name)
+    // console.log(age)
+    // console.log(this)
+}
+sayHello.call('This', 'Nik Topler', 18)
+
+const information = {
+    firstName : 'Nik',
+    lastName : 'Topler'
+}
+let { firstName } = information
+// console.log(firstName)
+
+
+let newArray = [1 ,2, 123, 23, 4, 3.123, 12, 93, 0]
+let result = newArray.filter( val => { return val % 2 === 1} )
+// console.log(result)
