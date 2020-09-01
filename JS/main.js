@@ -1,5 +1,4 @@
 window.onload = async () => {
-
     await getuserLocationInformationValue()
     removeActiveSidebarCategory()
     if (window.location.pathname.includes('headlines')) headlines()
