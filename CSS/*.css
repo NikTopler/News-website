@@ -209,6 +209,19 @@ body{
     .visible{
         visibility: hidden;
     }
+
+    .visible-auto {
+        transition: ease-in-out .2;
+        height: auto;
+        visibility: visible;
+    }
+    .visible-absolute {
+        visibility: hidden;
+        height: 0;
+        width: 0;
+        position: absolute;
+    }
+
     .position-center{
         top: 50%;
         left: 50%;

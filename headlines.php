@@ -110,7 +110,7 @@
 
     <?php include 'add-ons/navigation-bar.php' ?>
 
-    <div class="login-option-div grid absolute fixed" id="login-option-div">
+    <div class="login-option-div grid absolute fixed" id="login-option-div">    
         <header class="grid">
             <span class="flex align-center justify-center ">Sign in to</span>
             <h1 class="flex align-center justify-center ">News Website</h1>

@@ -693,12 +693,13 @@ function generateSuggestWords(array) {
     for(let i = 0; i < array.length; i++) {
         let div = document.createElement('div')
             div.innerHTML = array[i]
+            div.classList.add('visible-auto')
             // div.onclick = selectSuggestedSearchOption
         let hr = document.createElement('hr')
 
         if(i > 5) {
-            div.classList.add('disable')
-            hr.classList.add('disable')
+            div.classList.add('visible-absolute')
+            hr.classList.add('visible-absolute')
             moreSuggestWordsArray.push(div, hr)
         } 
         section.appendChild(div)
@@ -707,10 +708,14 @@ function generateSuggestWords(array) {
 }
 function moreSuggestWords() { 
     if(document.querySelector('.suggested-words footer').innerHTML.trim() === 'More') {
-        moreSuggestWordsArray.forEach(element => element.classList.remove('disable')) 
+        // moreSuggestWordsArray.forEach(element => element.classList.remove('visible-absolute')) 
+        let height = document.querySelectorAll('.suggested-words section div').length * 16 + document.querySelectorAll('.suggested-words section div').length + 
+        console.log(document.querySelectorAll('.suggested-words section div').length)
+        document.documentElement.style.cssText = `--suggest-more:${height}px`;
         document.querySelector('.suggested-words footer').innerHTML = 'Less'    
     } else {
-        moreSuggestWordsArray.forEach(element => element.classList.add('disable')) 
+        document.documentElement.style.cssText = `--suggest-more:auto`;
+        // moreSuggestWordsArray.forEach(element => element.classList.add('visible-absolute')) 
         document.querySelector('.suggested-words footer').innerHTML = 'More'    
     }
 }
