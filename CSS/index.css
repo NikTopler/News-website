@@ -1,6 +1,7 @@
 body{
     display: grid;
     grid-template-rows: 65px 1fr;
+    overflow-x: hidden;
 }
 
 /*? Navigation Bar */
@@ -402,7 +403,8 @@ body{
     main {
         grid-row: 2/3;
         background-color: var(--bg);
-        overflow: auto;
+        overflow-y: scroll;
+        overflow-x: visible;
     }
     .side-bar{
         left: 0;
