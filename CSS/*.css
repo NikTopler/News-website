@@ -9,8 +9,8 @@
 
 }
 body{
-    width: 100vw;
-    height: 100vh;
+    min-width: 100vw;
+    min-height: 100vh;
     font-family: 'Noto Sans', sans-serif;
 }
 
@@ -48,9 +48,7 @@ body{
     padding: 10px;
     color: var(--userTextInput);
 }
-.selected-option {
-    background-color: var(--hover-light);
-}
+.selected-option { background-color: var(--hover-light); }
 /* .selected-option:active {
     transition: all ease-in .18s;
 } */
@@ -58,55 +56,29 @@ body{
 /*? Reusable classes */
 
     /** Display */
-        .grid {
-            display: grid;
-        }
-        .flex {
-            display: flex;
-        }
-        .disable {
-            display: none !important;
-        }
+        .grid { display: grid; }
+        .flex { display: flex; }
+        .disable { display: none !important; }
 
     /** Position of elements */
-        .align-center{
-            align-items: center;
-        }
-        .justify-center{
-            justify-content: center;
-        }
+        .align-center{ align-items: center; }
+        .justify-center{ justify-content: center; }
 
     /** Position */
-        .relative{
-            position: relative;
-        }
-        .absolute{
-            position: absolute;
-        }
-        .fixed{
-            position: fixed;
-        }
+        .relative{ position: relative; }
+        .absolute{ position: absolute; }
+        .fixed{ position: fixed; }
 
     /** Border */
-        .border-radius-50{
-            border-radius: 50%;
-        }
+        .border-radius-50{ border-radius: 50%; }
 
     /** Cursor */
-        .pointer{
-            cursor: pointer;
-        }
-        .default-pointer{
-            cursor: default;
-        }
-        .pointer-events-none{
-            pointer-events: none;
-        }
+        .pointer{ cursor: pointer; }
+        .default-pointer{ cursor: default; }
+        .pointer-events-none{ pointer-events: none; }
 
     /** Link */
-        a{
-            text-decoration: none;
-        }
+        a{ text-decoration: none; }
     
     /** Img */
         .img{

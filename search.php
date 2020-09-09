@@ -29,35 +29,43 @@
 
         <?php include 'add-ons/side-bar.php' ?>
 
-        <section class="main-content-section full" id="main-content-section">
-            <header id="main-content-header" class="header-main-content search">
-                    <h1 class="search">Slovenia</h1>
-                    <section>
-                        <div>
-                            <figure class="circle" onclick="saveSearchWord(this)">
-                                <i class="fal fa-bookmark"></i>
-                            </figure>
-                            <figure class="rectangle" onclick="followSearchWord(this)">
-                                <i class="fa fa-star"></i> Follow
-                            </figure>
-                        </div>
-                    </section>
-                </header>
+        <section class="main-content-section single" id="main-content-section">
             <div class="main-content-container">
-                
+                <div class="article-container">
+                    <article>
+
+                    </article>
+                </div>
+                <aside id="main-side-content-container">
+                    <article class="search aside">
+                        <header>
+                            <div>Slovenia</div>
+                            <figure>
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Gull_portrait_ca_usa.jpg" class="border-radius-50">
+                            </figure>
+                            <span>Topic</span>
+                        </header>
+                        <section>   
+                            <div class="white-button" onclick="saveNews(this)">
+                                <i class="far fa-bookmark"></i>
+                                <span>Save</span>
+                            </div> 
+                            <div class="white-button" onclick="followNews(this)">
+                                <i class="far fa-star fa-lg"></i>
+                                <span>Follow</span>
+                            </div>
+                        </section>
+                    </article>
+                    <article class="suggested-words aside disable">
+                        <header>
+                            <h1>Suggested Words</h1>
+                            <hr>
+                        </header>
+                        <section>
+                        </section>
+                    </article>
+                </aside>
             </div>
-            <aside id="main-side-content-container">
-                <article class="suggested-words" class="disable">
-                    <header>
-                        <h1>Suggested Words</h1>
-                    </header>
-                    <section>
-                    </section>
-                    <footer onclick="moreSuggestWords()">
-                       More
-                    </footer>
-                </article>
-            </aside>
         </section>
     </main>
 

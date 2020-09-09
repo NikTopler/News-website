@@ -29,9 +29,22 @@
 
         <?php include 'add-ons/side-bar.php' ?>
 
-        <!-- <section class="main-content-section grid" id="main-content-section">
+        <section class="main-content-section grid" id="main-content-section">
+            <!-- <header id="main-content-header" class="header-main-content search">
+                    <h1 class="search">Slovenia</h1>
+                    <section>
+                        <div>
+                            <figure class="circle" onclick="saveSearchWord(this)">
+                                <i class="fal fa-bookmark"></i>
+                            </figure>
+                            <figure class="rectangle" onclick="followSearchWord(this)">
+                                <i class="fa fa-star"></i> Follow
+                            </figure>
+                        </div>
+                    </section>
+            </header> -->
             
-            <figure id="main-content-container">
+            <!-- <figure id="main-content-container">
                 <header id="main-content-header" class="section-main-header header-main-content">
                     <h1>Headlines</h1>
                     <a href="#" class="blue-link flex" onclick="showCategoryNews()">Categories</a>
@@ -44,67 +57,64 @@
                     <i class="fas fa-chevron-right corona-arrow pointer"></i>
                 </article>
 
-            </figure>
+            </figure> -->
+            <!-- <aside id="main-side-content-container">
+                <article class="weather-article grid relative">
+                    <header class="weather-main-header grid">
+                        <img src="" alt="" class="flex align-center justify-center">
+                        <label class="pointer"></label>
+                        <span class="temperature flex"></span>
+                    </header>
+                    <div class="weather-3-days grid">
+                        <section>
+                            <header></header>
+                            <div class="grid">
+                                <img src="" alt="" class="flex align-center justify-center">
+                                <span class="temperature flex"></span>
+                            </div>
+                            <div class="grid">
+                                <img src="" alt="" class="flex align-center justify-center">
+                                <span class="flex"></span>
+                            </div>
+                        </section>
+                        <section>
+                            <header></header>
+                            <div class="grid">
+                                <img src="" alt="" class="flex align-center justify-center">
+                                <span class="temperature flex"></span>
+                            </div>
+                            <div class="grid">
+                                <img src="" alt="" class="flex align-center justify-center">
+                                <span class="flex"></span>
+                            </div>
+                        </section>
+                        <section>
+                            <header></header>
+                            <div class="grid">
+                                <img src="" alt="" class="flex align-center justify-center">
+                                <span class="temperature flex"></span>
+                            </div>
+                            <div class="grid">
+                                <img src="" alt="" class="flex align-center justify-center">
+                                <span class="flex"></span>
+                            </div>
+                        </section>
 
-            <aside id="main-side-content-container">
-
-                    <article class="weather-article grid relative">
-                        <header class="weather-main-header grid">
-                            <img src="" alt="" class="flex align-center justify-center">
-                            <label class="pointer"></label>
-                            <span class="temperature flex"></span>
-                        </header>
-                        <div class="weather-3-days grid">
-                            <section>
-                                <header></header>
-                                <div class="grid">
-                                    <img src="" alt="" class="flex align-center justify-center">
-                                    <span class="temperature flex"></span>
-                                </div>
-                                <div class="grid">
-                                    <img src="" alt="" class="flex align-center justify-center">
-                                    <span class="flex"></span>
-                                </div>
-                            </section>
-                            <section>
-                                <header></header>
-                                <div class="grid">
-                                    <img src="" alt="" class="flex align-center justify-center">
-                                    <span class="temperature flex"></span>
-                                </div>
-                                <div class="grid">
-                                    <img src="" alt="" class="flex align-center justify-center">
-                                    <span class="flex"></span>
-                                </div>
-                            </section>
-                            <section>
-                                <header></header>
-                                <div class="grid">
-                                    <img src="" alt="" class="flex align-center justify-center">
-                                    <span class="temperature flex"></span>
-                                </div>
-                                <div class="grid">
-                                    <img src="" alt="" class="flex align-center justify-center">
-                                    <span class="flex"></span>
-                                </div>
-                            </section>
-
-                        </div>
-                        <footer class="grid">
-                            <section class="grid">
-                                <div class="pointer active" onclick="changeTemperatureUnit(this)">C</div>
-                                <div class="pointer" onclick="changeTemperatureUnit(this)">F</div>
-                                <div class="pointer" onclick="changeTemperatureUnit(this)">K</div>
-                            </section>
-                            <section>
-                                <a href="https://www.weatherapi.com/" target="_blank"
-                                    class="flex align-center justify-center">WeatherAPI</a>
-                            </section>
-                        </footer>
-                    </article>
-                </aside>
-
-        </section> -->
+                    </div>
+                    <footer class="grid">
+                        <section class="grid">
+                            <div class="pointer active" onclick="changeTemperatureUnit(this)">C</div>
+                            <div class="pointer" onclick="changeTemperatureUnit(this)">F</div>
+                            <div class="pointer" onclick="changeTemperatureUnit(this)">K</div>
+                        </section>
+                        <section>
+                            <a href="https://www.weatherapi.com/" target="_blank"
+                                class="flex align-center justify-center">WeatherAPI</a>
+                        </section>
+                    </footer>
+                </article>
+            </aside> -->
+        </section>
 
     </main>
 

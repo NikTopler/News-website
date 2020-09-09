@@ -15,7 +15,7 @@ window.onload = async () => {
     else if (window.location.pathname.includes('setings')) setings()
     else if (window.location.pathname.includes('about')) about()
     else if (window.location.pathname.includes('help')) help()
-    else if (window.location.pathname.includes('search')) search()
+    else if (window.location.pathname.includes('search')) mainSearch()
 
     // changeBackgroundColor()
     let selectedCountryAcronym = getCountryAcronym(selectedCountry.innerHTML)
@@ -42,12 +42,6 @@ window.onclick = (e) => {
     else if(!extOptProfile.classList.contains('disable')) clickInOutCheck(extOptProfile,e.target)
     else if(selectCountryDiv.classList.contains('active')) clickInOutCheck(selectCountryDiv,e.target)
     else if(!extraSearchOptions.classList.contains('disable')) clickInOutCheck(extraSearchOptions,e.target)
-}
-
-window.onkeydown = test
-
-function test() {
-    // alert(this)
 }
 
 // for(let i = 0; i < document.querySelectorAll('a').length; i++)
@@ -99,7 +93,6 @@ function getLanguageAcronym(target) {
         if(language[i] === target)
             return languageAcronyms[i]
 }
-
 
 function getCountryAcronym(target) {
     for(let i = 0; i < countries.length; i++)
@@ -217,30 +210,66 @@ async function headlines() {
 }
 
 /* SEARCH */ 
-
-    function searchArticles() {
-
-        if(!mainSearchIcon.classList.contains('disable') && window.innerWidth < 930) mobileVersionNavigationBar()
-        else if(mainSearchIcon.classList.contains('disable') && window.innerWidth > 930) desktopVersionNavigationBar()
-
-        if(mainSearchInput.value.length === 0) return
-        let selectedCountryAcronym = getCountryAcronym(selectedCountry.innerHTML)
-        if(extraSearchOptions.classList.contains('disable')) searchQuery = addCharacterBetweenSpaceInString(mainSearchInput.value,' ','+')
-        if(window.location.pathname.includes('search')) historyPushState(location.origin + location.pathname, `?q=${searchQuery}&`, `cou=${selectedCountryAcronym}&`,`bg=${backgroundColor}`)
-        else createUrlPath('search', searchQuery)
-
-        document.querySelectorAll('h1.search')[0].innerHTML = mainSearchInput.value.charAt(0).toUpperCase() + mainSearchInput.value.slice(1)
-        addDisableSideElements()
-    }
-    function search() {
+    function mainSearch(extra) {
+        if(!window.location.pathname.includes('search')) return newSearch(extra) 
         if(window.location.search.match(regularExpressions.url.query) === null) return openLinks(filePath.headlines) 
 
-        searchInputValue = window.location.search.match(regularExpressions.url.query)[0].slice(3, -1)
-        mainSearchInput.value = addCharacterBetweenSpaceInString(searchInputValue, '+', ' ')
-        document.querySelectorAll('h1.search')[0].innerHTML = mainSearchInput.value.charAt(0).toUpperCase() + mainSearchInput.value.slice(1)
+
+        let locationSearch 
+        if(extra !== undefined) console.log(createUrlExtraOptions())
+        else {
+            searchInputValue = window.location.search.match(regularExpressions.url.query)[0].slice(3, -1)
+            mainSearchInput.value = addCharacterBetweenSpaceInString(searchInputValue, '+', ' ')
+        }
+
+
+
+        hideSuggestWords()
+        addDisableSideElements()
         suggestWords()
+
         /* Search news articles */
     }
+    
+    function newSearch(extra) {
+        if(extra !== undefined) {
+            
+        }
+        // if(mainSearchInput.value.length === 0) return
+    
+        // if(!mainSearchIcon.classList.contains('disable') && window.innerWidth < 930) mobileVersionNavigationBar()
+        // else if(mainSearchIcon.classList.contains('disable') && window.innerWidth > 930) desktopVersionNavigationBar()
+
+        // let selectedCountryAcronym = getCountryAcronym(selectedCountry.innerHTML)
+        // if(extraSearchOptions.classList.contains('disable')) searchQuery = addCharacterBetweenSpaceInString(mainSearchInput.value,' ','+')
+
+
+
+        // else {
+        //     let urlPath = createUrlPath('search', searchQuery)
+        //     return console.log(urlPath)
+        // }
+
+    }
+
+    function createUrlExtraOptions(type) {
+        let hasWordsV = hasWords.value
+        let exactPhraseV = exactPhrase.value
+        let excludeWordsV = excludeWords.value
+
+        if(exactPhraseV.length !== 0 && hasWordsV.length === 0  && excludeWordsV.length === 0) return`"${exactPhraseV}"`
+        else if(hasWordsV.length !== 0 && exactPhraseV.length === 0  && excludeWordsV.length === 0) return devideStringIntoWords(hasWordsV,'HW')
+        else if(excludeWordsV.length !== 0 && exactPhraseV.length === 0  && hasWordsV.length === 0) return devideStringIntoWords(excludeWordsV,'EW')
+        else if (exactPhraseV.length !== 0 && hasWordsV.length !== 0  && excludeWordsV.length === 0) return `"${exactPhraseV}"+${devideStringIntoWords(hasWordsV,'HW')}`
+        else if(hasWordsV.length !== 0 && excludeWordsV.length !== 0 && exactPhraseV.length === 0) return `${devideStringIntoWords(hasWordsV,'HW')} ${devideStringIntoWords(excludeWordsV,'EW')}`
+        else if(exactPhraseV.length !== 0 && excludeWordsV.length !== 0 && hasWordsV.length === 0) return `"${exactPhraseV}" ${devideStringIntoWords(excludeWordsV,'EW')}`
+        else if(exactPhraseV.length !== 0 && excludeWordsV.length !== 0 && hasWordsV.length !== 0) return `"${exactPhraseV}" ${devideStringIntoWords(hasWordsV,'HW')} ${devideStringIntoWords(excludeWordsV,'EW')}`
+    }
+    function devideStringIntoWords(string, keyword){
+        if(keyword === 'HW') return `+${string.replace(/\s/g,' +')}`
+        if(keyword === 'EW') return  `-${string.replace(/\s/g,' -')}`
+    }
+
     function mobileVersionNavigationBar() {
         mainSearchIcon.classList.add('disable')
         mainSearchBackLeftIcon.classList.remove('disable')
@@ -337,28 +366,34 @@ mainSearchInput.oninput = () => {
 }
 let place = 0
 mainSearchInput.onkeyup = (e) => {
+    let suggestDivs = suggestMainInput.querySelectorAll('div')
+    let suggestDivActiveKey = suggestMainInput.querySelectorAll('div.active.key')
     if(e.keyCode === 13) {
-        if(!suggestMainInput.classList.contains('disable')) hideSuggestWords()
-        return searchArticles()
+
+        if(suggestDivActiveKey.length === 1) {
+            historyPushState(location.origin + location.pathname, `?q=${addCharacterBetweenSpaceInString(suggestDivActiveKey[0].firstElementChild.innerHTML, ' ', '+')}&`, `cou=${getCountryAcronym(selectedCountry.innerHTML)}&`,`bg=${backgroundColor}`)
+            mainSearch()
+        }
+        // if(!suggestMainInput.classList.contains('disable')) hideSuggestWords()
+        // return mainSearch()
     } 
     if(suggestMainInput.classList.contains('disable') || suggestMainInput.querySelectorAll('div').length === 0) return
 
-    let suggestDivs = suggestMainInput.querySelectorAll('div')
 
     if(suggestMainInput.querySelectorAll('div.active').length === 0 && (e.keyCode === 40 || e.keyCode === 38)) {
         mainSearchInput.value = suggestDivs[place].firstElementChild.innerHTML
         return suggestDivs[place].classList.add('active')
     } 
-    if(suggestMainInput.querySelectorAll('div.active').length === 1) suggestMainInput.querySelectorAll('div .active')[0].classList.remove('active')
+    if(suggestMainInput.querySelectorAll('div.active').length === 1) suggestMainInput.querySelectorAll('div .active')[0].classList.remove('active','key')
     if(e.keyCode === 40) {
         if(place === suggestDivs.length - 1) place = - 1
-        suggestDivs[place + 1].classList.add('active')
+        suggestDivs[place + 1].classList.add('active','key')
         place ++
         mainSearchInput.value = suggestDivs[place].firstElementChild.innerHTML
     }
     else if(e.keyCode === 38) {
         if(place === 0) place = suggestDivs.length
-        suggestDivs[place - 1].classList.add('active')
+        suggestDivs[place - 1].classList.add('active','key')
         place --
         mainSearchInput.value = suggestDivs[place].firstElementChild.innerHTML
     }
@@ -389,15 +424,15 @@ async function manageSuggestWords() {
     for(let i = 0; i < suggestMainInput.getElementsByTagName('div').length;  i++) {
         suggestMainInput.getElementsByTagName('div')[i].onmouseover = () => { 
             place = i
-            if(suggestMainInput.querySelectorAll('div.active').length === 1) suggestMainInput.querySelectorAll('div.active')[0].classList.remove('active')
+            if(suggestMainInput.querySelectorAll('div.active').length === 1) suggestMainInput.querySelectorAll('div.active')[0].classList.remove('active','key')
             suggestMainInput.getElementsByTagName('div')[i].classList.add('active') 
         }
-        suggestMainInput.getElementsByTagName('div')[i].onmouseleave = () => { suggestMainInput.getElementsByTagName('div')[i].classList.remove('active') }
+        suggestMainInput.getElementsByTagName('div')[i].onmouseleave = () => { suggestMainInput.getElementsByTagName('div')[i].classList.remove('active','key') }
     }
 }
 
 const suggestBox = words => {
-    let wordBoxes = words.map(word => `<div class="grid pointer" onclick="selectSuggestedSearchOption(this)">
+    let wordBoxes = words.map(word => `<div class="grid pointer" onclick="selectSuggestedSearchOption(this.firstElementChild)">
                                         <span>${word.word}</span>
                                     </div>`).join('')
     const html = `<hr class="absolute">${wordBoxes}`
@@ -413,13 +448,14 @@ function removeAllSuggestWordBoxes() {
 function selectSuggestedSearchOption(element) {
     removeActiveSidebarCategory()
     hideSuggestWords()
-    let elementInnerHTML = addCharacterBetweenSpaceInString(element.firstElementChild.innerHTML, ' ', '+')
-        mainSearchInput.value = element.firstElementChild.innerHTML
-    searchArticles()
+    let elementInnerHTML = addCharacterBetweenSpaceInString(element.innerHTML, ' ', '+')
+    let selectedCountryAcronym = getCountryAcronym(selectedCountry.innerHTML)
+    historyPushState(location.origin + location.pathname, `?q=${elementInnerHTML}&`, `cou=${selectedCountryAcronym}&`,`bg=${backgroundColor}`)
+    mainSearch()
 } 
 
 function addCharacterBetweenSpaceInString(word ,replace ,character) { 
-    word = word.trim().replace(/\s\s+/g, ' ');
+    word = word.trim().replace(/\s\s+/g, ' ')
     if(replace === ' ') return word.replace(/\s/g, character) 
     else if(replace === '+')return word.replace(/\+/g, character)
 }
@@ -452,8 +488,7 @@ function createUrlPath(type, search) {
     else if(type === 'sports') path = filePath.sports
     else if(type === 'health') path = filePath.health
     
-    path = `${path}?${query}cou=${getCountryAcronym(selectedCountry.innerHTML)}&bg=${backgroundColor}`
-    openLinks(path)
+    return path = `${path}?${query}cou=${getCountryAcronym(selectedCountry.innerHTML)}&bg=${backgroundColor}`
 }
 
 let activeCountry
@@ -669,61 +704,62 @@ async function suggestWords() {
     let suggestWordsArray = []
     let input = mainSearchInput.value.split(' ')
     let n = 0
-    while(suggestWordsArray.length < 8) { 
+
+    while(suggestWordsArray.length < 12) { 
         fetchArray = await fetchWords(input[n])
 
         for(let i = 0; i < fetchArray.length; i++)
             if(suggestWordsArray.indexOf(fetchArray[i].word) === -1 && fetchArray[i].word !== mainSearchInput.value) suggestWordsArray.push(fetchArray[i].word)
-        
         input[n] = removeCharactersInString(input[n], 0, -1)
         if(input.length === 0) break
-        if(n == input.length) n = 0
-        else n++
     }
-    document.querySelector('.suggested-words footer').innerHTML = 'More'    
-    removeDisableSideElements()
     generateSuggestWords(suggestWordsArray)
+    removeDisableSideElements()
 }
 
 let moreSuggestWordsArray = []
 function generateSuggestWords(array) {
-    let section = document.querySelector('.suggested-words section')
+    let section = document.querySelector('article.suggested-words.aside section')
         section.innerHTML = ''
 
     for(let i = 0; i < array.length; i++) {
         let div = document.createElement('div')
             div.innerHTML = array[i]
-            div.classList.add('visible-auto')
-            // div.onclick = selectSuggestedSearchOption
-        let hr = document.createElement('hr')
-
-        if(i > 5) {
-            div.classList.add('visible-absolute')
-            hr.classList.add('visible-absolute')
-            moreSuggestWordsArray.push(div, hr)
-        } 
+            div.classList.add('search-box')
+            div.onclick = () => selectSuggestedSearchOption(div)
         section.appendChild(div)
-        section.appendChild(hr)
-    }
-}
-function moreSuggestWords() { 
-    if(document.querySelector('.suggested-words footer').innerHTML.trim() === 'More') {
-        // moreSuggestWordsArray.forEach(element => element.classList.remove('visible-absolute')) 
-        let height = document.querySelectorAll('.suggested-words section div').length * 16 + document.querySelectorAll('.suggested-words section div').length + 
-        console.log(document.querySelectorAll('.suggested-words section div').length)
-        document.documentElement.style.cssText = `--suggest-more:${height}px`;
-        document.querySelector('.suggested-words footer').innerHTML = 'Less'    
-    } else {
-        document.documentElement.style.cssText = `--suggest-more:auto`;
-        // moreSuggestWordsArray.forEach(element => element.classList.add('visible-absolute')) 
-        document.querySelector('.suggested-words footer').innerHTML = 'More'    
     }
 }
 
 function addDisableSideElements() { mainAsideContent.querySelectorAll('article.disable').forEach(article => article.classList.add('disable')) }
 function removeDisableSideElements() { mainAsideContent.querySelectorAll('article.disable').forEach(article => article.classList.remove('disable')) }
 
+function saveNews(element) {
+    
+    if(element.lastElementChild.textContent === 'Save') {
+        element.firstElementChild.classList.remove('far')
+        element.firstElementChild.classList.add('fas')
+        element.lastElementChild.textContent = 'Saved'
+    } else {
+        element.firstElementChild.classList.remove('fas')
+        element.firstElementChild.classList.add('far')
+        element.lastElementChild.textContent = 'Save'
+    }
+    //PHP
+}
+function followNews(element) {
 
+    if(element.lastElementChild.textContent === 'Follow') {
+        element.firstElementChild.classList.remove('far')
+        element.firstElementChild.classList.add('fas')
+        element.lastElementChild.textContent = 'Following'
+    } else {
+        element.firstElementChild.classList.remove('fas')
+        element.firstElementChild.classList.add('far')
+        element.lastElementChild.textContent = 'Follow'
+    }
+        //PHP
+}
 
 
 
@@ -770,3 +806,15 @@ let { firstName } = information
 let newArray = [1 ,2, 123, 23, 4, 3.123, 12, 93, 0]
 let result = newArray.filter( val => { return val % 2 === 1} )
 // console.log(result)
+
+
+async function getSearchImage() {
+    const a = await fetch('https://pixabay.com/api/?key=18187948-25cec5ad4edb8ae89c0bd31f2&q=woman&image_type=photo')
+    let n = await a.json()
+    return n
+}
+// kkk()
+async function kkk() { 
+    let k = await getSearchImage() 
+    console.log(k)
+}

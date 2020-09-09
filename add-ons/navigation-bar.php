@@ -6,7 +6,7 @@
             <div class="menu-burger-icon">
             </div>
         </figure>
-        <a href="#" onclick="openLinks('headlines.php')" class="logo">Logo</a>
+        <a href="#" onclick="openLinks('headlines.php')" class="logo">Fews</a>
     </div>
 
     <div class="nav-search flex align-center justify-center relative" id="navigation-bar-middle">
@@ -15,7 +15,7 @@
                 placeholder="Search for latest news articles" autocomplete="off" value="">
             <figure class="search-icon-figure flex align-center justify-center relative" id="search-icon-figure">
                 <a href="#" class="search-icon flex align-center justify-center border-radius-50"
-                    id="main-search-icon-a" onclick="searchArticles()">
+                    id="main-search-icon-a" onclick="mainSearch()">
                     <i class="far fa-search" id="main-search-icon"></i>
                     <i class="far fa-arrow-left back-icon disable" id="main-search-icon-back-left"></i>
                 </a>
@@ -65,7 +65,7 @@
                 <button class="extra-option-btn ext-opt-reset pointer" id="extraOptionsClearButton"
                     onclick="resetExtraSearchOptions()">Clear</button>
                 <button class="extra-option-btn ext-opt-submit-disable pointer" id="extraOptionsSearchButton"
-                    onclick="">Search</button>
+                    onclick="mainSearch('extra')">Search</button>
             </footer>
         </aside>
         <aside class="search-words absolute disable" id="search-words" onmouseover="mouseSuggestHoverChange(true)" onmouseout="mouseSuggestHoverChange(false)">
