@@ -11,7 +11,6 @@
     const websiteURL = 'http://localhost:8080/News-website/'
     // const websiteURL = 'https://news.niktopler.com'
 
-
     const topStoriesURL = '&t=topstories&'
     const everythingURL = '&t=everything&'
     const sourcesURL = '&t=sources&'

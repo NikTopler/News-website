@@ -39,9 +39,9 @@
                 <aside id="main-side-content-container">
                     <article class="search aside">
                         <header>
-                            <div>Slovenia</div>
+                            <div></div>
                             <figure>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Gull_portrait_ca_usa.jpg" class="border-radius-50">
+                                <img src="" class="border-radius-50 disable">
                             </figure>
                             <span>Topic</span>
                         </header>
@@ -120,5 +120,6 @@
     <?php include 'add-ons/footer-scripts.php' ?>
 
 </body>
-
 <?php include 'add-ons/footer-scripts.php' ?>
+
+
