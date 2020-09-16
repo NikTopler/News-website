@@ -1,5 +1,232 @@
+let weatherArrayToday
+let weatherArrayTommorow
+let weatherArray2Days
+const weather = {
+    async getweather() {
+        city = changeDiacritics(userLocationInformationValue[3])
+        const key = php.info('weather')
+        const response = await fetch(`https://cors-anywhere.herokuapp.com/https://api.weatherapi.com/v1/forecast.json?key=${key}&q=${city}&days=7`)
+        const data = await response.json()
+            weatherArrayToday = data.forecast.forecastday[0]
+            weatherArrayTommorow = data.forecast.forecastday[1]
+            weatherArray2Days = data.forecast.forecastday[2]
+    },
+    updateWeather() {
+        let header =  document.querySelectorAll('.weather-main-header')[0]
+            header.children[0].src = weatherArrayToday.day.condition.icon
+            header.children[1].innerHTML = userLocationInformationValue[3]
+            header.children[2].innerHTML =  `${Math.round(weatherArrayToday.day.avgtemp_c)}°C`
+    
+        let weatherDate = new Date(weatherArrayToday.date)
+        let tommorowNumber = weatherDate.getDay()
+        let dayAfterTomorrow = weatherDate.getDay()
+
+        if(tommorowNumber == 6) tommorowNumber = tommorowNumber - 7
+        if(dayAfterTomorrow == 5 || dayAfterTomorrow == 6) dayAfterTomorrow = dayAfterTomorrow - 7
+
+        let dayAcronymTommorow = daysAcronyms[tommorowNumber + 1]
+        let dayAcronymIn2Days = daysAcronyms[dayAfterTomorrow + 2]
+
+        let mainWeatherContent = document.querySelectorAll('.weather-3-days')[0]
+            mainWeatherContent.children[0].firstElementChild.innerHTML = 'Today'
+            mainWeatherContent.children[1].firstElementChild.innerHTML = dayAcronymTommorow
+            mainWeatherContent.children[2].firstElementChild.innerHTML = dayAcronymIn2Days
+
+            mainWeatherContent.children[0].children[1].firstElementChild.src = weatherArrayToday.day.condition.icon
+            mainWeatherContent.children[1].children[1].firstElementChild.src = weatherArrayTommorow.day.condition.icon
+            mainWeatherContent.children[2].children[1].firstElementChild.src = weatherArray2Days.day.condition.icon
+
+            mainWeatherContent.children[0].children[2].firstElementChild.src = 'http://cdn.weatherapi.com/weather/64x64/day/302.png'
+            mainWeatherContent.children[1].children[2].firstElementChild.src = 'http://cdn.weatherapi.com/weather/64x64/day/302.png'
+            mainWeatherContent.children[2].children[2].firstElementChild.src = 'http://cdn.weatherapi.com/weather/64x64/day/302.png'
+
+            mainWeatherContent.children[0].children[1].lastElementChild.innerHTML = `${weatherArrayToday.day.avgtemp_c}°C`
+            mainWeatherContent.children[1].children[1].lastElementChild.innerHTML = `${weatherArrayTommorow.day.avgtemp_c}°C`
+            mainWeatherContent.children[2].children[1].lastElementChild.innerHTML = `${weatherArray2Days.day.avgtemp_c}°C`
+
+            mainWeatherContent.children[0].children[2].lastElementChild.innerHTML = `${weatherArrayToday.day.daily_chance_of_rain}%`
+            mainWeatherContent.children[1].children[2].lastElementChild.innerHTML = `${weatherArrayTommorow.day.daily_chance_of_rain}%`
+            mainWeatherContent.children[2].children[2].lastElementChild.innerHTML = `${weatherArray2Days.day.daily_chance_of_rain}%`
+    }
+}
+
+let userLocationInformationValue
+const user = {
+    location : async() => { userLocationInformationValue = await user.country() },
+    country : async() => {
+        const key = await php.info('user')
+        const response = await fetch(`https://ipinfo.io?token=${key}`)
+        const data = await response.json()
+        const userCountryAcronym = data.country.toLowerCase()
+        const userCountry = getAcronymCountry(userCountryAcronym)
+        const userCity = data.city
+        const userRegion = data.region
+        const userLocation = data.loc
+        const userTimeZone = data.timezone
+        return [userCountry, userCountryAcronym, userCity, userRegion, userLocation, userTimeZone]
+    }
+}
+
+const searchBox = {
+    update : async (query) => {
+        let i = 0
+        let images = await searchBox.fetch(query)
+        if(images.hits.length === 0) {
+            images = await searchBox.fetch('nature')
+            i = Math.round(Math.random() * images.hits.length)
+        } 
+    
+        let searchAside = document.querySelector('article.search.aside')
+            searchAside.firstElementChild.firstElementChild.innerHTML = capitalizeString(mainSearchInput.value)
+            searchAside.firstElementChild.querySelector('figure img').src = images.hits[i].webformatURL 
+            searchAside.firstElementChild.querySelector('figure img').classList.remove('disable')
+    },
+    fetch : async(query) => {
+        const key = await php.info('images')
+        const response = await fetch(`https://pixabay.com/api/?key=${key}&q=${query}&image_type=photo`)
+        const image = await response.json()
+        return image    
+    }
+}
+
+let mouseSuggestHover = false 
+let moreSuggestWordsArray = []
+const suggest = {
+    fetch : async (input) => {
+        const res = await fetch(`https://api.datamuse.com/sug?s=${input}`)
+        return words = await res.json()    
+    },
+    suggest : async() => {
+        let fetchArray = []
+        let suggestWordsArray = []
+        let input = mainSearchInput.value.split(' ')
+        let n = 0
+    
+        while(suggestWordsArray.length < 16) { 
+            fetchArray = await suggest.fetch(input[n])
+    
+            for(let i = 0; i < fetchArray.length; i++)
+                if(suggestWordsArray.indexOf(fetchArray[i].word) === -1 && fetchArray[i].word !== mainSearchInput.value) suggestWordsArray.push(fetchArray[i].word)
+            input[n] = removeCharactersInString(input[n], 0, -1)
+            if(input.length === 0) break
+        }
+        suggest.generate(suggestWordsArray)
+        removeDisableSideElements()
+    
+    },
+    generate : (array) => {
+        let section = document.querySelector('article.suggested-words.aside section')
+        section.innerHTML = ''
+
+        for(let i = 0; i < array.length; i++) {
+            let div = document.createElement('div')
+                div.innerHTML = array[i]
+                div.classList.add('search-box')
+                div.onclick = () => suggest.selectSuggestedSearchOption(div)
+            section.appendChild(div)
+        }
+    },
+    manageSuggestWords : async () => {
+        let suggestWordsArray = await suggest.fetch(mainSearchInput.value)
+        if(suggestWordsArray.length === 0) return hideSuggestWords()
+        
+        if(suggestWordsArray.length > 6) suggestWordsArray = removeCharactersInString(suggestWordsArray, 4, suggestWordsArray.length)
+    
+        suggest.suggestBox(suggestWordsArray)
+    
+        for(let i = 0; i < suggestMainInput.getElementsByTagName('div').length;  i++) {
+            suggestMainInput.getElementsByTagName('div')[i].onmouseover = () => { 
+                place = i
+                if(suggestMainInput.querySelectorAll('div.active').length === 1) suggestMainInput.querySelectorAll('div.active')[0].classList.remove('active','key')
+                suggestMainInput.getElementsByTagName('div')[i].classList.add('active') 
+            }
+            suggestMainInput.getElementsByTagName('div')[i].onmouseleave = () => { suggestMainInput.getElementsByTagName('div')[i].classList.remove('active','key') }
+        }    
+    },
+    suggestBox : (words) => {
+        let wordBoxes = words.map(word => `<div class="grid pointer" onclick="suggest.selectSuggestedSearchOption(this.firstElementChild)">
+                                            <span>${word.word}</span>
+                                        </div>`).join('')
+        const html = `<hr class="absolute">${wordBoxes}`
+        suggestMainInput.innerHTML = html
+    },
+    mouseSuggestHoverChange : (parameter) =>  { 
+        mouseSuggestHover = parameter 
+    },
+    removeAllSuggestWordBoxes : () => {
+        let numberOfBoxes = suggestMainInput.querySelectorAll('div').length
+        for(let i = 0; i < numberOfBoxes; i++) 
+            suggestMainInput.querySelector('div').remove()
+    },
+    selectSuggestedSearchOption : (element) => {
+        removeActiveSidebarCategory()
+        hideSuggestWords()
+        let elementInnerHTML = addCharacterBetweenSpaceInString(element.innerHTML, ' ', '+')
+        let selectedCountryAcronym = getCountryAcronym(selectedCountry.innerHTML)
+        historyPushState(location.origin + location.pathname, `?q=${elementInnerHTML}&`, `cou=${selectedCountryAcronym}&`,`bg=${backgroundColor}`)
+        mainSearch()    
+    }
+}
+
+const responsiveVersion = {
+    mobileVersionNavigationBar() {
+        mainSearchIcon.classList.add('disable')
+        mainSearchBackLeftIcon.classList.remove('disable')
+        navigationBarLeft.classList.add('disable')
+        navigationBarRight.classList.add('disable')
+        navigationBarMiddle.style.gridColumn = '1/4'
+        mainSearchFigure.style.gridColumn = '1/2'
+        mainSearchBackLeftTooltiptext.classList.remove('disable')
+        mainSearchInput.style.display = 'grid'
+        extOptIcon.style.display = 'flex'
+        mainSearchInput.focus()
+        sideBarContent.style.left = '-100%'
+        sideMenuCounter = 1
+    },
+    desktopVersionNavigationBar() {
+        mainSearchIcon.classList.remove('disable')
+        mainSearchBackLeftIcon.classList.add('disable')
+        navigationBarLeft.classList.remove('disable')
+        navigationBarRight.classList.remove('disable')
+        navigationBarMiddle.style.gridColumn = '2/3'
+        mainSearchFigure.style.gridColumn = '3/4'
+        mainSearchBackLeftTooltiptext.classList.add('disable')
+        mainSearchInput.style.display = 'none'
+        extOptIcon.style.display = 'none'    
+    }
+
+}
+
+const regularExpressions = {
+    url : {
+        query : /[\?|\&]+[q]+[=].*?[&]/g,
+        country : /[\?|\&]+[c]+[o]+[u]+[=].{2}/g,
+        backgroundColor : /[\&]+[b]+[g]+[=].*/g
+    },
+    string : {
+        symbols : /[@_!#$%^&*()<>?/|}{~:]/g
+    }
+}
+
+const php = {
+    info : async(word) => {
+        const response =  await fetch('privateInfo.php', {                          
+            method: "POST", 
+            body: createFormData(word)
+        })
+        return await response.text()
+    },
+    session : async() => {
+        const response =  await fetch('include/session.inc.php', {                          
+            method: "POST", 
+            body: createFormData('user')
+        })
+        return await response.text()
+    }
+}
+
 window.onload = async () => {
-    await getuserLocationInformationValue()
+    await user.location()
     removeActiveSidebarCategory()
     if (window.location.pathname.includes('headlines')) headlines()
     else if (window.location.pathname.includes('for-you')) forYou()
@@ -20,20 +247,21 @@ window.onload = async () => {
     // changeBackgroundColor()
     let selectedCountryAcronym = getCountryAcronym(selectedCountry.innerHTML)
 
-    if(!window.location.search.match(regularExpressions.url.country)) historyPushState(window.location.origin + window.location.pathname, '', `?cou=${selectedCountryAcronym}&`,`bg=${backgroundColor}`)
-    else {
-        urlCountryAcronym = window.location.search.match(regularExpressions.url.country)[0].slice(5, 7)
-        if(getAcronymCountry(urlCountryAcronym) === undefined) return openLinks(filePath.headlines)
-        urlCountry = getAcronymCountry(urlCountryAcronym)
-        updateCountrySelect(urlCountry)
-    }
+    // if(!window.location.search.match(regularExpressions.url.country))
+
+     //historyPushState(window.location.origin + window.location.pathname, '', `?cou=${selectedCountryAcronym}&`,`bg=${backgroundColor}`)
+    // else {
+        // urlCountryAcronym = window.location.search.match(regularExpressions.url.country)[0].slice(5, 7)
+        // if(getAcronymCountry(urlCountryAcronym) === undefined) return openLinks(filePath.headlines)
+        // urlCountry = getAcronymCountry(urlCountryAcronym)
+        // updateCountrySelect(urlCountry)
+    // }
     
     if(!window.location.search.match(regularExpressions.url.query)) return
 
     let query = location.search.match(regularExpressions.url.query)[0]
         query = removeCharactersInString(query, 3, query.length - 1)
     /* Search news */
-
 }
 
 window.onclick = (e) => {  
@@ -45,73 +273,34 @@ window.onclick = (e) => {
     else if(!extraSearchOptions.classList.contains('disable')) clickInOutCheck(extraSearchOptions, e.target)
 }
 
-async function getPrivateInfo(word) {
-    let formData = new FormData
-        formData.append(word, '') 
-
-    const response =  await fetch('privateInfo.php', {                          
-        method: "POST", 
-        body: formData
-    })
-    const data = await response.text()
-    return data
-}
-
 function openLinks(string) { window.location.replace(websiteURL + string) }
 
 function historyPushState(webiste, string, country, background) { history.pushState({}, null, webiste + string + country + background) }
 
 function changeBackgroundColor() { document.body.className = window.location.search.match(regularExpressions.url.backgroundColor)[0].slice(4,10) }
 
-let userLocationInformationValue
-async function getuserLocationInformationValue() { userLocationInformationValue = await getUsersCountry() }
-
-async function getUsersCountry() {
-    const key = await getPrivateInfo('user')
-    const response = await fetch(`https://ipinfo.io?token=${key}`)
-    const data = await response.json()
-    const userCountryAcronym = data.country.toLowerCase()
-    const userCountry = getAcronymCountry(userCountryAcronym)
-    const userCity = data.city
-    const userRegion = data.region
-    const userLocation = data.loc
-    const userTimeZone = data.timezone
-    return [userCountry, userCountryAcronym, userCity, userRegion, userLocation, userTimeZone]
-}
-
-let weatherArrayToday
-let weatherArrayTommorow
-let weatherArray2Days
-async function getWeather() {
-    city = changeDiacritics(userLocationInformationValue[3])
-    const key = getPrivateInfo('weather')
-    const response = await fetch(`https://cors-anywhere.herokuapp.com/https://api.weatherapi.com/v1/forecast.json?key=${key}&q=${city}&days=7`)
-    const data = await response.json()
-    weatherArrayToday = data.forecast.forecastday[0]
-    weatherArrayTommorow = data.forecast.forecastday[1]
-    weatherArray2Days = data.forecast.forecastday[2]
-}
-function changeDiacritics(string) {
-    const regexDiacritics = /č|ć|đ|š|ž/g
-    string = string.split('')
-    for(let i = 0; i < string.length; i++)
-        if(regexDiacritics.test(string[i]))
-            string[i] = diacriticsReplacement[string[i]]
-    return string
-}
+// console.log(changeDiacritics())
+// function changeDiacritics() {
+//     let string = 'leščać'
+//         string = string.split('')
+//     console.log(string)
+//     // const regexDiacritics = /č|ć|đ|š|ž/g
+//     for(let i = 0; i < string.length; i++)
+//         if(diacriticLetters.test(string[i]))
+//             string[i] = diacriticsReplacement[string[i]]
+//     return string
+// }
 
 function getLanguageAcronym(target) {
     for(let i = 0; i < language.length; i++)
         if(language[i] === target)
             return languageAcronyms[i]
 }
-
 function getCountryAcronym(target) {    
     for(let i = 0; i < countries.length; i++)
         if(countries[i] === target)
             return countryAcronyms[i] 
 }
-
 function getAcronymCountry(acronym) {
     for(let i = 0; i < countries.length; i++)
         if(countryAcronyms[i] === acronym)
@@ -123,43 +312,6 @@ function getAcronymLanguage(acronym) {
             return language[i]
 }
 
-function updateWeather() {
-    let header =  document.querySelectorAll('.weather-main-header')[0]
-        header.children[0].src = weatherArrayToday.day.condition.icon
-        header.children[1].innerHTML = userLocationInformationValue[3]
-        header.children[2].innerHTML =  `${Math.round(weatherArrayToday.day.avgtemp_c)}°C`
-    
-    let weatherDate = new Date(weatherArrayToday.date)
-    let tommorowNumber = weatherDate.getDay()
-    let dayAfterTomorrow = weatherDate.getDay()
-
-    if(tommorowNumber == 6) tommorowNumber = tommorowNumber - 7
-    if(dayAfterTomorrow == 5 || dayAfterTomorrow == 6) dayAfterTomorrow = dayAfterTomorrow - 7
-
-    let dayAcronymTommorow = daysAcronyms[tommorowNumber + 1]
-    let dayAcronymIn2Days = daysAcronyms[dayAfterTomorrow + 2]
-
-    let mainWeatherContent = document.querySelectorAll('.weather-3-days')[0]
-        mainWeatherContent.children[0].firstElementChild.innerHTML = 'Today'
-        mainWeatherContent.children[1].firstElementChild.innerHTML = dayAcronymTommorow
-        mainWeatherContent.children[2].firstElementChild.innerHTML = dayAcronymIn2Days
-
-        mainWeatherContent.children[0].children[1].firstElementChild.src = weatherArrayToday.day.condition.icon
-        mainWeatherContent.children[1].children[1].firstElementChild.src = weatherArrayTommorow.day.condition.icon
-        mainWeatherContent.children[2].children[1].firstElementChild.src = weatherArray2Days.day.condition.icon
-
-        mainWeatherContent.children[0].children[2].firstElementChild.src = 'http://cdn.weatherapi.com/weather/64x64/day/302.png'
-        mainWeatherContent.children[1].children[2].firstElementChild.src = 'http://cdn.weatherapi.com/weather/64x64/day/302.png'
-        mainWeatherContent.children[2].children[2].firstElementChild.src = 'http://cdn.weatherapi.com/weather/64x64/day/302.png'
-
-        mainWeatherContent.children[0].children[1].lastElementChild.innerHTML = `${weatherArrayToday.day.avgtemp_c}°C`
-        mainWeatherContent.children[1].children[1].lastElementChild.innerHTML = `${weatherArrayTommorow.day.avgtemp_c}°C`
-        mainWeatherContent.children[2].children[1].lastElementChild.innerHTML = `${weatherArray2Days.day.avgtemp_c}°C`
-
-        mainWeatherContent.children[0].children[2].lastElementChild.innerHTML = `${weatherArrayToday.day.daily_chance_of_rain}%`
-        mainWeatherContent.children[1].children[2].lastElementChild.innerHTML = `${weatherArrayTommorow.day.daily_chance_of_rain}%`
-        mainWeatherContent.children[2].children[2].lastElementChild.innerHTML = `${weatherArray2Days.day.daily_chance_of_rain}%`
-}
 
 function changeTemperatureUnit(element) {
     const unit = element.innerHTML
@@ -206,9 +358,6 @@ function changeTemperatureUnit(element) {
     document.querySelectorAll('.weather-article .active')[0].classList.remove('active')
     element.classList.add('active')
 }
-
-function removeCharactersInString(string, frontNumber, backNumber) { return string.slice(frontNumber, backNumber)}
-
 function celsiusToFahrenheit(number) { return number * 9/5 + 32 }
 function celsiusToKelvin(number) { return Number(number) + 273 }
 function kelvinToFahrenheit(number) { return (number - 273) * 9/5 + 32 }
@@ -216,12 +365,11 @@ function kelvinToCelsius(number) { return number - 273 }
 function fahrenheitToCelsius(number) { return (number - 32) * 5/9 }
 function fahrenheitToKelvin(number) { return (number - 32) * 5/9 + 273 }
 
-
 /* HEADLINES */
 
 async function headlines() {
-    // await getWeather()   
-    // updateWeather()
+    // await weather.getWeather()   
+    // weather.updateWeather()
     sidebarCategorySelect(document.querySelector('.fa-newspaper').parentElement)
 }
 
@@ -231,22 +379,23 @@ async function headlines() {
         if(window.location.search.match(regularExpressions.url.query) === null) return openLinks(filePath.headlines) 
 
         addDisableSideElements()
-        console.log(extra === undefined)
-        let locationSearch 
+        // console.log(extra === undefined)
         if(extra === undefined) {
-            searchInputValue = window.location.search.match(regularExpressions.url.query)[0].slice(3, -1)
+            let searchInputValue = window.location.search.match(regularExpressions.url.query)[0].slice(3, -1)
             mainSearchInput.value = addCharacterBetweenSpaceInString(searchInputValue, '+', ' ')
-            updateSearchBox(mainSearchInput.value.trim())
+            searchBox.update(mainSearchInput.value.trim())
         } else {
-            console.log(createUrlExtraOptions())
+            let extraOptionsUrl = createUrlExtraOptions()
+            let selectedCountryAcronym = getCountryAcronym(selectedCountry.innerHTML)
+            historyPushState(websiteURL, extraOptionsUrl, selectedCountryAcronym, backgroundColor)
         }
 
         hideSuggestWords()
-        suggestWords()
+        suggest.suggest()
 
         /* Search news articles */
     }
-    
+
     function newSearch(extra) {
         if(extra !== undefined) {
             
@@ -268,48 +417,25 @@ async function headlines() {
 
     }
 
-    function createUrlExtraOptions(type) {
-        let hasWordsV = hasWords.value
-        let exactPhraseV = exactPhrase.value
-        let excludeWordsV = excludeWords.value
+    function createUrlExtraOptions() {
+        let url
+        let exactPhraseV = exactPhrase.value.trim()
+        let hasWordsV = hasWords.value.trim()
+        let excludeWordsV = excludeWords.value.trim()
 
-        if(exactPhraseV.length !== 0 && hasWordsV.length === 0  && excludeWordsV.length === 0) return`"${exactPhraseV}"`
-        else if(hasWordsV.length !== 0 && exactPhraseV.length === 0  && excludeWordsV.length === 0) return devideStringIntoWords(hasWordsV,'HW')
-        else if(excludeWordsV.length !== 0 && exactPhraseV.length === 0  && hasWordsV.length === 0) return devideStringIntoWords(excludeWordsV,'EW')
-        else if (exactPhraseV.length !== 0 && hasWordsV.length !== 0  && excludeWordsV.length === 0) return `"${exactPhraseV}"+${devideStringIntoWords(hasWordsV,'HW')}`
-        else if(hasWordsV.length !== 0 && excludeWordsV.length !== 0 && exactPhraseV.length === 0) return `${devideStringIntoWords(hasWordsV,'HW')} ${devideStringIntoWords(excludeWordsV,'EW')}`
-        else if(exactPhraseV.length !== 0 && excludeWordsV.length !== 0 && hasWordsV.length === 0) return `"${exactPhraseV}" ${devideStringIntoWords(excludeWordsV,'EW')}`
-        else if(exactPhraseV.length !== 0 && excludeWordsV.length !== 0 && hasWordsV.length !== 0) return `"${exactPhraseV}" ${devideStringIntoWords(hasWordsV,'HW')} ${devideStringIntoWords(excludeWordsV,'EW')}`
+        if(exactPhraseV.length !== 0 && hasWordsV.length === 0  && excludeWordsV.length === 0) url = `"${exactPhraseV.trim()}"`
+        else if(hasWordsV.length !== 0 && exactPhraseV.length === 0  && excludeWordsV.length === 0) url = addCharacterBetweenSpaceInString(hasWordsV, ' ', '+')
+        else if(excludeWordsV.length !== 0 && exactPhraseV.length === 0  && hasWordsV.length === 0) url = addCharacterBetweenSpaceInString(excludeWordsV, ' ', '-')
+        // else if (exactPhraseV.length !== 0 && hasWordsV.length !== 0  && excludeWordsV.length === 0) return `"${exactPhraseV}"+${devideStringIntoWords(hasWordsV,'HW')}`
+        // else if(hasWordsV.length !== 0 && excludeWordsV.length !== 0 && exactPhraseV.length === 0) return `${devideStringIntoWords(hasWordsV,'HW')} ${devideStringIntoWords(excludeWordsV,'EW')}`
+        // else if(exactPhraseV.length !== 0 && excludeWordsV.length !== 0 && hasWordsV.length === 0) return `"${exactPhraseV}" ${devideStringIntoWords(excludeWordsV,'EW')}`
+        // else if(exactPhraseV.length !== 0 && excludeWordsV.length !== 0 && hasWordsV.length !== 0) return `"${exactPhraseV}" ${devideStringIntoWords(hasWordsV,'HW')} ${devideStringIntoWords(excludeWordsV,'EW')}`
+        return url
+        // historyPushState(location.origin + location.pathname, `?q=${addCharacterBetweenSpaceInString(mainSearchInput.value, ' ', '+')}&`, `cou=${getCountryAcronym(selectedCountry.innerHTML)}&`,`bg=${backgroundColor}`)
     }
     function devideStringIntoWords(string, keyword){
-        if(keyword === 'HW') return `+${string.replace(/\s/g,' +')}`
-        if(keyword === 'EW') return  `-${string.replace(/\s/g,' -')}`
-    }
-
-    function mobileVersionNavigationBar() {
-        mainSearchIcon.classList.add('disable')
-        mainSearchBackLeftIcon.classList.remove('disable')
-        navigationBarLeft.classList.add('disable')
-        navigationBarRight.classList.add('disable')
-        navigationBarMiddle.style.gridColumn = '1/4'
-        mainSearchFigure.style.gridColumn = '1/2'
-        mainSearchBackLeftTooltiptext.classList.remove('disable')
-        mainSearchInput.style.display = 'grid'
-        extOptIcon.style.display = 'flex'
-        mainSearchInput.focus()
-        sideBarContent.style.left = '-100%'
-        sideMenuCounter = 1
-    }
-    function desktopVersionNavigationBar() {
-        mainSearchIcon.classList.remove('disable')
-        mainSearchBackLeftIcon.classList.add('disable')
-        navigationBarLeft.classList.remove('disable')
-        navigationBarRight.classList.remove('disable')
-        navigationBarMiddle.style.gridColumn = '2/3'
-        mainSearchFigure.style.gridColumn = '3/4'
-        mainSearchBackLeftTooltiptext.classList.add('disable')
-        mainSearchInput.style.display = 'none'
-        extOptIcon.style.display = 'none'
+        if(keyword === 'HW') return `+${string.replace(/\s/g, ' +')}`
+        if(keyword === 'EW') return  `-${string.replace(/\s/g, ' -')}`
     }
 
 /* FOR YOU */
@@ -346,40 +472,16 @@ function settings() {
 function about() {
 }
 
-const regularExpressions = {
-    url : {
-        query : /[\?|\&]+[q]+[=].*?[&]/g,
-        country : /[\?|\&]+[c]+[o]+[u]+[=].{2}/g,
-        backgroundColor : /[\&]+[b]+[g]+[=].*/g
-    },
-    string : {
-        symbols : /[@_!#$%^&*()<>?/|}{~:]/g
-    }
-}
-
-
-function sidebarCategorySelect(selectedElement) {
-    if(selectedElement.classList.contains('side-menu-active')) return
-    selectedElement.classList.add('side-menu-active')
-    selectedElement.firstElementChild.classList.add('side-menu-active')
-    /* Search news articles */    
-} 
-function removeActiveSidebarCategory() {
-    let oldSelectedElements = document.querySelectorAll('.side-menu-active')
-    for(let i = 0; i < oldSelectedElements.length; i++)
-        oldSelectedElements[i].classList.remove('side-menu-active')
-}
-
 mainSearchInput.onfocus = () => {
     if(!extraSearchOptions.classList.contains('disable')) return manageExtraSearchOptions()
     else if(mainSearchInput.value.length !== 0) showSuggestWords()
-    manageSuggestWords()
+    suggest.manageSuggestWords()
 }
 
 mainSearchInput.oninput = () => {
     if(mainSearchInput.value.length === 0) return hideSuggestWords()
     else if(suggestMainInput.classList.contains('disable')) showSuggestWords()
-    manageSuggestWords() 
+    suggest.manageSuggestWords() 
 }
 let place = 0
 mainSearchInput.onkeyup = (e) => {
@@ -387,8 +489,10 @@ mainSearchInput.onkeyup = (e) => {
     let suggestDivActiveKey = suggestMainInput.querySelectorAll('div.active.key')
     if(e.keyCode === 13) {
 
-        if(suggestDivActiveKey.length === 1) historyPushState(location.origin + location.pathname, `?q=${addCharacterBetweenSpaceInString(suggestDivActiveKey[0].firstElementChild.innerHTML, ' ', '+')}&`, `cou=${getCountryAcronym(selectedCountry.innerHTML)}&`,`bg=${backgroundColor}`)
-        else historyPushState(location.origin + location.pathname, `?q=${addCharacterBetweenSpaceInString(mainSearchInput.value, ' ', '+')}&`, `cou=${getCountryAcronym(selectedCountry.innerHTML)}&`,`bg=${backgroundColor}`)
+        if(suggestDivActiveKey.length === 1)//historyPushState 
+            console.log(location.origin + location.pathname, `?q=${addCharacterBetweenSpaceInString(suggestDivActiveKey[0].firstElementChild.innerHTML, ' ', '+')}&`, `cou=${getCountryAcronym(selectedCountry.innerHTML)}&`,`bg=${backgroundColor}`)
+        else //historyPushState
+            console.log(location.origin + location.pathname, `?q=${addCharacterBetweenSpaceInString(mainSearchInput.value, ' ', '+')}&`, `cou=${getCountryAcronym(selectedCountry.innerHTML)}&`,`bg=${backgroundColor}`)
         mainSearch()
         // if(!suggestMainInput.classList.contains('disable')) hideSuggestWords()
         // return mainSearch()
@@ -413,67 +517,6 @@ mainSearchInput.onkeyup = (e) => {
         place --
         mainSearchInput.value = suggestDivs[place].firstElementChild.innerHTML
     }
-}
-
-let mouseSuggestHover = false 
-function mouseSuggestHoverChange(parameter) {
-    mouseSuggestHover = parameter
-}
-
-let searchSuggestOptionsArray = []
-let resultArray = []
-let searchSuggestOptionSelectedWord
-const maxNumberSuggestWords = 6
-
-async function fetchWords(input) {
-    const res = await fetch(`https://api.datamuse.com/sug?s=${input}`)
-    return words = await res.json()
-}
-async function manageSuggestWords() {
-    let  suggestWordsArray = await fetchWords(mainSearchInput.value)
-    if(suggestWordsArray.length === 0) return hideSuggestWords()
-    
-    if(suggestWordsArray.length > 6) suggestWordsArray = removeCharactersInString(suggestWordsArray, 4, suggestWordsArray.length)
-
-    suggestBox(suggestWordsArray)
-
-    for(let i = 0; i < suggestMainInput.getElementsByTagName('div').length;  i++) {
-        suggestMainInput.getElementsByTagName('div')[i].onmouseover = () => { 
-            place = i
-            if(suggestMainInput.querySelectorAll('div.active').length === 1) suggestMainInput.querySelectorAll('div.active')[0].classList.remove('active','key')
-            suggestMainInput.getElementsByTagName('div')[i].classList.add('active') 
-        }
-        suggestMainInput.getElementsByTagName('div')[i].onmouseleave = () => { suggestMainInput.getElementsByTagName('div')[i].classList.remove('active','key') }
-    }
-}
-
-const suggestBox = words => {
-    let wordBoxes = words.map(word => `<div class="grid pointer" onclick="selectSuggestedSearchOption(this.firstElementChild)">
-                                        <span>${word.word}</span>
-                                    </div>`).join('')
-    const html = `<hr class="absolute">${wordBoxes}`
-    suggestMainInput.innerHTML = html
-}
-
-function removeAllSuggestWordBoxes() {
-    let numberOfBoxes = suggestMainInput.querySelectorAll('div').length
-    for(let i = 0; i < numberOfBoxes; i++) 
-        suggestMainInput.querySelector('div').remove()
-}
-
-function selectSuggestedSearchOption(element) {
-    removeActiveSidebarCategory()
-    hideSuggestWords()
-    let elementInnerHTML = addCharacterBetweenSpaceInString(element.innerHTML, ' ', '+')
-    let selectedCountryAcronym = getCountryAcronym(selectedCountry.innerHTML)
-    historyPushState(location.origin + location.pathname, `?q=${elementInnerHTML}&`, `cou=${selectedCountryAcronym}&`,`bg=${backgroundColor}`)
-    mainSearch()
-} 
-
-function addCharacterBetweenSpaceInString(word, replace, character) { 
-    word = word.trim().replace(/\s\s+/g, ' ')
-    if(replace === ' ') return word.replace(/\s/g, character) 
-    else if(replace === '+') return word.replace(/\+/g, character)
 }
 
 function updateCountrySelect(country) {
@@ -539,15 +582,12 @@ function generateCountries() {
     for(let i = 0; i < newCountriesArray.length; i++) 
         createElementsForCountry(newCountriesArray[i], 'not-active', 'normal') 
 }
-function removeDuplicates(array) { array.splice(0, array.length, ...(new Set(array))) }
-function removeSelectedValuesFromArray(array, target) { return target.filter(val => !array.includes(val)) }
 function checkForDoubleCountriesSuggest(country) {
     for(let i = 0; i < suggestCountriesArray.length; i++) 
         if(suggestCountriesArray[i] === country)
             return true
     return false
 }
-
 function createElementsForCountry(country, activeCountry, location) {
     let aside = document.createElement('aside')
         aside.classList.add('radio-button-container','grid')
@@ -584,7 +624,6 @@ function changeSelectedCountry(element) {
     aside.firstElementChild.firstElementChild.classList.add('active')
     aside.firstElementChild.firstElementChild.firstElementChild.classList.add('active')
 }
-
 let lastSelectedCountry = null
 let selectedC = null
 let newCountriesArray = []
@@ -677,7 +716,7 @@ hasWords.oninput = () => { inputExtraSearchOptionChange() }
 excludeWords.oninput = () => { inputExtraSearchOptionChange() }
 
 function inputExtraSearchOptionChange() {
-    if(hasWords.value.length === 0 && exactPhrase.value.length === 0 && excludeWords.value.length === 0){
+    if(hasWords.value.length === 0 && exactPhrase.value.length === 0 && excludeWords.value.length === 0) {
         submitButton.disabled = true
         submitButton.classList.add('ext-opt-submit-disable')
         submitButton.classList.remove('ext-opt-submit')
@@ -688,86 +727,10 @@ function inputExtraSearchOptionChange() {
     }
 }
 
-
-function saveSearchWord(element) {
-    if(element.firstElementChild.classList.contains('yellow-color')) {
-        element.firstElementChild.classList.remove('yellow-color', 'fa')
-        element.firstElementChild.classList.add('fal')
-    } 
-    else {
-        element.firstElementChild.classList.add('yellow-color', 'fa')
-        element.firstElementChild.classList.remove('fal')
-    }
-}
-function followSearchWord(element) {
-    if(element.firstElementChild.classList.contains('blue-color')) {
-        element.innerHTML = ' <i class="fa fa-star"></i> Follow'
-        element.firstElementChild.classList.remove('blue-color')
-        element.classList.remove('blue-color')
-    } else {
-        element.innerHTML = ' <i class="fa fa-star"></i> Following'
-        element.firstElementChild.classList.add('blue-color')
-        element.classList.add('blue-color')
-    }
-} 
-
-async function suggestWords() {
-    let fetchArray = []
-    let suggestWordsArray = []
-    let input = mainSearchInput.value.split(' ')
-    let n = 0
-
-    while(suggestWordsArray.length < 16) { 
-        fetchArray = await fetchWords(input[n])
-
-        for(let i = 0; i < fetchArray.length; i++)
-            if(suggestWordsArray.indexOf(fetchArray[i].word) === -1 && fetchArray[i].word !== mainSearchInput.value) suggestWordsArray.push(fetchArray[i].word)
-        input[n] = removeCharactersInString(input[n], 0, -1)
-        if(input.length === 0) break
-    }
-    generateSuggestWords(suggestWordsArray)
-    removeDisableSideElements()
-}
-
-let moreSuggestWordsArray = []
-function generateSuggestWords(array) {
-    let section = document.querySelector('article.suggested-words.aside section')
-        section.innerHTML = ''
-
-    for(let i = 0; i < array.length; i++) {
-        let div = document.createElement('div')
-            div.innerHTML = array[i]
-            div.classList.add('search-box')
-            div.onclick = () => selectSuggestedSearchOption(div)
-        section.appendChild(div)
-    }
-}
-
-async function updateSearchBox(query) {
-    let i = 0
-    let images = await fetchImages(query)
-    if(images.hits.length === 0) {
-        images = await fetchImages('nature')
-        i = Math.round(Math.random() * images.hits.length)
-    } 
-
-    let searchBox = document.querySelector('article.search.aside')
-        searchBox.firstElementChild.firstElementChild.innerHTML = capitalizeString(mainSearchInput.value)
-        searchBox.firstElementChild.querySelector('figure img').src = images.hits[i].webformatURL 
-        searchBox.firstElementChild.querySelector('figure img').classList.remove('disable')
-}
-async function fetchImages(query) {
-    const key = await getPrivateInfo('images')
-    const response = await fetch(`https://pixabay.com/api/?key=${key}&q=${query}&image_type=photo`)
-    const image = await response.json()
-    return image
-}
-
 function addDisableSideElements() { mainAsideContent.querySelectorAll('article').forEach(article => article.classList.add('disable')) }
 function removeDisableSideElements() { mainAsideContent.querySelectorAll('article.disable').forEach(article => article.classList.remove('disable')) }
 
 function saveNews(element) {
-    
     if(element.lastElementChild.textContent === 'Save') {
         element.firstElementChild.classList.remove('far')
         element.firstElementChild.classList.add('fas')
@@ -793,38 +756,23 @@ function followNews(element) {
         //PHP
 }
 
-function capitalizeString(string) { return string.charAt(0).toUpperCase() + string.slice(1) }
-
 /* API */
 
 // fetchNewsArticles()
-// async function fetchNewsArticles() {
+async function fetchNewsArticles() {
 
+    const key = await php.info('news')
+    const response = await fetch(`http://cors-anywhere.herokuapp.com/http://newsapi.org/v2/everything?q=-velenje america "coronavirus"&sortBy=popularity&apiKey=${key}`).catch(() => {
+        // noArticlesFoundNotification()
+    })
+    // const response = await fetch(newsApiLoadUrl).catch(err => {
+    //     noArticlesFoundNotification()
+    // })
+    const json = await response.json()
+    const articles = await json.articles
 
-//     const response = await fetch(`http://cors-anywhere.herokuapp.com/`).catch(() => {
-//         noArticlesFoundNotification()
-//     })
-//     // const response = await fetch(newsApiLoadUrl).catch(err => {
-//     //     noArticlesFoundNotification()
-//     // })
-//     const json = await response.json()
-//     const articles = await json.articles
-
-//     console.log(articles)
-
-
-// }
-
-
-
-
-
-function sayHello (name, age) {
-    // console.log(name)
-    // console.log(age)
-    // console.log(this)
+    console.log(articles, `http://cors-anywhere.herokuapp.com/http://newsapi.org/v2/everything?q=-velenje america "coronavirus"&sortBy=popularity&apiKey=${key}`)
 }
-sayHello.call('This', 'Nik Topler', 18)
 
 const information = {
     firstName : 'Nik',
@@ -833,8 +781,18 @@ const information = {
 let { firstName } = information
 // console.log(firstName)
 
-
-let newArray = [1 ,2, 123, 23, 4, 3.123, 12, 93, 0]
-let result = newArray.filter( val => { return val % 2 === 1} )
-// console.log(result)
+function createFormData(word) { 
+    let formData = new FormData
+        formData.append(word, '') 
+    return formData
+}
+function capitalizeString(string) { return string.charAt(0).toUpperCase() + string.slice(1) }
+function removeCharactersInString(string, frontNumber, backNumber) { return string.slice(frontNumber, backNumber)}
+function removeDuplicates(array) { array.splice(0, array.length, ...(new Set(array))) }
+function removeSelectedValuesFromArray(array, target) { return target.filter(val => !array.includes(val)) }
+function addCharacterBetweenSpaceInString(word, replace, character) { 
+word = word.trim().replace(/\s\s+/g, ' ')
+    if(replace === ' ') return word.replace(/\s/g, character) 
+    else if(replace === '+') return word.replace(/\+/g, character)
+}
 

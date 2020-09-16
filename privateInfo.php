@@ -5,11 +5,7 @@ $dotend = Dotenv::createImmutable(__DIR__);
 $dotend->load();
 
 if($_SERVER['REQUEST_METHOD'] !== 'POST') return;
-if(isset($_POST['images'])) return image();
-if(isset($_POST['user'])) return user();
-if(isset($_POST['weather'])) return weather();
-
-function image() { echo $_ENV['IMAGE_API_KEY']; }
-function user() { echo $_ENV['USER_LOCATION_API_KEY']; }
-function weather() { echo $_ENV['WEATHER_API_KEY']; }
-    
+if(isset($_POST['images'])) echo $_ENV['IMAGE_API_KEY']; 
+else if(isset($_POST['user'])) echo $_ENV['USER_LOCATION_API_KEY'];
+else if(isset($_POST['weather'])) echo $_ENV['WEATHER_API_KEY'];
+else if(isset($_POST['news'])) echo $_ENV['NEWS_API_KEY'];

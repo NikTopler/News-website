@@ -91,7 +91,7 @@ function hideSuggestWords() {
     mainSearchInput.style.borderBottomLeftRadius = '6px'
     mainSearchInput.style.borderBottomRightRadius = '6px'
     suggestMainInput.classList.add('disable')
-    removeAllSuggestWordBoxes()
+    suggest.removeAllSuggestWordBoxes()
 }
 
 function hideSelectCountry() {
@@ -127,4 +127,16 @@ function resetExtraSearchOptions() {
     indexTimeLabel.innerHTML = 'Anytime'
     for(let i = 0; i < 3; i++)
         document.querySelectorAll('.extra-search-options > div > input')[i].value = '' 
+}
+
+function sidebarCategorySelect(selectedElement) {
+    if(selectedElement.classList.contains('side-menu-active')) return
+    selectedElement.classList.add('side-menu-active')
+    selectedElement.firstElementChild.classList.add('side-menu-active')
+    /* Search news articles */    
+} 
+function removeActiveSidebarCategory() {
+    let oldSelectedElements = document.querySelectorAll('.side-menu-active')
+    for(let i = 0; i < oldSelectedElements.length; i++)
+        oldSelectedElements[i].classList.remove('side-menu-active')
 }

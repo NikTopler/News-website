@@ -68,7 +68,7 @@
                     onclick="mainSearch('extra')">Search</button>
             </footer>
         </aside>
-        <aside class="search-words absolute disable" id="search-words" onmouseover="mouseSuggestHoverChange(true)" onmouseout="mouseSuggestHoverChange(false)">
+        <aside class="search-words absolute disable" id="search-words" onmouseover="suggest.mouseSuggestHoverChange(true)" onmouseout="suggest.mouseSuggestHoverChange(false)">
             <hr class="absolute">
         </aside>
     </div>
