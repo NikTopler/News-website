@@ -1,7 +1,7 @@
 body{
     display: grid;
     grid-template-rows: 65px 1fr;
-    overflow: hidden;
+    overflow: auto;
 }
 
 /*? Navigation Bar */
@@ -413,7 +413,7 @@ body{
         width: 17.5rem;
         overflow: hidden;
     }
-    .side-bar-content{
+    .side-bar-content {
         font-size: 0.875rem;
         height: 100%;
         width: 17.5rem;
@@ -537,11 +537,12 @@ body{
     }
         /** Main Section */ 
             .main-content-section {
-                width: 1180px;
-                min-width: 500px;
+                max-width: 1176px;
+                width: 1080px;
+                min-width: 250px;
                 height: 100%;
                 padding: 20px;
-                margin-top: 65px;
+                margin: auto;
             }
             .main-content-container {
                 height: 100%;
@@ -1330,15 +1331,22 @@ body{
             }
 
     /** Responsiveness */
-        /* @media screen and (max-width: 930px) {
-            .navigation-bar{
-                grid-template-columns: 120px 1fr 85px;
+        /* @media screen and (max-width: 1150px) {
+            .article-container {
+                grid-column: 1/8;
             }
-            .main-search-input,.extra-option-icon{
-                display: none;
+            #main-side-content-container {
+                grid-column: 8/13;
             }
-            .search-icon-figure{
-                grid-column: 3/4;
+        } */
+        @media screen and (max-width: 1681px) {
+            .main-content-section {
+                margin-left: 280px;
+            }
+        }
+        @media screen and (max-width: 1100px) {
+            .main-content-section {
+                margin-left: 0px;
             }
             .side-bar-content {
                 background-color: var(--bg);
@@ -1346,6 +1354,29 @@ body{
                 overflow: auto;
                 z-index: 2;
             }
-
-        } */
-    
+            .side-bar-content {
+                left: -280px;
+            }
+        }
+        @media screen and (max-width: 964px) {
+            .navigation-bar { grid-template-columns: 120px 1fr 85px; }
+            .main-search-input,
+            .extra-option-icon {
+                display: none;
+            }
+            .search-icon-figure{
+                grid-column: 3/4;
+            }
+        }
+        /* Ipad */
+        @media screen and (max-width: 768px) {
+            #main-side-content-container {
+                display: none;
+            }
+            .article-container {
+                grid-column: 1/13;
+            }
+            .main-content-section {
+                width: 100%;
+            }
+        }

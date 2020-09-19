@@ -25,17 +25,21 @@ function checkWindowWidth900() {
 function manageExtraSearchOptions() {
     if(extraSearchOptions.classList.contains('disable')) {
         hideSuggestWords()
-        extraSearchOptions.classList.remove('disable')
-        mainSearchInput.style.borderBottomLeftRadius = '0'
-        mainSearchInput.style.borderBottomRightRadius = '0'
-        extOptIcon.style.transform = 'rotate(180deg)'
-        if(!indexTimeSelect.classList.contains('disable')) indexTimeSelect.classList.add('disable')
-    } else {
-        extraSearchOptions.classList.add('disable')
-        mainSearchInput.style.borderBottomLeftRadius = '6px'
-        mainSearchInput.style.borderBottomRightRadius = '6px'
-        extOptIcon.style.transform = 'rotate(0deg)'
-    }
+        showExtraSearchOptions()
+    } else hideExtraSearchOptions()
+}
+function showExtraSearchOptions() {
+    extraSearchOptions.classList.remove('disable')
+    mainSearchInput.style.borderBottomLeftRadius = '0'
+    mainSearchInput.style.borderBottomRightRadius = '0'
+    extOptIcon.style.transform = 'rotate(180deg)'
+    if(!indexTimeSelect.classList.contains('disable')) indexTimeSelect.classList.add('disable')
+}
+function hideExtraSearchOptions() {
+    extraSearchOptions.classList.add('disable')
+    mainSearchInput.style.borderBottomLeftRadius = '6px'
+    mainSearchInput.style.borderBottomRightRadius = '6px'
+    extOptIcon.style.transform = 'rotate(0deg)'
 }
 function resetExtraSearchOptions() {
     indexTimeLabel.innerHTML = 'Anytime'

@@ -302,4 +302,4 @@ for (let i = 0; i < replacementList.length; i++) {
   for (let j = 0; j < chars.length; j++)
     diacriticsMap[chars[j]] = replacementList[i].base
 }
-function removeDiacritics(str) { return str.replace(/[^\u0000-\u007e]/g, function(c) { return diacriticsMap[c] || c }) }
+function removeDiacritics(str) { return str.replace(/[^\u0000-\u007e]/g, (c) => { return diacriticsMap[c] || c }) }

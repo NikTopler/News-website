@@ -15,7 +15,7 @@
                 placeholder="Search for latest news articles" autocomplete="off" value="">
             <figure class="search-icon-figure flex align-center justify-center relative" id="search-icon-figure">
                 <a href="#" class="search-icon flex align-center justify-center border-radius-50"
-                    id="main-search-icon-a" onclick="mainSearch()">
+                    id="main-search-icon-a" onclick="mainSearch(undefined,'main-input')">
                     <i class="far fa-search" id="main-search-icon"></i>
                     <i class="far fa-arrow-left back-icon disable" id="main-search-icon-back-left"></i>
                 </a>

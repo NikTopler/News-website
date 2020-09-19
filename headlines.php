@@ -13,6 +13,7 @@
 
     <script src="JS/variables.js" defer></script>
     <script src="JS/show.js" defer></script>
+    <script src="JS/diacritics.js" defer></script>
     <script src="JS/main.js" defer></script>
     <script src="JS/sign.js" defer></script>
 

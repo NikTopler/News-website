@@ -40,10 +40,11 @@
         const submitButton = document.getElementById('extraOptionsSearchButton')
         const date = document.getElementById('extra-option-select')
 
-
+    /** Navigation Bar Right */
+        const loginButton = document.getElementById('login-button')
     /** Extra Search Options */
-        let indexTimeSelect = document.getElementById('index-time-select')
-        let indexTimeLabel = document.getElementById('index-time-label')
+        const indexTimeSelect = document.getElementById('index-time-select')
+        const indexTimeLabel = document.getElementById('index-time-label')
 
     /* Navigation Bar Right */
         const logInOptions = document.getElementById('login-option-div')
@@ -62,6 +63,9 @@
         const sideBarAboutContent = document.getElementById('about-sidebar-content')
         const mainContentContainer = document.getElementById('main-content-container')
         let mainContentHeader = document.getElementById('main-content-header')
+        const showCountriesLink = document.getElementById('show-countries-button')
+            const sclSpan = showCountriesLink.firstElementChild
+            const sclStrong = showCountriesLink.lastElementChild
 
         
     const overlay = document.getElementById('overlay')
