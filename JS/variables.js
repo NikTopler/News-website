@@ -52,22 +52,24 @@
     /** Main Content */
         /** Side Menu */
         let sideBarContent = document.getElementById('side-bar-content')
+        let sideBar = document.getElementById('side-bar')
         const selectCountryDiv = document.getElementById('select-country')
         const listOfCountries = document.getElementById('list-of-countries')
         const selectedCountry = document.getElementById('country-name-side-menu')
         const suggestCountryCountainer = document.getElementById('suggest-country')
         const searchCountriesInput = document.getElementById('search-country-input')
-        let mainContentSection = document.getElementById('main-content-section')
+        const mainContentSection = document.getElementById('main-content-section')
         let mainAsideContent = document.getElementById('main-side-content-container')
         let aboutContentSection = document.getElementById('about-content-section')
         const sideBarAboutContent = document.getElementById('about-sidebar-content')
         const mainContentContainer = document.getElementById('main-content-container')
         let mainContentHeader = document.getElementById('main-content-header')
         const showCountriesLink = document.getElementById('show-countries-button')
-            const sclSpan = showCountriesLink.firstElementChild
-            const sclStrong = showCountriesLink.lastElementChild
+            const sclSpan = showCountriesLink.firstElementChild.firstElementChild
+            const sclStrong = showCountriesLink.firstElementChild.lastElementChild
 
-        
+    const main = document.getElementById('main')
+       
     const overlay = document.getElementById('overlay')
     let navigationBarProfileImageDiv = document.getElementById('navigation-bar-profile-img-div')
     let extOptProfile = document.getElementById('profile-extra-options')

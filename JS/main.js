@@ -1,6 +1,8 @@
+let pathLocation = '../'
 let weatherArrayToday
 let weatherArrayTommorow
 let weatherArray2Days
+
 const weather = {
     async getweather() {
         city = changeDiacritics(userLocationInformationValue[3])
@@ -93,9 +95,12 @@ const searchBox = {
 let mouseSuggestHover = false 
 let moreSuggestWordsArray = []
 const suggest = {
-    fetch : async (input) => {
-        // const res = await fetch(`https://api.datamuse.com/words?ml=${input}`)
-        const res = await fetch(`https://api.datamuse.com/sug?s=${input}`)
+    fetch : async (input, type) => {
+        let res
+        place = 0
+        if(type === 'words' || !type) res = await fetch(`https://api.datamuse.com/words?ml=${input}`)
+        else if(type === 'suggest') res = await fetch(`https://api.datamuse.com/sug?s=${input}`)
+        else if(type === 'sp') res = await fetch(`https://api.datamuse.com/words?sp=${input}`)
         return words = await res.json()    
     },
     suggest : async() => {
@@ -103,19 +108,19 @@ const suggest = {
         let suggestWordsArray = []
         let input = mainSearchInput.value.split(' ')
         let n = 0
-    
-        while(suggestWordsArray.length < 21) { 
+        const maxLength = 40
+
+        while(suggestWordsArray.length < 30) { 
             fetchArray = await suggest.fetch(input[n])
-    
+
             for(let i = 0; i < fetchArray.length; i++)
-                if(suggestWordsArray.indexOf(fetchArray[i].word) === -1 && fetchArray[i].word !== mainSearchInput.value) suggestWordsArray.push(fetchArray[i].word)
+                if(suggestWordsArray.indexOf(fetchArray[i].word) === -1 && fetchArray[i].word !== mainSearchInput.value && suggestWordsArray.length < 30) suggestWordsArray.push(fetchArray[i].word)
 
             input[n] = removeCharactersInString(input[n], 0, -1)
             if(input.length === 0) break
         }
         suggest.generate(suggestWordsArray)
         removeDisableSideElements()
-    
     },
     generate : (array) => {
         let section = document.querySelector('article.suggested-words.aside section')
@@ -130,11 +135,12 @@ const suggest = {
         }
     },
     manageSuggestWords : async () => {
-        let suggestWordsArray = await suggest.fetch(mainSearchInput.value)
+        const maxLength = 10
+        let suggestWordsArray = await suggest.getSuggestWords()
         if(suggestWordsArray.length === 0) return hideSuggestWords()
         
-        if(suggestWordsArray.length > 6) suggestWordsArray = removeCharactersInString(suggestWordsArray, 4, suggestWordsArray.length)
-    
+        if(suggestWordsArray.length > maxLength) 
+            suggestWordsArray = suggestWordsArray.slice(0, maxLength)
         suggest.suggestBox(suggestWordsArray)
     
         for(let i = 0; i < suggestMainInput.getElementsByTagName('div').length;  i++) {
@@ -144,7 +150,14 @@ const suggest = {
                 suggestMainInput.getElementsByTagName('div')[i].classList.add('active') 
             }
             suggestMainInput.getElementsByTagName('div')[i].onmouseleave = () => { suggestMainInput.getElementsByTagName('div')[i].classList.remove('active','key') }
-        }    
+        }        
+    },
+    getSuggestWords : async() => {
+        let array
+        if(mainSearchInput.value.length < 3) array = await suggest.fetch(mainSearchInput.value, 'sp')
+        else array = await suggest.fetch(mainSearchInput.value, 'words')
+        if(array.length === 0) array = await suggest.fetch(mainSearchInput.value, 'suggest')
+        return array
     },
     suggestBox : (words) => {
         let wordBoxes = words.map(word => `<div class="grid pointer" onclick="suggest.selectSuggestedSearchOption(this.firstElementChild)">
@@ -199,20 +212,9 @@ const responsiveVersion = {
     // }
 }
 
-const regularExpressions = {
-    url : {
-        query : /[\?|\&]+[q]+[=].*?[&]/g,
-        country : /[\?|\&]+[c]+[o]+[u]+[=].{2}/g,
-        backgroundColor : /[\&]+[b]+[g]+[=].*/g
-    },
-    string : {
-        symbols : /[@_!#$%^&*()<>?/|}{~:]/g
-    }
-}
-
 const php = {
     info : async(word) => {
-        const response =  await fetch('privateInfo.php', {                          
+        const response =  await fetch(`${pathLocation}privateInfo.php`, {                          
             method: "POST", 
             body: createFormData(word)
         })
@@ -228,13 +230,33 @@ const php = {
 }
 
 const error = {
+    window : () => {
+        // Checkes if correct country acronym is in URL
+        if(window.location.search.match(regularExpressions.url.country)) {
+            let countryAcronym = window.location.search.match(regularExpressions.url.country)[0].slice(5, 7)
+            let country = getAcronymCountry(countryAcronym)
+                if(country) sclStrong.innerHTML = country
+                else return openLinks(filePath.headlines)
+        }
+    },
     headlines : () => {
 
     },
     search : () => {
-        if(!window.location.search.match(regularExpressions.url.country) 
-            || !window.location.search.match(regularExpressions.url.backgroundColor)
-            || !window.location.search.match(regularExpressions.url.search)) openLinks(filePath.headlines)
+        // if(mainSearchInput.value.length === 0) return true
+        // if(window.location.pathname.includes('search') && window.location.search.match(regularExpressions.url.query)[0].slice(3, -1).length === 0) return true
+        // if(window.location.search.match(regularExpressions.url.query)[0].slice(3, -1).length === 0) return true
+    }
+}
+
+const regularExpressions = {
+    url : {
+        query : /[\?|\&]+[q]+[=].*?[&]/g,
+        country : /[\?|\&]+[c]+[o]+[u]+[=].{2}/g,
+        backgroundColor : /[\&]+[b]+[g]+[=].*/g
+    },
+    string : {
+        symbols : /[@_!#$%^&*()<>?/|}{~:]/g
     }
 }
 
@@ -261,10 +283,12 @@ window.onload = async () => {
     // Close all open windows
         hideExtraSearchOptions()
         hideSuggestWords()
+    // document.querySelectorAll('article').forEach(article => { article.onclick = () => { alert() }})
 
     document.querySelectorAll('input').forEach(input => { input.autocomplete = 'off' })
 
-    await user.location()
+    error.window()
+
     removeActiveSidebarCategory()
     if (window.location.pathname.includes('headlines')) headlines()
     else if (window.location.pathname.includes('for-you')) forYou()
@@ -281,13 +305,12 @@ window.onload = async () => {
     else if (window.location.pathname.includes('about')) about()
     else if (window.location.pathname.includes('help')) help()
     else if (window.location.pathname.includes('search')) mainSearch()
-
+    await user.location()
     // changeBackgroundColor()
 
     // let query = location.search.match(regularExpressions.url.query)[0]
     //     query = removeCharactersInString(query, 3, query.length - 1)
     
-    /* Search news */
 }
 
 window.onclick = (e) => {      
@@ -304,6 +327,11 @@ function historyPushState(webiste, string, country, background) { history.pushSt
 
 function changeBackgroundColor() { document.body.className = window.location.search.match(regularExpressions.url.backgroundColor)[0].slice(4,10) }
 
+/**
+ * This function gets a language and returns it's acronym
+ * @param {string} target 
+ * @returns {string} language acronym
+ */
 function getLanguageAcronym(target) {
     for(let i = 0; i < language.length; i++)
         if(language[i] === target)
@@ -381,7 +409,9 @@ function fahrenheitToKelvin(number) { return (number - 32) * 5/9 + 273 }
 async function headlines() {
     // await weather.getWeather()   
     // weather.updateWeather()
-    sidebarCategorySelect(document.querySelector('.fa-newspaper').parentElement)
+
+    pathLocation = ''
+    sidebarCategorySelect(document.querySelector('.fa-newspaper').parentElement.parentElement)
 
     historyPushState(window.location.origin + window.location.pathname, '', `?cou=${getCountryAcronym(selectedCountry.innerHTML)}`,`&bg=${backgroundColor}`)
 }
@@ -390,8 +420,9 @@ async function headlines() {
     function mainSearch(extra, type) {
         let url = ''
         let newSearch = false 
+        pathLocation = ''
 
-        // error.search()
+        if(error.search() === true) return 
 
         if(!type) type = 'main-url'
         if(!window.location.pathname.includes('search')) newSearch = true
@@ -458,25 +489,25 @@ async function headlines() {
 /* FOR YOU */
 
 function forYou() {
-    sidebarCategorySelect(document.querySelector('.fa-user-alt').parentElement)
+    sidebarCategorySelect(document.querySelector('.fa-user-alt').parentElement.parentElement)
 }
 
 /* FOLLOWING */
 
 function following() {
-    sidebarCategorySelect(document.querySelector('.fa-star').parentElement)
+    sidebarCategorySelect(document.querySelector('.fa-star').parentElement.parentElement)
 }
 
 /* LIBRARY */
 
 function library() {
-    sidebarCategorySelect(document.querySelector('.fa-bookmark').parentElement)
+    sidebarCategorySelect(document.querySelector('.fa-bookmark').parentElement.parentElement)
 }
 
 /* CATEGORIES */
 
 function category(word) {
-    sidebarCategorySelect(document.querySelector(`.${word}`).parentElement)
+    sidebarCategorySelect(document.querySelector(`.${word}`).parentElement.parentElement)
 }
 
 /* SETTINGS */
@@ -494,7 +525,9 @@ mainSearchInput.onfocus = () => {
     else if(mainSearchInput.value.length !== 0) showSuggestWords()
     suggest.manageSuggestWords()
 }
-
+mainSearchInput.onblur = () => {
+    // hideSuggestWords()
+}
 mainSearchInput.oninput = () => {
     if(mainSearchInput.value.length === 0) return hideSuggestWords()
     else if(suggestMainInput.classList.contains('disable')) showSuggestWords()
@@ -506,7 +539,7 @@ mainSearchInput.onkeyup = (e) => {
     let suggestDivActiveKey = suggestMainInput.querySelectorAll('div.active.key')
     if(e.keyCode === 13) {  
         if(suggestDivActiveKey.length === 1) historyPushState(location.origin + location.pathname, `?q=${removeDiacritics(suggestDivActiveKey[0].firstElementChild.innerHTML).trim()}&`, `cou=${getCountryAcronym(selectedCountry.innerHTML)}&`,`bg=${backgroundColor}`)
-        else historyPushState(location.origin + location.pathname, `?q=${removeDiacritics(mainSearchInput.value).trim()}&`, `cou=${getCountryAcronym(selectedCountry.innerHTML)}&`,`bg=${backgroundColor}`)
+        else historyPushState(location.origin + location.pathname, `?q=${mainSearchInput.value.trim()}&`, `cou=${getCountryAcronym(selectedCountry.innerHTML)}&`,`bg=${backgroundColor}`)
         mainSearch()
     } 
     if(suggestMainInput.classList.contains('disable') || suggestMainInput.querySelectorAll('div').length === 0) return
@@ -539,14 +572,9 @@ function updateCountrySelect(country) {
 }
 
 function createUrlPath(type, search) {
-    if(search === undefined && location.pathname.includes(type)) return 
     let path 
-    let query = ''
+    if(search === undefined && location.pathname.includes(type)) return 
     if(type === 'headlines') path = filePath.headlines
-    else if(type === 'search') {
-        path = filePath.search 
-        query = `q=${search}&`
-    } 
     else if(type === 'following') path = filePath.following
     else if(type === 'for-you') path = filePath.forYou
     else if(type === 'library') path = filePath.library
@@ -557,8 +585,8 @@ function createUrlPath(type, search) {
     else if(type === 'entertainment') path = filePath.entertainment
     else if(type === 'sports') path = filePath.sports
     else if(type === 'health') path = filePath.health
-    
-    return path = `${path}?${query}cou=${getCountryAcronym(selectedCountry.innerHTML)}&bg=${backgroundColor}`
+    path = `${path}?cou=${getCountryAcronym(selectedCountry.innerHTML)}&bg=${backgroundColor}`
+    openLinks(path)
 }
 
 let activeCountry
@@ -694,15 +722,15 @@ function clickInOutCheck(parent, target) {
     if(checkIfClickIsOnElement(hasChildren, target) === true || checkIfClickIsOnElement(noChildren, target) === true) clickOnOpenedElement = true
     else clickOnOpenedElement = false
 
-    if(clickOnOpenedElement === false && parent === extraSearchOptions && target !== extOptIcon) hideExtraSearchOptions()
-    else if(clickOnOpenedElement === false && parent === suggestMainInput) hideSuggestWords()
-    else if(clickOnOpenedElement === false && parent === extOptProfile) manageExtraProfileOptions()
-    else if(clickOnOpenedElement === false && parent === selectCountryDiv && countryDivExceptions.some((val) => val === target) === false) hideSelectCountry()
-    else if(clickOnOpenedElement === false && parent === logInOptions && target !== loginButton) manageLoginOptions()
-
     children = []
     hasChildren = []
     noChildren = []
+    if(clickOnOpenedElement === true) return
+    if(parent === extraSearchOptions && target !== extOptIcon) hideExtraSearchOptions()
+    else if(parent === suggestMainInput && document.activeElement !== mainSearchInput) hideSuggestWords() 
+    else if(parent === extOptProfile) manageExtraProfileOptions()
+    else if(parent === selectCountryDiv && countryDivExceptions.some((val) => val === target) === false) hideSelectCountry()
+    else if(parent === logInOptions && target !== loginButton) manageLoginOptions()
 } 
 function doesElementHaveChildren(parent) {
     if(parent.children.length > 0){
