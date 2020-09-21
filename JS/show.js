@@ -1,25 +1,18 @@
-
 let sideMenuCounter = 0
 function manageSideMenu() {
-    if(checkWindowWidth900() === true && sideMenuCounter === 0){
-        sideBarContent.style.left = '-100%'
+    if(window.innerWidth < 1101 && sideMenuCounter === 0){
+        sideBar.style.marginLeft = '-100%'
         sideMenuCounter = 1
-    } else if(checkWindowWidth900() === true && sideMenuCounter === 1){
-        sideBarContent.style.left = '0%'
+    } else if(window.innerWidth < 1101 && sideMenuCounter === 1){
+        sideBar.style.marginLeft = '0'
         sideMenuCounter = 0
-    } else if(checkWindowWidth900() === false && sideMenuCounter === 0){
-        sideBarContent.style.left = '-100%'
+    } else if(window.innerWidth > 1100 && sideMenuCounter === 0){
+        sideBar.style.marginLeft = '-100%'
         sideMenuCounter = 1
-    } else if(checkWindowWidth900() === false && sideMenuCounter === 1) {
-        sideBarContent.classList.remove('disable')
-        sideBarContent.style.left = '0%'
+    } else if(window.innerWidth > 1100 && sideMenuCounter === 1) {
+        sideBar.style.marginLeft = '0'
         sideMenuCounter = 0
     }
-}
-
-function checkWindowWidth900() {
-    if(window.innerWidth > 930) return true
-    else return false
 }
 
 function manageExtraSearchOptions() {
@@ -134,13 +127,13 @@ function resetExtraSearchOptions() {
 }
 
 function sidebarCategorySelect(selectedElement) {
-    if(selectedElement.classList.contains('side-menu-active')) return
-    selectedElement.classList.add('side-menu-active')
-    selectedElement.firstElementChild.classList.add('side-menu-active')
+    if(selectedElement.classList.contains('active')) return
+    selectedElement.classList.add('active')
+    selectedElement.firstElementChild.classList.add('active')
     /* Search news articles */    
 } 
 function removeActiveSidebarCategory() {
-    let oldSelectedElements = document.querySelectorAll('.side-menu-active')
+    let oldSelectedElements = document.querySelectorAll('sidebar-category.active')
     for(let i = 0; i < oldSelectedElements.length; i++)
-        oldSelectedElements[i].classList.remove('side-menu-active')
+        oldSelectedElements[i].classList.remove('active')
 }
