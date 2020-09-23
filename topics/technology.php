@@ -5,52 +5,39 @@
     <main id="main" class="flex align-center justify-center">
 
         <?php include '../add-ons/side-bar.php' ?>
+        <section class="main-content-section full" id="main-content-section">
+            <div class="main-content-container">
+                <div class="article-container">
+                    <div class="main-header">
+                            <div class="title-container">
+                                <div class="image-container border-radius-50 technology">
+                                    <i class="far fa-microchip fa-lg"></i>
+                                </div>
+                            <div class="title">
+                                    <h2>Technology</h2>
+                            </div>
+                            </div>
+                            <div class="buttons">
+                                <div class="white-button follow topic" onclick="followCategory()">
+                                    <i class="far fa-star fa-lg"></i>
+                                    <span>Follow</span>
+                                </div>
+                                <div class="white-button share topic">
+                                        <i class="fas fa-share-alt fa-lg"></i>
+                                    <span>Share</span>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
 
     </main>
 
     <?php include '../add-ons/navigation-bar.php' ?>
 
-    <div class="login-option-div grid absolute fixed" id="login-option-div">
-        <header class="grid">
-            <span class="flex align-center justify-center ">Sign in to</span>
-            <h1 class="flex align-center justify-center ">News Website</h1>
-        </header>
-
-        <div class="google-facebook-links">
-            <div class="external-login-container" id="googleBtn">
-                <div class="external-login-botton google-login-button grid pointer">
-                    <div class="icons8-google"></div>
-                    <label class="flex align-center justify-center pointer">Google</label>
-                </div>
-            </div>
-            <!--! Facebook is curently unavailable-->
-            <!-- <div class="external-login-container facebook-login-container relative" onclick="showUnableAtTheMomentNotification()">
-                <div class="external-login-botton facebook-login-button grid pointer">
-                    <i class="fab fa-facebook fa-2x flex align-center justify-center"></i>                    
-                    <label class="flex align-center justify-center pointer">Facebook</label>             
-                </div>
-            </div> -->
-            <div class="external-login-container" id="github-button">
-                <div class="external-login-botton github-login-button grid pointer">
-                    <i class="fa fa-github fa-2x flex align-center justify-center"></i>
-                    <label class="flex align-center justify-center pointer">GitHub</label>
-                </div>
-            </div>
-        </div>
-        <hr>
-        <span class="or-login absolute">or</span>
-
-
-
-        <figure class="x-icon absolute flex align-center justify-center border-radius-50">
-            <i class="fal fa-times fa-lg pointer" onclick="manageLoginOptions()"></i>
-        </figure>
-
-        <footer class="login-other-options">
-            <a href="signin.php" class="blue-link">Create Account</a>
-            <a href="login.php" class="blue-link">Log In</a>
-        </footer>
-    </div>
+    <?php include '../add-ons/login.php' ?> 
 
     <?php include '../add-ons/select-country.php' ?>
 

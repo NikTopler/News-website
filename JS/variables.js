@@ -2,7 +2,7 @@
 
     const countries = ['Arab Emirates','Argentina','Australia','Austria','Belgium','Brasil','Bulgaria','Canada','China','Colombia','Cuba','Czech Republic','Egypt','England','France','Germany','Greece','Hong Kong','Hungary','Indonesia','Ireland','Israel','Italy','Japan','Latvia','Lithuania','Malaysia','Mexico','Morocco','Netherlands','New Zealand','Nigeria','Norway','Philippines','Poland','Portugal','Romania','Russia','Saudia Arabia','Serbia','Singapore','Slovakia','Slovenia','South Africa','South Korea','Sweden','Switzerland','Taiwan','Thailand','Turkey','Ukraine','United States','Venezuela']
     const countryAcronyms = ['ae','ar','au','at','be','br','bg','ca','cn','co','cu','cz','eg','gb','fr','de','gr','hk','hu','id','it','il','it','jp','lt','lv','my','mx','ma','nl','nz','ng','no','ph','pl','pt','ro','ru','sa','rs','sg','sk','si','za','kr','se','ch','tw','th','tr','ua','us','ve']
-    const categories = ['all','Tbusiness','entertainment','general','health','science','sports','technology']
+    const categories = ['all','business','entertainment','general','health','science','sports','technology','world']
     const language = ['All','Arabic','German','English','Spanish','French','Italian','Dutch','Norwegian','Portuguese','Russian','Swedish','Chinese']
     const languageAcronyms = ['all','ar','de','en','es','fr','it','nl','no','pt','ru','se','zh']
     const colors = ['rgb(211, 47, 47)','rgb(123, 31, 162)','rgb(81, 45, 168)','rgb(48, 63, 159)','rgb(25, 118, 210)','rgb(2, 136, 209)','rgb(0, 151, 167)','rgb(0, 121, 107)','rgb(56, 142, 60)','rgb(104, 159, 56)','rgb(175, 180, 43)','rgb(251, 192, 45)','rgb(255, 160, 0)','rgb(245, 124, 0)','rgb(230, 74, 25)','rgb(93, 64, 55)','rgb(97, 97, 97)']

@@ -106,18 +106,16 @@ const suggest = {
     suggest : async() => {
         let fetchArray = []
         let suggestWordsArray = []
-        let input = mainSearchInput.value.split(' ')
+        let replaceInput = mainSearchInput.value.trim().replace(regularExpressions.string.symbols, ' ')
+        let input = replaceInput.split(' ')
         let n = 0
         const maxLength = 40
-
-        while(suggestWordsArray.length < 30) { 
+        while(suggestWordsArray.length < maxLength) { 
             fetchArray = await suggest.fetch(input[n])
-
             for(let i = 0; i < fetchArray.length; i++)
-                if(suggestWordsArray.indexOf(fetchArray[i].word) === -1 && fetchArray[i].word !== mainSearchInput.value && suggestWordsArray.length < 30) suggestWordsArray.push(fetchArray[i].word)
-
-            input[n] = removeCharactersInString(input[n], 0, -1)
-            if(input.length === 0) break
+                if(suggestWordsArray.indexOf(fetchArray[i].word) === -1 && fetchArray[i].word !== mainSearchInput.value && suggestWordsArray.length < maxLength) suggestWordsArray.push(fetchArray[i].word)
+            if(input.length === n) break
+            n++
         }
         suggest.generate(suggestWordsArray)
         removeDisableSideElements()
@@ -184,34 +182,6 @@ const suggest = {
     }
 }
 
-const responsiveVersion = {
-    // mobileVersionNavigationBar() {
-    //     mainSearchIcon.classList.add('disable')
-    //     mainSearchBackLeftIcon.classList.remove('disable')
-    //     navigationBarLeft.classList.add('disable')
-    //     navigationBarRight.classList.add('disable')
-    //     navigationBarMiddle.style.gridColumn = '1/4'
-    //     mainSearchFigure.style.gridColumn = '1/2'
-    //     mainSearchBackLeftTooltiptext.classList.remove('disable')
-    //     mainSearchInput.style.display = 'grid'
-    //     extOptIcon.style.display = 'flex'
-    //     mainSearchInput.focus()
-    //     sideBarContent.style.left = '-100%'
-    //     sideMenuCounter = 1
-    // },
-    // desktopVersionNavigationBar() {
-    //     mainSearchIcon.classList.remove('disable')
-    //     mainSearchBackLeftIcon.classList.add('disable')
-    //     navigationBarLeft.classList.remove('disable')
-    //     navigationBarRight.classList.remove('disable')
-    //     navigationBarMiddle.style.gridColumn = '2/3'
-    //     mainSearchFigure.style.gridColumn = '3/4'
-    //     mainSearchBackLeftTooltiptext.classList.add('disable')
-    //     mainSearchInput.style.display = 'none'
-    //     extOptIcon.style.display = 'none'    
-    // }
-}
-
 const php = {
     info : async(word) => {
         const response =  await fetch(`${pathLocation}privateInfo.php`, {                          
@@ -256,7 +226,7 @@ const regularExpressions = {
         backgroundColor : /[\&]+[b]+[g]+[=].*/g
     },
     string : {
-        symbols : /[@_!#$%^&*()<>?/|}{~:]/g
+        symbols : /[@_!#$%^&*()<>?/|}{~:"'-]/g
     }
 }
 
@@ -280,10 +250,10 @@ const regularExpressions = {
 // }
 
 window.onload = async () => {
+    windowWidthSettings()
     // Close all open windows
         hideExtraSearchOptions()
         hideSuggestWords()
-    // document.querySelectorAll('article').forEach(article => { article.onclick = () => { alert() }})
 
     document.querySelectorAll('input').forEach(input => { input.autocomplete = 'off' })
 
@@ -306,11 +276,7 @@ window.onload = async () => {
     else if (window.location.pathname.includes('help')) help()
     else if (window.location.pathname.includes('search')) mainSearch()
     await user.location()
-    // changeBackgroundColor()
-
-    // let query = location.search.match(regularExpressions.url.query)[0]
-    //     query = removeCharactersInString(query, 3, query.length - 1)
-    
+    // changeBackgroundColor()    
 }
 
 window.onclick = (e) => {      
@@ -320,6 +286,7 @@ window.onclick = (e) => {
     else if(selectCountryDiv.classList.contains('active')) clickInOutCheck(selectCountryDiv, e.target)
     else if(!extraSearchOptions.classList.contains('disable')) clickInOutCheck(extraSearchOptions, e.target)
 }
+window.onresize = windowWidthSettings
 
 function openLinks(string) { window.location.replace(websiteURL + string) }
 
@@ -327,11 +294,6 @@ function historyPushState(webiste, string, country, background) { history.pushSt
 
 function changeBackgroundColor() { document.body.className = window.location.search.match(regularExpressions.url.backgroundColor)[0].slice(4,10) }
 
-/**
- * This function gets a language and returns it's acronym
- * @param {string} target 
- * @returns {string} language acronym
- */
 function getLanguageAcronym(target) {
     for(let i = 0; i < language.length; i++)
         if(language[i] === target)
@@ -518,6 +480,12 @@ function settings() {
 /* ABOUT */
 
 function about() {
+}
+
+mainSearchFigure.onclick = () => {
+    if(window.innerWidth > 964) return mainSearch(undefined, 'main-input')
+    if(mainSearchIcon.classList.contains('disable') && navigationBarLeft.classList.contains('disable') && navigationBarRight.classList.contains('disable')) responsiveVersion.closeMobileVersionNavBar()
+    else responsiveVersion.openMobileVersionNavBar()
 }
 
 mainSearchInput.onfocus = () => {
@@ -814,4 +782,13 @@ function removeCharactersInString(string, frontNumber, backNumber) { return stri
 function removeDuplicates(array) { array.splice(0, array.length, ...(new Set(array))) }
 function removeSelectedValuesFromArray(array, target) { return target.filter(val => !array.includes(val)) }
 function urlEdit(string) { return decodeURIComponent(string).trim().replace(/\s\s+/g, ' ') }
+function checkIfCategoriesAreOpen() { 
+    for(let i = 0; i < categories.length; i++)
+            if(window.location.pathname.includes(categories[i]) || window.location.pathname.includes('covid-19')) 
+                return true
+    return false
+ }
 // string.trim().replace(/\s\s+/g, ' ').replace(/%20/g, ' ').replace(/%22/g, '"')
+
+function followCategory() {
+}
