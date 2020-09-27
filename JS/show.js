@@ -137,3 +137,5 @@ function removeActiveSidebarCategory() {
     for(let i = 0; i < oldSelectedElements.length; i++)
         oldSelectedElements[i].classList.remove('active')
 }
+
+

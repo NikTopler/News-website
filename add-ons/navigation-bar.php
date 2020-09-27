@@ -73,8 +73,8 @@
     </div>
 
     <div class="nav-right-side" id="navigation-bar-right">
-        <a href="#" class="login link" id="login-button" onclick="manageLoginOptions()">Log in</a>
-        <!-- <i class="profile-img-link relative">
+        <a href="#" class="login link  <?php if(isset($_SESSION['id'])) echo 'disable'?>" id="login-button" onclick="manageLoginOptions()">Log in</a>
+        <i class="profile-img-link relative  <?php if(!isset($_SESSION['id'])) echo 'disable'?>">
             <span>
             </span>
             <figure class="img border-radius-50"></figure>
@@ -88,8 +88,7 @@
                 <span class="tooltiptext-name">Nik Topler</span><br>
                 <span class="tooltiptext-name">nik.topler@gmail.com</span>
             </span>
-        </i> -->
-
+        </i>
     </div>
 
     <aside class="profile-extra-options grid absolute disable" id="profile-extra-options">

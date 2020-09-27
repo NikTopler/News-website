@@ -183,19 +183,38 @@ const suggest = {
 }
 
 const php = {
-    info : async(word) => {
-        const response =  await fetch(`${pathLocation}privateInfo.php`, {                          
+    info : async (word) => {
+        const res =  await fetch(`${pathLocation}privateInfo.php`, {                          
             method: "POST", 
-            body: createFormData(word)
+            body: createFormData(word, '')
         })
-        return await response.text()
+        return await res.text()
     },
-    session : async() => {
-        const response =  await fetch('include/session.inc.php', {                          
+    session : async () => {
+        const res =  await fetch('include/session.inc.php', {                          
             method: "POST", 
-            body: createFormData('user')
+            body: createFormData('user', '')
         })
-        return await response.text()
+        return await res.text()
+    },
+    userInsertInDB : async (type, userInfo, id_token, clientID) => {
+        let array
+        if(type === 'google') {
+            let id = userInfo.getId()
+            let name = userInfo.getGivenName()
+            let surname = userInfo.getFamilyName()
+            let img = userInfo.getImageUrl()
+            let email = userInfo.getEmail()
+            array = JSON.stringify([id, id_token, clientID, name, surname, img, email])
+        } else if(type === 'facebook') array = JSON.stringify([userInfo[0], userInfo[1], userInfo[2],userInfo[3], userInfo[4], userInfo[5].data.url,userInfo[6]])
+
+        const res = await fetch(`${pathLocation}include/insert.inc.php`, {
+            method: "POST", 
+            body: createFormData(type, array)
+        })
+        const data = await res.text()
+        console.log(data)
+        if(data === 'success') location.reload()
     }
 }
 
@@ -730,30 +749,34 @@ function inputExtraSearchOptionChange() {
 function addDisableSideElements() { mainAsideContent.querySelectorAll('article').forEach(article => article.classList.add('disable')) }
 function removeDisableSideElements() { mainAsideContent.querySelectorAll('article.disable').forEach(article => article.classList.remove('disable')) }
 
+function follow(element) {
+    if(element.lastElementChild.textContent === 'Follow') fillIcons(element.firstElementChild, element.lastElementChild, 'Following')
+    else emptyIcons(element.firstElementChild, element.lastElementChild, 'Follow')
+
+    if(window.location.pathname.includes('search')) followNews()
+    else followCategory()
+}
 function saveNews(element) {
-    if(element.lastElementChild.textContent === 'Save') {
-        element.firstElementChild.classList.remove('far')
-        element.firstElementChild.classList.add('fas')
-        element.lastElementChild.textContent = 'Saved'
-    } else {
-        element.firstElementChild.classList.remove('fas')
-        element.firstElementChild.classList.add('far')
-        element.lastElementChild.textContent = 'Save'
-    }
+    if(element.lastElementChild.textContent === 'Save') fillIcons(element.firstElementChild, element.lastElementChild, 'Saved')
+    else emptyIcons(element.firstElementChild, element.lastElementChild, 'Save')
     //PHP
 }
-function followNews(element) {
+function followNews() {
+    //PHP
+}
+function followCategory() {
+    
+}
 
-    if(element.lastElementChild.textContent === 'Follow') {
-        element.firstElementChild.classList.remove('far')
-        element.firstElementChild.classList.add('fas')
-        element.lastElementChild.textContent = 'Following'
-    } else {
-        element.firstElementChild.classList.remove('fas')
-        element.firstElementChild.classList.add('far')
-        element.lastElementChild.textContent = 'Follow'
-    }
-        //PHP
+function fillIcons(icon, text, string) {
+    icon.classList.remove('far')
+    icon.classList.add('fas')
+    text.textContent = string
+}
+function emptyIcons(icon, text, string) {
+    icon.classList.add('far')
+    icon.classList.remove('fas')
+    text.textContent = string
 }
 
 /* API */
@@ -772,9 +795,9 @@ async function fetchNewsArticles() {
     const articles = await json.articles
 }
 
-function createFormData(word) { 
+function createFormData(word, data) { 
     let formData = new FormData
-        formData.append(word, '') 
+        formData.append(word, data) 
     return formData
 }
 function capitalizeString(string) { return string.charAt(0).toUpperCase() + string.slice(1) }
@@ -790,5 +813,10 @@ function checkIfCategoriesAreOpen() {
  }
 // string.trim().replace(/\s\s+/g, ' ').replace(/%20/g, ' ').replace(/%22/g, '"')
 
-function followCategory() {
+
+
+// Temporary
+async function manageExtraProfileOptions() {
+    await fetch(`${pathLocation}include/logout.inc.php`)
+    openLinks(filePath.headlines);
 }

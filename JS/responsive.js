@@ -38,11 +38,11 @@ const responsiveVersion = {
     },
     smallScreen457() {
         if(window.innerWidth < 510) {
-            document.querySelectorAll('.article-container .main-header .buttons .white-button span')[0].innerHTML = ''
-            document.querySelectorAll('.article-container .main-header .buttons .white-button span')[1].innerHTML = ''
+            // document.querySelectorAll('.article-container .main-header .buttons .white-button span')[0].innerHTML = ''
+            // document.querySelectorAll('.article-container .main-header .buttons .white-button span')[1].innerHTML = ''
         } else {
-            document.querySelectorAll('.article-container .main-header .buttons .white-button span')[0].innerHTML = 'Following'
-            document.querySelectorAll('.article-container .main-header .buttons .white-button span')[1].innerHTML = 'Share'
+            // document.querySelectorAll('.article-container .main-header .buttons .white-button span')[0].innerHTML = 'Following'
+            // document.querySelectorAll('.article-container .main-header .buttons .white-button span')[1].innerHTML = 'Share'
         }
     }
 

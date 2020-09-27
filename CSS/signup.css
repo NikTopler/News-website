@@ -1,0 +1,64 @@
+main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    font-family: 'Google Sans','Noto Sans Myanmar UI',arial,sans-serif;
+    background-color: var(--bg);
+    z-index: 100;
+}
+.main-container {
+    min-width: 400px;
+    height: auto;
+    min-height: 440px;
+    padding: 40px;
+    border: 1px solid var(--border-light);
+    border-radius: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg);
+}
+.logo-container { margin: 0 auto; }
+.sign-container,
+.upper-container  {
+    margin-top: 15px;
+    text-align: center;
+}
+.upper-container span { font-size: 1.2rem; }
+
+.sign-container h1 { font-size: 1.8rem; }
+
+.main-middle-conatiner {
+    display: flex;  
+    min-height: 310px;
+    position: relative;
+    margin-top: 15px;
+}
+.email-container {
+    position: absolute;
+    min-width: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    transition: all ease-in-out .2;
+    background-color: rebeccapurple;
+}
+.password-container {
+    position: absolute;
+    min-width: 100%;
+    top: 0;
+    bottom: 0;
+    left: 100%;
+    background-color: green;
+    transition: all ease-in-out .2;
+}
+.email-container.active {
+    right: 100%;
+    left: -100%;
+}
+.password-container.active {
+    left: 0;
+}
+

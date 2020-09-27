@@ -19,7 +19,7 @@
                             </div>
                             </div>
                             <div class="buttons">
-                                <div class="white-button follow topic" onclick="followCategory()">
+                                <div class="white-button follow topic" onclick="follow(this)">
                                     <i class="far fa-star fa-lg"></i>
                                     <span>Follow</span>
                                 </div>

@@ -15,16 +15,16 @@
                                     <i class="fas fa-globe-europe fa-lg"></i>
                                 </div>
                             <div class="title">
-                                    <h2>World</h2>
+                                <h2>World</h2>
                             </div>
                             </div>
                             <div class="buttons">
-                                <div class="white-button follow topic" onclick="followCategory()">
+                                <div class="white-button follow topic" onclick="follow(this)">
                                     <i class="far fa-star fa-lg"></i>
                                     <span>Follow</span>
                                 </div>
                                 <div class="white-button share topic">
-                                        <i class="fas fa-share-alt fa-lg"></i>
+                                    <i class="fas fa-share-alt fa-lg"></i>
                                     <span>Share</span>
                                 </div>
                             </div>
