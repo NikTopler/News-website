@@ -30,23 +30,23 @@
 
 /** GitHub */
     // OAuth.initialize('qFa2sjgoyyIVRhaoOePG2ie1RqY') 
-      document.getElementById('github-btn').onclick = () => {     
-        // Initialize with your OAuth.io app public key
-        OAuth.initialize('_nPRfzTNGplyDCW0vD9dmek5QAg')
-        // Use popup for oauth
-        // Alternative is redirect
-        OAuth.popup('github').then(github => {
-        //   console.log('github:', github)
-          // Retrieves user data from oauth provider
-          // Prompts 'welcome' message with User's email on successful login
-          // #me() is a convenient method to retrieve user data without requiring you
-          // to know which OAuth provider url to call
-          github.me().then(data => {
-            // console.log('me data:', data)
-            // alert('GitHub says your email is:' + data.email + ".\nView browser 'Console Log' for more details")
-          })
-        })
-      }
+    //   document.getElementById('github-btn').onclick = () => {     
+    //     // Initialize with your OAuth.io app public key
+    //     OAuth.initialize('_nPRfzTNGplyDCW0vD9dmek5QAg')
+    //     // Use popup for oauth
+    //     // Alternative is redirect
+    //     OAuth.popup('github').then(github => {
+    //     //   console.log('github:', github)
+    //       // Retrieves user data from oauth provider
+    //       // Prompts 'welcome' message with User's email on successful login
+    //       // #me() is a convenient method to retrieve user data without requiring you
+    //       // to know which OAuth provider url to call
+    //       github.me().then(data => {
+    //         // console.log('me data:', data)
+    //         // alert('GitHub says your email is:' + data.email + ".\nView browser 'Console Log' for more details")
+    //       })
+    //     })
+    //   }
 
 
 /** FaceBook */

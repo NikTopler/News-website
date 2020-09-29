@@ -274,6 +274,8 @@ window.onload = async () => {
         hideExtraSearchOptions()
         hideSuggestWords()
 
+    if(window.location.hash === '#login') manageLoginOptions()
+
     document.querySelectorAll('input').forEach(input => { input.autocomplete = 'off' })
 
     error.window()

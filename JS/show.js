@@ -120,12 +120,6 @@ function manageLoginOptions() {
     }
 }
 
-function resetExtraSearchOptions() {
-    indexTimeLabel.innerHTML = 'Anytime'
-    for(let i = 0; i < 3; i++)
-        document.querySelectorAll('.extra-search-options > div > input')[i].value = '' 
-}
-
 function sidebarCategorySelect(selectedElement) {
     if(selectedElement.classList.contains('active')) return
     selectedElement.classList.add('active')

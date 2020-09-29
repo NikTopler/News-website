@@ -45,7 +45,22 @@
         .title-container .title h2 { font-size: 1.5rem ; }
         .white-button.topic { padding: 6px 10px; }
 
+    /* Sign up */
+        .double.psw .eye-icon-container { display: none; }
+        .double.psw .psw-repeat-container { margin: 0; }
+        .sign-container h1 { font-size: 1.5rem; }
+
 }
 @media screen and (max-width: 360px) {
     .main-content-section.full .main-header .title-container { flex-grow: 0; }
+}
+
+
+/* Sign In */
+@media screen and (max-width: 600px) {
+    .main-container {
+        min-width: calc(100% - 40px);
+        padding: 40px;
+        /* border: none; */
+    }
 }
