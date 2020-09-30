@@ -71,8 +71,8 @@
     const main = document.getElementById('main')
        
     const overlay = document.getElementById('overlay')
-    let navigationBarProfileImageDiv = document.getElementById('navigation-bar-profile-img-div')
-    let extOptProfile = document.getElementById('profile-extra-options')
+    const navigationBarProfileImageDiv = document.getElementById('outter-container')
+    const extOptProfile = document.getElementById('profile-extra-options')
 
 
     let currentNewsArticles = [

@@ -56,7 +56,12 @@
                                                 <div class="sidebar-category country" id="show-countries-button" onclick="showSelectCountry()"> 
                                                         <div class="sidebar-country-container grid">
                                                                 <span>Language & Region</span> 
-                                                                <strong id="country-name-side-menu"><?php echo 'United States' ?></strong> 
+                                                                <strong id="country-name-side-menu">
+                                                                        <?php 
+                                                                                if(isset($_SESSION['country'])) echo $_SESSION['country'][0];
+                                                                                else echo 'United States';
+                                                                        ?>
+                                                                </strong> 
                                                         </div>
                                                 </div>
                                                 <div class="sidebar-category">

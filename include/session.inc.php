@@ -25,6 +25,7 @@ class Session extends Dbh {
         $_SESSION['facebookID'] = $this->checkIfStringNull($row['facebookID']);
         $_SESSION['githubID'] = $this->checkIfStringNull($row['githubID']);
         $_SESSION['country'] = $this->getCountryWithID($row['country_id']);
+        $_SESSION['letter'] = strtoupper($email[0]);
     }
     public function checkIfStringNull($string) { 
         if($string == null) return 0;

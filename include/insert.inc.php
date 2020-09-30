@@ -53,18 +53,18 @@ class Login extends Dbh{
             $hashFacebookID = password_hash($userInfo[0], PASSWORD_DEFAULT);
             $array = [$userInfo[3], $userInfo[4], $userInfo[6], $userInfo[5], $hashFacebookID];
         } else if($type === 'standard') {
+            $color = $this->randomColor();
             $num = 1;
             $emailNum = 2;
             $countryID = $this->getCountryIDwithName($userInfo[5]);
             $hashPassword = password_hash($userInfo[3], PASSWORD_DEFAULT);
-            $sql = 'INSERT INTO users(name, surname, email, password, country_id) VALUES(?, ?, ?, ?, ?)';
-            $array = [$userInfo[0], $userInfo[1], $userInfo[2], $hashPassword, $countryID];
+            $sql = 'INSERT INTO users(name, surname, email, password, country_id, profile_color) VALUES(?, ?, ?, ?, ?, ?)';
+            $array = [$userInfo[0], $userInfo[1], $userInfo[2], $hashPassword, $countryID, $color];
         }
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute($array);
         $this->updateProfileChoice($num, $userInfo[$emailNum]);
         $this->setSessionVariables($userInfo[$emailNum]);
-        echo 'success';
     }
     public function updateID($type, $userInfo) {
         if($this->isIdSet($type, $userInfo) == 1) {
@@ -109,23 +109,10 @@ class Login extends Dbh{
     }
 
     public function standard($userInfo) {
-        $res = $this->checkIfUserExists($userInfo[2]);
-        if($res == "user exist's") {
-            echo "user exist's";
-            return;
-        } else if($res == "exist google" ||  $res == "exist facebook" || $res == "exist github") {
-            echo $res;
-            return;
-        }
-        if(!filter_var($userInfo[2], FILTER_VALIDATE_EMAIL)) {
-            echo 'incorrect email';
-            return;
-        }
-        if($userInfo[3] !== $userInfo[4]) {
-            echo "passwords don't match";
-            return;
-        }
+        $this->checkIfUserExists($userInfo[2]);
+        $this->errorHandeling($userInfo);
         $this->insert('standard', $userInfo);
+        echo 'success';
     }
     public function checkIfUserExists($email) {
         $sql = 'SELECT * FROM users WHERE email = ?';
@@ -133,12 +120,39 @@ class Login extends Dbh{
         $stmt->execute([$email]);
         $row = $stmt->fetch();
         if($row) {            
-            if($row['googleID'] != null) return "exist google";
-            if($row['facebookID'] != null) return "exist facebook";
-            if($row['githubID'] != null) return "exist github";
-            return "user exist's";
+            if($row['googleID'] != null) $this->errorHandeling("exist google");
+            if($row['facebookID'] != null) $this->errorHandeling("exist facebook");
+            if($row['githubID'] != null)  $this->errorHandeling("exist github");
+            $this->errorHandeling("user exist's");
         } 
-        else return "user doesn't exist's";  
+    }
+    public function errorOver($string) {
+        echo $string;
+        die;
+    }
+    public function errorHandeling($userInfo) {
+        $string = 'empty';
+        if(empty($userInfo[0])) $string = $string.' name';
+        if(empty($userInfo[1])) $string = $string.' surname';
+        if(empty($userInfo[2])) $string = $string.' email';
+        if(empty($userInfo[3])) $string = $string.' password';
+        if(empty($userInfo[4])) $string = $string.' password-repeat';
+        if($userInfo[5] == 'Select Country') $string = $string.' country';
+        if($string != 'empty') $this->errorOver($string);
+
+        if(strlen($userInfo[0]) > 10) $this->errorOver('name too long');
+        if(strlen($userInfo[1]) > 10) $this->errorOver('surname too long');
+
+        if(!filter_var($userInfo[2], FILTER_VALIDATE_EMAIL)) $this->errorOver('incorrect email');
+
+        if($userInfo[3] != $userInfo[4]) $this->errorOver("passwords don't match");
+        if(strlen($userInfo[3]) > 25) $this->errorOver('password too long');
+        if(preg_match('/\s/', $userInfo[3])) $this->errorOver("no white spaces in password");
+    }
+    public function randomColor() {
+        $colors = array('rgb(211,47,47)','rgb(123,31,162)','rgb(81,45,168)','rgb(48,63,159)','rgb(25,118,210)','rgb(2,136,209)','rgb(0,151,167)','rgb(0,121,107)','rgb(56,142,60)','rgb(104,159,56)','rgb(175,180,43)','rgb(251,192,45)','rgb(255,160,0)','rgb(245,124,0)','rgb(230,74,25)','rgb(93,64,55)','rgb(97,97,97)');
+        $i = array_rand($colors);
+        return $colors[$i];
     }
 }
 

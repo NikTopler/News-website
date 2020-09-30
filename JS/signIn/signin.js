@@ -47,6 +47,9 @@ function switchLoginBox() {
         email.classList.remove('active')
         password.classList.remove('active')
         setupSubHeading()
+        errorContainer.classList.add('disable')
+        emailInput.classList.remove('error-red-border')
+        email.querySelector('.label-container').classList.remove('error-red')
     }
 }
 async function checkEmail() {
@@ -57,8 +60,11 @@ async function checkEmail() {
     })
     const data = await res.text()
     
-    if(errorHandelingEmail(data) === true) switchLoginBox()
-    setupProfile()
+    if(errorHandelingEmail(data) === true) {
+        switchLoginBox()
+        setupProfile()
+    }
+    
 }
 
 const errorPswContainer = document.querySelector('.error.psw')

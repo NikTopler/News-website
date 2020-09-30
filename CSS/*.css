@@ -75,7 +75,7 @@ body{
         a{ text-decoration: none; }
     
     /** Img */
-        .img{
+        .imga{
             width: calc(var(--imageDefaultSize) * var(--times));
             height: calc(var(--imageDefaultSize) * var(--times));
         }
@@ -85,7 +85,8 @@ body{
         .search-icon:hover + .tooltiptext,
         .article-other-info .test:hover + .tooltiptext,
         .article-extra-option-icon:hover + .tooltiptext,
-        .company-date:hover .tooltiptext{
+        .company-date:hover .tooltiptext,
+        .outter-container:hover .tooltiptext{
             visibility: visible;
             opacity: 1;
             font-size: 0.7em;
@@ -138,9 +139,7 @@ body{
         width: 90%;
         border: none;
     }
-    .activeProfile{
-        background-color: var(--hover-medium) !important;
-    }
+    .activeProfile{ background-color: var(--hover-medium) !important; }
     .underline-input-animation{
         display: inline-block;
         width: 0px;

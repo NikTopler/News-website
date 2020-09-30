@@ -133,3 +133,12 @@ function removeActiveSidebarCategory() {
 }
 
 
+function manageExtraProfileOptions() {
+    if(extOptProfile.classList.contains('disable')) {
+        extOptProfile.classList.remove('disable')
+        navigationBarProfileImageDiv.classList.add('active')
+    } else {
+        extOptProfile.classList.add('disable')
+        navigationBarProfileImageDiv.classList.remove('active')
+    }
+}

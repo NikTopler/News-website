@@ -717,7 +717,7 @@ function clickInOutCheck(parent, target) {
     if(clickOnOpenedElement === true) return
     if(parent === extraSearchOptions && target !== extOptIcon) hideExtraSearchOptions()
     else if(parent === suggestMainInput && document.activeElement !== mainSearchInput) hideSuggestWords() 
-    else if(parent === extOptProfile) manageExtraProfileOptions()
+    // else if(parent === extOptProfile) manageExtraProfileOptions()
     else if(parent === selectCountryDiv && countryDivExceptions.some((val) => val === target) === false) hideSelectCountry()
     else if(parent === logInOptions && target !== loginButton) manageLoginOptions()
 } 
@@ -816,9 +816,7 @@ function checkIfCategoriesAreOpen() {
 // string.trim().replace(/\s\s+/g, ' ').replace(/%20/g, ' ').replace(/%22/g, '"')
 
 
-
-// Temporary
-async function manageExtraProfileOptions() {
+async function logOut(path) {
     await fetch(`${pathLocation}include/logout.inc.php`)
-    openLinks(filePath.headlines);
+    openLinks(filePath.headlines + path);
 }

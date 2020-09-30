@@ -74,53 +74,144 @@
 
     <div class="nav-right-side" id="navigation-bar-right">
         <a href="#" class="login link  <?php if(isset($_SESSION['id'])) echo 'disable'?>" id="login-button" onclick="manageLoginOptions()">Log in</a>
-        <i class="profile-img-link relative  <?php if(!isset($_SESSION['id'])) echo 'disable'?>">
-            <span>
-            </span>
-            <figure class="img border-radius-50"></figure>
-            <div class="first-profile-div flex align-center justify-center border-radius-50 pointer"
-                onclick="manageExtraProfileOptions()" id="navigation-bar-profile-img-div">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Gull_portrait_ca_usa.jpg"
-                    class="img border-radius-50 navigation-profile-img">
+
+        <div class="outter-container border-radius-50 pointer <?php if(!isset($_SESSION['id'])) echo 'disable'?>" id="outter-container">
+            <div>
+                <?php 
+                    if($_SESSION['profile_choice'] == 0) 
+                        echo ('<div class="img small" onclick="manageExtraProfileOptions()"><img src="'.$_SESSION['profile_img'].'" class="imga"></div>');
+                    else if($_SESSION['profile_choice'] == 1) 
+                        echo ('<div class="img small" onclick="manageExtraProfileOptions()" style="background-color: '.$_SESSION['profile_color'].';">
+                                    <div class="letter">
+                                        <span>'.$_SESSION['letter'].'</span>
+                                    </div>
+                                </div>');
+                    else if($_SESSION['profile_choice'] == 2) 
+                        echo ('<div class="img small" onclick="manageExtraProfileOptions()"><img src="'.$_SESSION['google_profile_img'].'" class="imga"></div>');
+                    else if($_SESSION['profile_choice'] == 3) 
+                        echo ('<div class="img small" onclick="manageExtraProfileOptions()"><img src="'.$_SESSION['facebook_profile_img'].'" class="imga"></div>');
+                    else if($_SESSION['profile_choice'] == 4) 
+                        echo ('<div class="img small" onclick="manageExtraProfileOptions()"><img src="'.$_SESSION['github_profile_img'].'" class="imga"></div>');
+                ?>
+                
             </div>
-            <span class="tooltiptext tooltiptextTop120">
-                <strong>Personal Information</strong><br>
-                <span class="tooltiptext-name">Nik Topler</span><br>
-                <span class="tooltiptext-name">nik.topler@gmail.com</span>
+            <span class="tooltiptext tooltiptextTop90">
+                <div><strong>Personal Information</strong></div>
+                <div class=" <?php if(!isset($_SESSION['name']) && !isset($_SESSION['surname'])) echo 'disable'?> ">
+                    <span class="tooltiptext-name">
+                        <?php echo $_SESSION['name'].' '.$_SESSION['surname'];?>
+                    </span>
+                </div>
+                <div>
+                    <span class="tooltiptext-name">
+                        <?php echo $_SESSION['email']?>
+                    </span>
+                </div>
             </span>
-        </i>
+        </div>
     </div>
 
-    <aside class="profile-extra-options grid absolute disable" id="profile-extra-options">
-        <div class="grid">
-            <aside class="profile-img-link relative flex align-center justify-center">
-                <!-- <span>
-                </span> -->
-                <!-- <figure class="img border-radius-50"></figure> -->
-                <!-- <img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Gull_portrait_ca_usa.jpg"
-                    class="img border-radius-50 profile-options-profile-img pointer" alt="img"> -->
-                <figure
-                    class="change-profile-picture grid flex align-center justify-center absolute border-radius-50 pointer">
-                    <i class="fal fa-camera"></i>
-                </figure>
-            </aside>
-            <div>
-                <strong>Nik Topler</strong>
-                <p class="emailProfile">
-                    nik.topler@gmail.com
-                </p>
+    <aside class="profile-extra-options absolute disable" id="profile-extra-options">
+        <div class="top-div">
+            <div class="img-container">
+                <div class="img-middle">
+                    <div>
+                        <?php 
+                            if($_SESSION['profile_choice'] == 0) 
+                                echo ('<div class="img big" onclick="openLinks(\'account.php\')" ><img src="'.$_SESSION['profile_img'].'" class="imga"></div>');
+                            else if($_SESSION['profile_choice'] == 1) 
+                                echo ('<div class="img big" onclick="openLinks(\'account.php\')" style="background-color: '.$_SESSION['profile_color'].';">
+                                            <div class="letter">
+                                                <span>'.$_SESSION['letter'].'</span>
+                                            </div>
+                                        </div>');
+                            else if($_SESSION['profile_choice'] == 2) 
+                                echo ('<div class="img big" onclick="openLinks(\'account.php\')"><img src="'.$_SESSION['google_profile_img'].'" class="imga"></div>');
+                            else if($_SESSION['profile_choice'] == 3) 
+                                echo ('<div class="img big" onclick="openLinks(\'account.php\')"><img src="'.$_SESSION['facebook_profile_img'].'" class="imga"></div>');
+                            else if($_SESSION['profile_choice'] == 4) 
+                                echo ('<div class="img big" onclick="openLinks(\'account.php\')"><img src="'.$_SESSION['github_profile_img'].'" class="imga"></div>');
+                        ?>
+                    </div>
+                    <div class="camera-container">
+                        <i class="far fa-camera"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="full-name <?php if(!isset($_SESSION['name']) && !isset($_SESSION['surname'])) echo 'disable'?>">
+                <span>
+                    <?php echo $_SESSION['name'].' '.$_SESSION['surname']; ?>
+                </span>
+            </div>
+            <div class="email">
+                <span><?php echo $_SESSION['email']?></span>
+            </div>
+            <div class="manage-button">
+                <div class="container" onclick="openLinks('account.php')">
+                    <span>
+                        Manage your account
+                    </span>
+                </div>
             </div>
 
-            <div class="manage-profile-extra-options flex align-center justify-center">
-                <a href="account.php">Manage your account</a>
+        </div>
+        <div class="middle-div">
+            <div class="container">
+               <div class="google" <?php if($_SESSION['googleID'] == 0) echo 'onclick="logOut(\'#login\')"' ?>>
+                    <div>
+                        <i class="fab fa-google icon"></i>
+                    </div>
+                    <span>
+                        <?php 
+                            if($_SESSION['googleID'] == 0) echo 'Sign in with Google'; 
+                            else echo 'Signed in'; 
+                        ?>
+                    </span>
+               </div>
+            </div>
+            <div class="container">
+                <div class="facebook" <?php if($_SESSION['facebookID'] == 0) echo 'onclick="logOut(\'#login\')"' ?>>
+                    <div>
+                        <i class="fab fa-facebook icon"></i>
+                    </div>
+                    <span>
+                        <?php 
+                            if($_SESSION['facebookID'] == 0) echo 'Sign in with Facebook'; 
+                            else echo 'Signed in'; 
+                        ?>
+                    </span>
+                </div>
+            </div>
+            <div class="container">
+                <div class="github" <?php if($_SESSION['githubID'] == 0) echo 'onclick="logOut(\'#login\')"' ?>>
+                    <div>
+                        <i class="fab fa-github icon"></i>
+                    </div>
+                    <span>
+                        <?php 
+                            if($_SESSION['githubID'] == 0) echo 'Sign in with Github'; 
+                            else echo 'Signed in'; 
+                        ?>
+                    </span>
+                </div>
             </div>
         </div>
-        <hr>
-        <div class="extra-options-settings flex align-center justify-center">
-            <a href="account.php#settings">Settings</a>
-        </div>
-        <div class="extra-options-logout flex align-center justify-center">
-            <a href="#" onclick="signOut()">Sign Out</a>
+        <div class="bottom-div">
+            <div class="sign-out">
+                <div class="button-container" onclick="logOut('')">
+                    <span>
+                        Sign out
+                    </span>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="container">
+                   <div class="inner-container">
+                        <span>About</span>
+                        <span>Settings</span>
+                   </div>
+                </div>
+            </div>
         </div>
     </aside>
 
