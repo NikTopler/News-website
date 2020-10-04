@@ -19,15 +19,20 @@
                                                 <div class="icon"><i class="fas fa-bookmark fa-lg"></i></div>
                                                 <div><a href="#" class="side-menu-categories">Saved news</a></div>
                                         </div>
-                                        <div class="sidebar-line"><hr></div>
+                                        <div class="sidebar-line">
+                                                <hr>
+                                        </div>
                                         <div class="sidebar-category" onclick="createUrlPath('covid-19')">
                                                 <div class="icon"><i class="fad fa-shield-cross fa-lg"></i></div>
                                                 <div><a href="#" class="side-menu-categories">COVID-19</a></div>
                                         </div>
-                                        <div class="sidebar-line"><hr></div>
+                                        <div class="sidebar-line">
+                                                <hr>
+                                        </div>
                                         <div class="categories">
                                                 <div class="sidebar-category" onclick="createUrlPath('world')">
-                                                        <div class="icon"><i class="fad fa-globe-europe fa-lg"></i></div>
+                                                        <div class="icon"><i class="fad fa-globe-europe fa-lg"></i>
+                                                        </div>
                                                         <div><a href="#" class="side-menu-categories">World</a></div>
                                                 </div>
                                                 <div class="sidebar-category" onclick="createUrlPath('business')">
@@ -36,11 +41,13 @@
                                                 </div>
                                                 <div class="sidebar-category" onclick="createUrlPath('technology')">
                                                         <div class="icon"><i class="fad fa-microchip fa-lg"></i></div>
-                                                        <div><a href="#" class="side-menu-categories">Technology</a></div>
+                                                        <div><a href="#" class="side-menu-categories">Technology</a>
+                                                        </div>
                                                 </div>
                                                 <div class="sidebar-category" onclick="createUrlPath('entertainment')">
                                                         <div class="icon"><i class="fas fa-camera-movie"></i></div>
-                                                        <div><a href="#" class="side-menu-categories">Entertainment</a></div>
+                                                        <div><a href="#" class="side-menu-categories">Entertainment</a>
+                                                        </div>
                                                 </div>
                                                 <div class="sidebar-category" onclick="createUrlPath('sports')">
                                                         <div class="icon"><i class="fas fa-tennis-ball fa-lg"></i></div>
@@ -51,24 +58,30 @@
                                                         <div><a href="#" class="side-menu-categories">Health</a></div>
                                                 </div>
                                         </div>
-                                        <div class="sidebar-line"><hr></div>
+                                        <div class="sidebar-line">
+                                                <hr>
+                                        </div>
                                         <div class="other">
-                                                <div class="sidebar-category country" id="show-countries-button" onclick="showSelectCountry()"> 
+                                                <div class="sidebar-category country" id="show-countries-button"
+                                                        onclick="showSelectCountry()">
                                                         <div class="sidebar-country-container grid">
-                                                                <span>Language & Region</span> 
+                                                                <span>Language & Region</span>
                                                                 <strong id="country-name-side-menu">
                                                                         <?php 
-                                                                                if(isset($_SESSION['country'])) echo $_SESSION['country'][0];
+                                                                                if(isset($_SESSION['country']) && $_SESSION['country'][0] != null) echo $_SESSION['country'][0];
                                                                                 else echo 'United States';
                                                                         ?>
-                                                                </strong> 
+                                                                </strong>
                                                         </div>
                                                 </div>
                                                 <div class="sidebar-category">
-                                                        <div class="text"><a href="#" class="side-menu-categories" onclick="createUrlPath('sources')">Sources</a></div>
+                                                        <div class="text"><a href="#" class="side-menu-categories"
+                                                                        onclick="createUrlPath('sources')">Sources</a>
+                                                        </div>
                                                 </div>
                                                 <div class="sidebar-category">
-                                                        <div class="text"><a href="#" onclick="createUrlPath('settings')">Settings</a>
+                                                        <div class="text"><a href="#"
+                                                                        onclick="createUrlPath('settings')">Settings</a>
                                                         </div>
                                                 </div>
                                                 <div class="sidebar-category">
@@ -81,8 +94,10 @@
                         </div>
                         <footer>
                                 <div class="about text"><a href="#" onclick="createUrlPath('about')">About</a></div>
-                                <div><span class="flex align-center justify-center" style="color: var(--font-medium);">•</span></div>
-                                <div class="text"><a href="https://newsapi.org/" target="_blank" id="news-api-link">News Api</a> </div>
+                                <div><span class="flex align-center justify-center"
+                                                style="color: var(--font-medium);">•</span></div>
+                                <div class="text"><a href="https://newsapi.org/" target="_blank" id="news-api-link">News
+                                                Api</a> </div>
                         </footer>
                 </div>
         </div>

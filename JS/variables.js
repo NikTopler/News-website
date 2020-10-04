@@ -39,7 +39,6 @@
         const excludeWords = document.getElementById('extra-option-input3')
         const submitButton = document.getElementById('extraOptionsSearchButton')
         const date = document.getElementById('extra-option-select')
-
     /** Navigation Bar Right */
         const loginButton = document.getElementById('login-button')
     /** Extra Search Options */
@@ -65,11 +64,15 @@
         const mainContentContainer = document.getElementById('main-content-container')
         let mainContentHeader = document.getElementById('main-content-header')
         const showCountriesLink = document.getElementById('show-countries-button')
-            const sclSpan = showCountriesLink.firstElementChild.firstElementChild
-            const sclStrong = showCountriesLink.firstElementChild.lastElementChild
+        let sclSpan
+        let sclStrong
+        const mainImgContainer = document.getElementById('main-img-container')
+        if(showCountriesLink !== null) {
+            sclSpan = showCountriesLink.firstElementChild.firstElementChild
+            sclStrong = showCountriesLink.firstElementChild.lastElementChild
+        }
 
     const main = document.getElementById('main')
-       
     const overlay = document.getElementById('overlay')
     const navigationBarProfileImageDiv = document.getElementById('outter-container')
     const extOptProfile = document.getElementById('profile-extra-options')

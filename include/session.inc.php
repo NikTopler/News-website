@@ -26,6 +26,17 @@ class Session extends Dbh {
         $_SESSION['githubID'] = $this->checkIfStringNull($row['githubID']);
         $_SESSION['country'] = $this->getCountryWithID($row['country_id']);
         $_SESSION['letter'] = strtoupper($email[0]);
+        if($row['password'] == null) $_SESSION['password-set'] = 'Not set';
+        else $_SESSION['password-set'] = '••••••••••';
+        $_SESSION['admin'] = $this->checkIfUserIsAdmin($email);
+    }
+    public function checkIfUserIsAdmin($email) {
+        $sql = 'SELECT * FROM admins WHERE user_id = (SELECT id FROM users WHERE email = ?);';
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([$email]);
+        $row = $stmt->fetch();
+        if($row) return 'yes';
+        else return 'no';
     }
     public function checkIfStringNull($string) { 
         if($string == null) return 0;

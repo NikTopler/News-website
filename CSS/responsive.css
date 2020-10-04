@@ -49,9 +49,7 @@
         .double.psw .eye-icon-container { display: none; }
         .double.psw .psw-repeat-container { margin: 0; }
         .sign-container h1 { font-size: 1.5rem; }
-    
-    /* Profile options */
-        .profile-extra-options { min-width: 300px; }
+        .profile-extra-options {  min-width: 300px; }
 
 }
 @media screen and (max-width: 360px) {
@@ -60,10 +58,11 @@
 
 
 /* Sign In */
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 601px) {
     .main-container {
         min-width: calc(100% - 40px);
         padding: 40px;
-        /* border: none; */
     }
+    .tooltiptext { display: none; }
 }
+

@@ -37,6 +37,66 @@ class Check extends Dbh {
             echo 'success';
         } else echo 'wrong password';
     }
+    public function pswSet() {
+        if (session_status() == PHP_SESSION_NONE) session_start();
+        $string = '';
+        if($_SESSION['password-set'] != 'Not set') {
+            $string = '<div class="psw-old-container">
+                            <div class="input-container">
+                                <div class="label-container">
+                                    <label for="psw-old-input">Old Password</label>
+                                </div>
+                                <input type="password" name="password" id="psw-old-input" autocomplete="off">
+                            </div>
+                            <div class="eye-icon-container" onclick="managePasswordVisibility(this)">
+                                <div>
+                                    <i class="far fa-eye fa-lg disable"></i>
+                                    <i class="far fa-eye-slash fa-lg"></i>
+                                </div>
+                            </div>
+                        </div>';
+        }
+        echo $string.'<div class="psw-container">
+                        <div class="input-container">
+                            <div class="label-container">
+                                <label for="psw-input">New Password</label>
+                            </div>
+                            <input type="password" name="password" id="psw-input" autocomplete="off">
+                        </div>
+                        <div class="eye-icon-container" onclick="managePasswordVisibility(this)">
+                            <div>
+                                <i class="far fa-eye fa-lg disable"></i>
+                                <i class="far fa-eye-slash fa-lg"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="psw-repeat-container">
+                        <div class="input-container">
+                            <div class="label-container">
+                                <label for="psw-repeat-input">Repeat</label>
+                            </div>
+                            <input type="password" name="password-repeat" id="psw-repeat-input" autocomplete="off">
+                        </div>
+                        <div class="eye-icon-container" onclick="managePasswordVisibility(this)">
+                            <div>
+                                <i class="far fa-eye fa-lg disable"></i>
+                                <i class="far fa-eye-slash fa-lg"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error psw disable">
+                    <div class="red"></div>
+                    </div>
+                    <div class="button-container">
+                        <div class="inner-container">
+                            <a href="personal.php">Back</a>
+                        </div>
+                        <div class="inner-container">
+                            <div class="blue-button" onclick="check.psw()">Next</div>
+                        </div>
+                    </div>';
+        die;
+    }
 }
 
 $checkObj = new Check();
@@ -44,4 +104,4 @@ $checkObj = new Check();
 if($_SERVER['REQUEST_METHOD'] !== 'POST') return;
 if(isset($_POST['email'])) $checkObj->email(json_decode($_POST['email']));
 else if(isset($_POST['login'])) $checkObj->login(json_decode($_POST['login']));
-
+else if(isset($_POST['pswSet'])) $checkObj->pswSet();

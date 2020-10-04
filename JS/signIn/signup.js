@@ -251,7 +251,6 @@ const error = {
             errorHandeling.text(countryError.firstElementChild, 'Select a country')
             num = 10
         }
-        console.log(num)
         if (num > 0) return false
         else return true
     },

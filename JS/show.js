@@ -142,3 +142,25 @@ function manageExtraProfileOptions() {
         navigationBarProfileImageDiv.classList.remove('active')
     }
 }
+
+function openLinks(string) { window.location.replace(websiteURL + string) }
+const insertContainer = document.getElementById('insert-photo-container')
+function showProfileImg() {
+    if(mainImgContainer.classList.contains('active')) {
+        manageInsertContainer()
+        mainImgContainer.classList.remove('active')
+        overlay.classList.remove('active')
+        insertContainer.classList.remove('active')
+        document.querySelector('.color-img').classList.remove('active')
+
+    } else {
+        document.querySelector('.color-img').classList.add('active')
+        mainImgContainer.classList.add('active')
+        overlay.classList.add('active')
+    }
+}
+function manageInsertContainer() {
+    if(insertContainer.classList.contains('active')) insertContainer.classList.remove('active')
+    else insertContainer.classList.add('active')
+}
+function openFolder() { document.getElementById('file-upload').click() }

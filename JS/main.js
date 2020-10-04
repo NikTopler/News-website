@@ -176,7 +176,7 @@ const suggest = {
         removeActiveSidebarCategory()
         hideSuggestWords()
         let elementInnerHTML = removeDiacritics(element.innerHTML).trim()
-        let selectedCountryAcronym = getCountryAcronym(selectedCountry.innerHTML)
+        let selectedCountryAcronym = getCountryAcronym(selectedCountry.innerHTML.trim())
         historyPushState(location.origin + location.pathname, `?q=${elementInnerHTML}&`, `cou=${selectedCountryAcronym}&`,`bg=${backgroundColor}`)
         mainSearch()    
     }
@@ -309,8 +309,6 @@ window.onclick = (e) => {
 }
 window.onresize = windowWidthSettings
 
-function openLinks(string) { window.location.replace(websiteURL + string) }
-
 function historyPushState(webiste, string, country, background) { history.pushState({}, null, webiste + string + country + background) }
 
 function changeBackgroundColor() { document.body.className = window.location.search.match(regularExpressions.url.backgroundColor)[0].slice(4,10) }
@@ -396,7 +394,7 @@ async function headlines() {
     pathLocation = ''
     sidebarCategorySelect(document.querySelector('.fa-newspaper').parentElement.parentElement)
 
-    historyPushState(window.location.origin + window.location.pathname, '', `?cou=${getCountryAcronym(selectedCountry.innerHTML)}`,`&bg=${backgroundColor}`)
+    historyPushState(window.location.origin + window.location.pathname, '', `?cou=${getCountryAcronym(selectedCountry.innerHTML.trim())}`,`&bg=${backgroundColor}`)
 }
 
 /* SEARCH */ 
@@ -413,7 +411,7 @@ async function headlines() {
         
         if(!extra && newSearch === true) {
             url = removeDiacritics(mainSearchInput.value).trim()
-            return openLinks(filePath.search + `?q=${url}&cou=${getCountryAcronym(selectedCountry.innerHTML)}&bg=${backgroundColor}`)
+            return openLinks(filePath.search + `?q=${url}&cou=${getCountryAcronym(selectedCountry.innerHTML.trim())}&bg=${backgroundColor}`)
         } else if(extra && newSearch === true) {
             url = createUrlExtraOptions()
             return openLinks(filePath.search + url[1] + url[2] + url[3])
@@ -462,7 +460,7 @@ async function headlines() {
         else if(hasWordsV.length !== 0 && excludeWordsV.length !== 0 && exactPhraseV.length === 0) url = `${hasWordsV} ${devideStringIntoWords(excludeWordsV, 'EW')}`
         else if(exactPhraseV.length !== 0 && excludeWordsV.length !== 0 && hasWordsV.length === 0) url = `"${exactPhraseV}" ${devideStringIntoWords(excludeWordsV, 'EW')}`
         else if(exactPhraseV.length !== 0 && excludeWordsV.length !== 0 && hasWordsV.length !== 0) url = `"${exactPhraseV}" ${hasWordsV} ${devideStringIntoWords(excludeWordsV, 'EW')}`
-        return [`${location.origin}/News-website/search.php`,`?q=${url + time}`,`&cou=${getCountryAcronym(selectedCountry.innerHTML)}`,`&bg=${backgroundColor}`, url]
+        return [`${location.origin}/News-website/search.php`,`?q=${url + time}`,`&cou=${getCountryAcronym(selectedCountry.innerHTML.trim())}`,`&bg=${backgroundColor}`, url]
     }
     function devideStringIntoWords(string, keyword){
         if(keyword === 'HW') return `+${string.replace(/\s/g, ' +')}`
@@ -527,8 +525,8 @@ mainSearchInput.onkeyup = (e) => {
     let suggestDivs = suggestMainInput.querySelectorAll('div')
     let suggestDivActiveKey = suggestMainInput.querySelectorAll('div.active.key')
     if(e.keyCode === 13) {  
-        if(suggestDivActiveKey.length === 1) historyPushState(location.origin + location.pathname, `?q=${removeDiacritics(suggestDivActiveKey[0].firstElementChild.innerHTML).trim()}&`, `cou=${getCountryAcronym(selectedCountry.innerHTML)}&`,`bg=${backgroundColor}`)
-        else historyPushState(location.origin + location.pathname, `?q=${mainSearchInput.value.trim()}&`, `cou=${getCountryAcronym(selectedCountry.innerHTML)}&`,`bg=${backgroundColor}`)
+        if(suggestDivActiveKey.length === 1) historyPushState(location.origin + location.pathname, `?q=${removeDiacritics(suggestDivActiveKey[0].firstElementChild.innerHTML).trim()}&`, `cou=${getCountryAcronym(selectedCountry.innerHTML.trim())}&`,`bg=${backgroundColor}`)
+        else historyPushState(location.origin + location.pathname, `?q=${mainSearchInput.value.trim()}&`, `cou=${getCountryAcronym(selectedCountry.innerHTML.trim())}&`,`bg=${backgroundColor}`)
         mainSearch()
     } 
     if(suggestMainInput.classList.contains('disable') || suggestMainInput.querySelectorAll('div').length === 0) return
@@ -574,7 +572,7 @@ function createUrlPath(type, search) {
     else if(type === 'entertainment') path = filePath.entertainment
     else if(type === 'sports') path = filePath.sports
     else if(type === 'health') path = filePath.health
-    path = `${path}?cou=${getCountryAcronym(selectedCountry.innerHTML)}&bg=${backgroundColor}`
+    path = `${path}?cou=${getCountryAcronym(selectedCountry.innerHTML.trim())}&bg=${backgroundColor}`
     openLinks(path)
 }
 
@@ -815,8 +813,8 @@ function checkIfCategoriesAreOpen() {
  }
 // string.trim().replace(/\s\s+/g, ' ').replace(/%20/g, ' ').replace(/%22/g, '"')
 
-
-async function logOut(path) {
-    await fetch(`${pathLocation}include/logout.inc.php`)
-    openLinks(filePath.headlines + path);
+async function logOut(string) {
+    const res = await fetch(`include/logout.inc.php`)
+    const data = res.text()
+    openLinks(filePath.headlines + string);
 }
