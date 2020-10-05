@@ -4,11 +4,15 @@
         <div class="outter-container border-radius-50 pointer <?php if(!isset($_SESSION['id'])) echo 'disable'?>" id="outter-container">
             <div>
                 <?php 
-                    if(!strpos($_SERVER['REQUEST_URI'], 'change')) $str = 'onclick="manageExtraProfileOptions()"';
+                    $path = '../';
+                    if(strpos($_SERVER['REQUEST_URI'], 'search') || strpos($_SERVER['REQUEST_URI'], 'headlines')) $path = '';
+
+
+                    if(!strpos($_SERVER['REQUEST_URI'], 'change')) $str = 'onclick="manageExtraProfileOptions()"'; 
                     else $str = '';
 
                     if($_SESSION['profile_choice'] == 0) 
-                        echo ('<div class="img small" '.$str.'><img src="'.$_SESSION['profile_img'].'" class="imga"></div>');
+                        echo ('<div class="img small" '.$str.'><img src="'.$path.$_SESSION['profile_img'].'" class="imga"></div>');
                     else if($_SESSION['profile_choice'] == 1) 
                         echo ('<div class="img small" '.$str.' style="background-color: '.$_SESSION['profile_color'].';">
                                     <div class="letter">
@@ -47,20 +51,23 @@
                 <div class="img-middle">
                     <div>
                         <?php 
+                            $path = '../';
+                            if(strpos($_SERVER['REQUEST_URI'], 'search') || strpos($_SERVER['REQUEST_URI'], 'headlines')) $path = '';
+                        
                             if($_SESSION['profile_choice'] == 0) 
-                                echo ('<div class="img big" onclick="openLinks(\'account/home.php\')" ><img src="'.$_SESSION['profile_img'].'" class="imga"></div>');
+                                echo ('<div class="img big" onclick="openLinks(\'/account/home.php\')" ><img src="'.$path.$_SESSION['profile_img'].'" class="imga"></div>');
                             else if($_SESSION['profile_choice'] == 1) 
-                                echo ('<div class="img big" onclick="openLinks(\'account/home.php\')" style="background-color: '.$_SESSION['profile_color'].';">
+                                echo ('<div class="img big" onclick="openLinks(\'/account/home.php\')" style="background-color: '.$_SESSION['profile_color'].';">
                                             <div class="letter">
                                                 <span>'.$_SESSION['letter'].'</span>
                                             </div>
                                         </div>');
                             else if($_SESSION['profile_choice'] == 2) 
-                                echo ('<div class="img big" onclick="openLinks(\'account/home.php\')"><img src="'.$_SESSION['google_profile_img'].'" class="imga"></div>');
+                                echo ('<div class="img big" onclick="openLinks(\'/account/home.php\')"><img src="'.$_SESSION['google_profile_img'].'" class="imga"></div>');
                             else if($_SESSION['profile_choice'] == 3) 
-                                echo ('<div class="img big" onclick="openLinks(\'account/home.php\')"><img src="'.$_SESSION['facebook_profile_img'].'" class="imga"></div>');
+                                echo ('<div class="img big" onclick="openLinks(\'/account/home.php\')"><img src="'.$_SESSION['facebook_profile_img'].'" class="imga"></div>');
                             else if($_SESSION['profile_choice'] == 4) 
-                                echo ('<div class="img big" onclick="openLinks(\'account/home.php\')"><img src="'.$_SESSION['github_profile_img'].'" class="imga"></div>');
+                                echo ('<div class="img big" onclick="openLinks(\'/account/home.php\')"><img src="'.$_SESSION['github_profile_img'].'" class="imga"></div>');
                         ?>
                     </div>
                     <div class="camera-container" onclick="showProfileImg()">
@@ -80,13 +87,13 @@
                 <?php 
                 
                     if(strpos($_SERVER['REQUEST_URI'], 'account')) 
-                        echo '<div class="container" onclick="openLinks(\'headlines.php\')">
+                        echo '<div class="container" onclick="openLinks(\'/headlines.php\')">
                                 <span>
                                     Browse latest news articles
                                 </span>
                             </div>';
                     else 
-                        echo '<div class="container" onclick="openLinks(\'account/home.php\')">
+                        echo '<div class="container" onclick="openLinks(\'/account/home.php\')">
                                 <span>
                                     Manage your account
                                 </span>

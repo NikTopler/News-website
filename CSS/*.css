@@ -87,7 +87,9 @@ body{
         .article-other-info .test:hover + .tooltiptext,
         .article-extra-option-icon:hover + .tooltiptext,
         .company-date:hover .tooltiptext,
-        .outter-container:hover .tooltiptext{
+        .outter-container:hover .tooltiptext,
+        .plus-icon-container:hover .tooltiptext,
+        .trash-icon-container:hover .tooltiptext{
             visibility: visible;
             opacity: 1;
             font-size: 0.7em;
@@ -114,6 +116,9 @@ body{
         }
         .tooltiptextTop150 {
             top: 150%;
+        }
+        .tooltiptextTop130 {
+            top: 130%;
         }
         .tooltiptextTop120 {
             top: 120%;

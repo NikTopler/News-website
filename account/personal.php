@@ -1,7 +1,6 @@
 <?php include 'add-ons/head.php' ?>
 
     <body>
-    <?php  include '../add-ons/profileImg.php' ?>
     <nav class="account">
         <div class="left">
                 <div class="container">
@@ -16,6 +15,7 @@
                 </div>
         </div>
     </nav>
+    
         <main>
             <?php include 'add-ons/side-bar.php' ?>
 
@@ -44,7 +44,7 @@
                             <div class="image">
                                 <?php 
                                     if($_SESSION['profile_choice'] == 0) 
-                                        echo ('<div class="img medium" ><img src="'.$_SESSION['profile_img'].'" class="imga"></div>');
+                                        echo ('<div class="img medium" ><img src="../'.$_SESSION['profile_img'].'" class="imga"></div>');
                                     else if($_SESSION['profile_choice'] == 1) 
                                         echo ('<div class="img medium" style="background-color: '.$_SESSION['profile_color'].';">
                                                     <div class="letter">
@@ -60,7 +60,7 @@
                                 ?>
                             </div>
                         </div>
-                        <div class="info" onclick="openLinks('account/changeName.php')">
+                        <div class="info" onclick="openLinks('/account/changeName.php')">
                             <div class="line"></div>
                             <div class="title">
                                 <h3>Name</h3>
@@ -79,7 +79,7 @@
                                 <i class="far fa-angle-right fa-lg"></i>
                             </div>
                         </div>
-                        <div class="info" onclick="openLinks('account/changeGender.php')">
+                        <div class="info" onclick="openLinks('/account/changeGender.php')">
                             <div class="line"></div>
                             <div class="title">
                                 <h3>Gender</h3>
@@ -96,7 +96,7 @@
                                 <i class="far fa-angle-right fa-lg"></i>
                             </div>
                         </div>
-                        <div class="info" onclick="openLinks('account/changeCountry.php?cou=<?php if(isset($_SESSION['country'])) echo $_SESSION['country'][1]?>')">
+                        <div class="info" onclick="openLinks('/account/changeCountry.php?cou=<?php if(isset($_SESSION['country'])) echo $_SESSION['country'][1]?>')">
                             <div class="line"></div>
                             <div class="title">
                                 <h3>Country</h3>
@@ -113,7 +113,7 @@
                                 <i class="far fa-angle-right fa-lg"></i>
                             </div>
                         </div>
-                        <div class="info psw" onclick="openLinks('account/changePassword.php')">
+                        <div class="info psw" onclick="openLinks('/account/changePassword.php')">
                             <div class="line"></div>
                             <div class="title">
                                 <h3>Password</h3>
@@ -164,6 +164,8 @@
 
             </div>
         </main>
+        <?php  include '../add-ons/profileImg.php' ?>
+
         <div class="fixed" id="overlay"></div>
     </body>
 </html>

@@ -24,8 +24,11 @@
                     <section class="header">   
                         <div class="img-container"> 
                             <?php 
+                                $path = '../';
+                                if(strpos($_SERVER['REQUEST_URI'], 'search') || strpos($_SERVER['REQUEST_URI'], 'headlines')) $path = '';
+                            
                                 if($_SESSION['profile_choice'] == 0) 
-                                    echo ('<div class="img xxl" onclick="changeProfileImg()" ><img src="'.$_SESSION['profile_img'].'" class="imga"></div>');
+                                    echo ('<div class="img xxl" onclick="changeProfileImg()" ><img src="'.$path.$_SESSION['profile_img'].'" class="imga"></div>');
                                 else if($_SESSION['profile_choice'] == 1) 
                                     echo ('<div class="img xxl" onclick="changeProfileImg()" style="background-color: '.$_SESSION['profile_color'].';">
                                                 <div class="letter">
@@ -68,7 +71,7 @@
                                         <strong>Note: </strong>Some personal information can change the way website works.
                                     </p>
                                 </div>
-                                <div class="button" onclick="openLinks('account/personal.php')">
+                                <div class="button" onclick="openLinks('/account/personal.php')">
                                     <a href="#">Manage your Personal Information</a>
                                 </div>
                             </div>
@@ -79,7 +82,7 @@
                                         Customize your account based on your prefrences.
                                     </p>
                                 </div>
-                                <div class="button" onclick="openLinks('account/settings.php')">
+                                <div class="button" onclick="openLinks('/account/settings.php')">
                                     <a href="#">Open Settings</a>
                                 </div>
                             </div>
@@ -96,7 +99,7 @@
                                                 <strong>Note: </strong> this page is only for website moderators.
                                             </p>
                                         </div>
-                                        <div class="button" onclick="openLinks(\'account/admin.php\')">
+                                        <div class="button" onclick="openLinks(\'/account/admin.php\')">
                                             <a href="#">Manage Admins</a>
                                         </div>
                                     </div>
@@ -107,7 +110,7 @@
                                                 Select news articles, that are going to be featured in the trending section.
                                             </p>
                                         </div>
-                                        <div class="button" onclick="openLinks(\'account/trending.php\')">
+                                        <div class="button" onclick="openLinks(\'/account/trending.php\')">
                                             <a href="#">Edit Trending section</a>
                                         </div>
                                     </div>

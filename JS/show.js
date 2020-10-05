@@ -143,7 +143,7 @@ function manageExtraProfileOptions() {
     }
 }
 
-function openLinks(string) { window.location.replace(websiteURL + string) }
+function openLinks(string) { window.location.replace(websiteURL +'/'+ string) }
 const insertContainer = document.getElementById('insert-photo-container')
 function showProfileImg() {
     if(mainImgContainer.classList.contains('active')) {
@@ -164,3 +164,17 @@ function manageInsertContainer() {
     else insertContainer.classList.add('active')
 }
 function openFolder() { document.getElementById('file-upload').click() }
+
+function generateColors () {
+    let parent = document.querySelector('.color-container')
+    if(!parent) return
+    for(let i = 0; i < colors.length; i++) {
+        let divP = document.createElement('div')
+            divP.classList.add('box-container')
+        let div = document.createElement('div')
+            div.classList.add('img','medium')
+            div.style.backgroundColor = colors[i]
+        divP.appendChild(div)
+        parent.appendChild(divP)
+    }
+}

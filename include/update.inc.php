@@ -98,6 +98,54 @@ class update extends Dbh {
         } else return 'wrong password';
     }
 
+    public function addAdmin($email) {
+        if($this->checkIfUserExists($email) == 0) die;
+        $sql = "INSERT INTO admins(user_id) VALUES((SELECT id FROM users WHERE email = ?))";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([$email]);
+        echo 'success';
+    }
+
+    public function checkIfUserExists($email) {
+        $sql = "SELECT * FROM users WHERE email = ?";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([$email]);
+        $row = $stmt->fetch();
+        if($row) return 1;
+        else return 0;
+    }
+
+    public function removeAdmin($email) {
+        if($this->checkIfUserExists($email) == 0) die;
+        $sql = "DELETE FROM admins WHERE user_id = (SELECT id FROM users WHERE email = ?)";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([$email]);
+        echo 'success';
+    }
+
+    public function imageUpload($info) {
+        if($info[0] == '0') {
+            $name = "profile_img";
+            $num = 0;
+        }
+        $this->checkForImage();
+        $sql = "UPDATE users SET profile_choice = ? WHERE email = ?";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([$num, $_SESSION['email']]);
+
+        $sql = "UPDATE users SET ".$name." = ? WHERE email = ?";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([$info[1], $_SESSION['email']]);
+        $this->setSessionVariables($_SESSION['email']);
+        echo 'success';
+    }
+    public function checkForImage() {
+        $sql = 'SELECT * FROM users WHERE email = ?';
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([$_SESSION['email']]);
+        $row = $stmt->fetch();
+        if($row['profile_select'] == 0 && $row['profile_img'] != null) unlink('../'.$row['profile_img']);
+    }
 }
 
 $updateObj = new Update();
@@ -108,3 +156,7 @@ else if(isset($_POST['gender'])) $updateObj->gender(json_decode($_POST['gender']
 else if(isset($_POST['country'])) $updateObj->country(json_decode($_POST['country']));
 else if(isset($_POST['newPsw'])) $updateObj->newPsw(json_decode($_POST['newPsw']));
 else if(isset($_POST['oldPsw'])) $updateObj->oldPsw(json_decode($_POST['oldPsw']));
+else if(isset($_POST['addAdmin'])) $updateObj->addAdmin($_POST['addAdmin']);
+else if(isset($_POST['removeAdmin'])) $updateObj->removeAdmin($_POST['removeAdmin']);
+else if(isset($_POST['imageUpload'])) $updateObj->imageUpload(json_decode($_POST['imageUpload']));
+

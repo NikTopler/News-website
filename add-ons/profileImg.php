@@ -1,5 +1,4 @@
-<div class="main-img-container" id="main-img-container">
-
+<div class="main-img-container disable" id="main-img-container">
     <header>
         <h1>Change Profile Image</h1>
     </header>
@@ -20,23 +19,26 @@
                 </div>
             </div>  
         </div>
-        <section class="insert-photo-container" id="insert-photo-container" onclick="openFolder()">
+        <section class="insert-photo-container" id="insert-photo-container">
             <div class="main-insert-photo-container">
                 <div class="img-text">
                     <p>Click on grey area and add image</p>
-                </div>
-                <div class="select-img">
+                </div>                        
+                <div><span class="error-span-upload-image red-color" id="error-span-upload-image"></span></div>
+
+                <div class="select-img"  onclick="openFolder()">
                     <div class="icon">
                         <i class="fab fa-dropbox"></i>
                     </div>
                 </div>
                 <div class="footer">
-                    <div class="file-name">
-                        <span></span>
-                    </div>
-                    <div class="button">
-                        <div>
-                            Upload
+                    <form action="include/uploadFile.inc.php" method="post" enctype="multipart/form-data" id="uploadProfileImageForm">
+                        <input type="file" hidden="hidden" id="file-upload" name="file"  onChange='fileChange()'>
+                    </form> 
+                    <div class="footer disable">
+                        <div class="name"><span class="image-name-label" id="image-name-label">Ime</span></div>
+                        <div class="button" onclick="submitProfileImageUploadForm()">
+                            Submit
                         </div>
                     </div>
                 </div>
@@ -45,7 +47,9 @@
     </section>
     <section class="color-img">
         <div class="img-text">
-            <p>Select image from your computer or type in a link</p>
+            <p>Select a color you like</p>
+        </div>
+        <div class="color-container">
         </div>
     </section>
     <div class="x" onclick="showProfileImg()" >

@@ -4,51 +4,53 @@ let weatherArrayTommorow
 let weatherArray2Days
 
 const weather = {
-    async getweather() {
-        city = changeDiacritics(userLocationInformationValue[3])
-        const key = php.info('weather')
+    getweather : async function () {
+        city = removeDiacritics(userLocationInformationValue[3])
+        const key = await php.info('weather')
         const response = await fetch(`https://cors-anywhere.herokuapp.com/https://api.weatherapi.com/v1/forecast.json?key=${key}&q=${city}&days=7`)
         const data = await response.json()
             weatherArrayToday = data.forecast.forecastday[0]
             weatherArrayTommorow = data.forecast.forecastday[1]
             weatherArray2Days = data.forecast.forecastday[2]
     },
-    updateWeather() {
-        let header =  document.querySelectorAll('.weather-main-header')[0]
-            header.children[0].src = weatherArrayToday.day.condition.icon
-            header.children[1].innerHTML = userLocationInformationValue[3]
-            header.children[2].innerHTML =  `${Math.round(weatherArrayToday.day.avgtemp_c)}°C`
-    
+    updateWeather : function () {
+        let header = document.querySelectorAll('.weather-main-header')[0]
+        header.children[0].src = weatherArrayToday.day.condition.icon
+        header.children[1].innerHTML = userLocationInformationValue[3]
+        header.children[2].innerHTML = `${Math.round(weatherArrayToday.day.avgtemp_c)}°C`
+
         let weatherDate = new Date(weatherArrayToday.date)
         let tommorowNumber = weatherDate.getDay()
         let dayAfterTomorrow = weatherDate.getDay()
 
-        if(tommorowNumber == 6) tommorowNumber = tommorowNumber - 7
-        if(dayAfterTomorrow == 5 || dayAfterTomorrow == 6) dayAfterTomorrow = dayAfterTomorrow - 7
+        if (tommorowNumber == 6)
+            tommorowNumber = tommorowNumber - 7
+        if (dayAfterTomorrow == 5 || dayAfterTomorrow == 6)
+            dayAfterTomorrow = dayAfterTomorrow - 7
 
         let dayAcronymTommorow = daysAcronyms[tommorowNumber + 1]
         let dayAcronymIn2Days = daysAcronyms[dayAfterTomorrow + 2]
 
         let mainWeatherContent = document.querySelectorAll('.weather-3-days')[0]
-            mainWeatherContent.children[0].firstElementChild.innerHTML = 'Today'
-            mainWeatherContent.children[1].firstElementChild.innerHTML = dayAcronymTommorow
-            mainWeatherContent.children[2].firstElementChild.innerHTML = dayAcronymIn2Days
+        mainWeatherContent.children[0].firstElementChild.innerHTML = 'Today'
+        mainWeatherContent.children[1].firstElementChild.innerHTML = dayAcronymTommorow
+        mainWeatherContent.children[2].firstElementChild.innerHTML = dayAcronymIn2Days
 
-            mainWeatherContent.children[0].children[1].firstElementChild.src = weatherArrayToday.day.condition.icon
-            mainWeatherContent.children[1].children[1].firstElementChild.src = weatherArrayTommorow.day.condition.icon
-            mainWeatherContent.children[2].children[1].firstElementChild.src = weatherArray2Days.day.condition.icon
+        mainWeatherContent.children[0].children[1].firstElementChild.src = weatherArrayToday.day.condition.icon
+        mainWeatherContent.children[1].children[1].firstElementChild.src = weatherArrayTommorow.day.condition.icon
+        mainWeatherContent.children[2].children[1].firstElementChild.src = weatherArray2Days.day.condition.icon
 
-            mainWeatherContent.children[0].children[2].firstElementChild.src = 'http://cdn.weatherapi.com/weather/64x64/day/302.png'
-            mainWeatherContent.children[1].children[2].firstElementChild.src = 'http://cdn.weatherapi.com/weather/64x64/day/302.png'
-            mainWeatherContent.children[2].children[2].firstElementChild.src = 'http://cdn.weatherapi.com/weather/64x64/day/302.png'
+        mainWeatherContent.children[0].children[2].firstElementChild.src = 'http://cdn.weatherapi.com/weather/64x64/day/302.png'
+        mainWeatherContent.children[1].children[2].firstElementChild.src = 'http://cdn.weatherapi.com/weather/64x64/day/302.png'
+        mainWeatherContent.children[2].children[2].firstElementChild.src = 'http://cdn.weatherapi.com/weather/64x64/day/302.png'
 
-            mainWeatherContent.children[0].children[1].lastElementChild.innerHTML = `${weatherArrayToday.day.avgtemp_c}°C`
-            mainWeatherContent.children[1].children[1].lastElementChild.innerHTML = `${weatherArrayTommorow.day.avgtemp_c}°C`
-            mainWeatherContent.children[2].children[1].lastElementChild.innerHTML = `${weatherArray2Days.day.avgtemp_c}°C`
+        mainWeatherContent.children[0].children[1].lastElementChild.innerHTML = `${weatherArrayToday.day.avgtemp_c}°C`
+        mainWeatherContent.children[1].children[1].lastElementChild.innerHTML = `${weatherArrayTommorow.day.avgtemp_c}°C`
+        mainWeatherContent.children[2].children[1].lastElementChild.innerHTML = `${weatherArray2Days.day.avgtemp_c}°C`
 
-            mainWeatherContent.children[0].children[2].lastElementChild.innerHTML = `${weatherArrayToday.day.daily_chance_of_rain}%`
-            mainWeatherContent.children[1].children[2].lastElementChild.innerHTML = `${weatherArrayTommorow.day.daily_chance_of_rain}%`
-            mainWeatherContent.children[2].children[2].lastElementChild.innerHTML = `${weatherArray2Days.day.daily_chance_of_rain}%`
+        mainWeatherContent.children[0].children[2].lastElementChild.innerHTML = `${weatherArrayToday.day.daily_chance_of_rain}%`
+        mainWeatherContent.children[1].children[2].lastElementChild.innerHTML = `${weatherArrayTommorow.day.daily_chance_of_rain}%`
+        mainWeatherContent.children[2].children[2].lastElementChild.innerHTML = `${weatherArray2Days.day.daily_chance_of_rain}%`
     }
 }
 
@@ -273,9 +275,9 @@ window.onload = async () => {
     // Close all open windows
         hideExtraSearchOptions()
         hideSuggestWords()
+        generateColors()
 
     if(window.location.hash === '#login') manageLoginOptions()
-
     document.querySelectorAll('input').forEach(input => { input.autocomplete = 'off' })
 
     error.window()
@@ -388,10 +390,11 @@ function fahrenheitToKelvin(number) { return (number - 32) * 5/9 + 273 }
 
 /* HEADLINES */
 async function headlines() {
-    // await weather.getWeather()   
-    // weather.updateWeather()
-
     pathLocation = ''
+    await user.location()
+    await weather.getweather()
+    weather.updateWeather()
+
     sidebarCategorySelect(document.querySelector('.fa-newspaper').parentElement.parentElement)
 
     historyPushState(window.location.origin + window.location.pathname, '', `?cou=${getCountryAcronym(selectedCountry.innerHTML.trim())}`,`&bg=${backgroundColor}`)

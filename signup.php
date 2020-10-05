@@ -9,7 +9,8 @@
     <link rel="stylesheet" href="CSS/*.css">
     <link rel="stylesheet" href="CSS/signup.css">
     <link rel="stylesheet" href="CSS/responsive.css">
-
+    <link rel="shortcut icon" href="">
+    
     <script src="JS/responsive.js" defer></script>
     <script src="JS/signIn/signup.js" defer></script>
 

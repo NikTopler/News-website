@@ -3,6 +3,7 @@ const sideBarResAccount = document.querySelector('.side-bar-responsive')
 const sideBarAccount = document.getElementById('side-bar-account')
 
 window.onload = () => {
+    generateColors()
     if(window.location.pathname.includes('changeName')) change.name()
     else if(window.location.pathname.includes('changeCountry')) change.country()
     else if(window.location.pathname.includes('changePassword')) change.password()
@@ -26,11 +27,13 @@ function responsive() {
         sideBarResAccount.classList.add('disable')
     }
 }
+if(mainImgContainer)
+    if(mainImgContainer.classList.contains('disable')) mainImgContainer.classList.remove('disable')
 
 
 async function logout(string) {
     await fetch(`../include/logout.inc.php`)
-    openLinks(filePath.headlines + string);
+    openLinks('/'+filePath.headlines+string);
 }
 
 function openLinks(string) { window.location.replace(websiteURL + string) }
@@ -181,7 +184,7 @@ const check = {
             body: createFormData('name', array)
         })
         const data = await res.text()
-        if(data === 'success') openLinks('account/personal.php')
+        if(data === 'success') openLinks('/account/personal.php')
     },
     gender : async() => {
         if(!document.querySelector('.gender-container .active')) {
@@ -194,7 +197,7 @@ const check = {
             body: createFormData('gender', array)
         })
         const data = await res.text()
-        if(data === 'success') openLinks('account/personal.php')
+        if(data === 'success') openLinks('/account/personal.php')
     }, 
     country : async() => {
         if(!document.querySelector('.country-container .active')) {
@@ -207,7 +210,7 @@ const check = {
             body: createFormData('country', array)
         })
         const data = await res.text()
-        if(data === 'success') openLinks('account/personal.php')
+        if(data === 'success') openLinks('/account/personal.php')
 
     },
     psw : async() => {
@@ -227,7 +230,7 @@ const check = {
         })
         const data = await res.text()
         console.log(data)
-        if(data === 'success') openLinks('account/personal.php')
+        if(data === 'success') openLinks('/account/personal.php')
         else error.passwordOldAfter()
     }
 }
@@ -360,4 +363,75 @@ function managePasswordVisibility(element) {
         else if(element.parentElement.firstElementChild.lastElementChild === pswRepeatInput) pswRepeatInput.type = 'password'
         else if(element.parentElement.firstElementChild.lastElementChild === pswOldInput) pswOldInput.type = 'password'
     }
+}
+
+
+function addAdmin(element) {
+    element.parentElement.firstElementChild.classList.add('disable')
+    element.parentElement.lastElementChild.classList.remove('disable')
+    admin('addAdmin', element.parentElement.parentElement.children[1].innerHTML.trim())
+}
+
+function removeAdmin(element) {
+    element.parentElement.firstElementChild.classList.remove('disable')
+    element.parentElement.lastElementChild.classList.add('disable')
+    admin('removeAdmin', element.parentElement.parentElement.children[1].innerHTML.trim())
+}
+
+async function admin(action, email) {
+
+    const res = await fetch('../include/update.inc.php', {
+        method: "POST", 
+        body: createFormData(action, email)
+    })
+    const data = await res.text()
+    console.log(data)
+}
+
+let imageUploadActive = false
+let currentImageUploadLocation
+async function submitProfileImageUploadForm() {
+
+    if(document.getElementById('file-upload').value) {
+
+        let photo = document.getElementById("file-upload").files[0]
+        let formData = new FormData()
+        
+        formData.append('file', photo)
+
+        const response = await fetch('../include/uploadFile.inc.php', {
+            method: "POST", 
+            body: formData
+        })
+        const text = await response.text()
+        if(text === 'too big') errorSpanUploadImage.innerHTML = `${icon} Max file size is 1MB`
+        else if(text === 'error') errorSpanUploadImage.innerHTML = `${icon} There have been some sort of an error`
+        else if(text === 'extension not allowed') errorSpanUploadImage.innerHTML = `${icon} Only jpeg, jpg, png are allowed`
+        else {
+            imageUploadActive = true
+            errorSpanUploadImage.classList.remove('red-color')
+            errorSpanUploadImage.classList.add('light-green-color')
+            errorSpanUploadImage.innerHTML = 'Image has been successfully added' 
+             
+            currentImageUploadLocation = text.split(' ')[1]
+            
+            array = JSON.stringify(['0', currentImageUploadLocation])
+            const res = await fetch('../include/update.inc.php', {
+                method: "POST", 
+                body: createFormData('imageUpload', array)
+            })
+            const data = await res.text()
+            console.log(data)        
+        }
+        document.getElementById('file-upload').value = ''
+
+    } else imageNameLabel.innerHTML = 'No file selected'
+
+}
+function fileChange() {
+    console.log(document.querySelector('.insert-photo-container .footer'))
+    document.querySelector('.insert-photo-container .footer .footer').classList.remove('disable')
+    let a = document.getElementById('file-upload').value.split(`fakepath`).pop().replace(/\\/g, '')
+    a = a.substring(0, 20)+'...'
+    imageNameLabel.innerHTML = a
 }

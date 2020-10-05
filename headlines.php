@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="CSS/*.css">
     <link rel="stylesheet" href="CSS/index.css">
     <link rel="stylesheet" href="CSS/responsive.css">
-
+    <link rel="shortcut icon" href="">
+    
     <script src="JS/variables.js" defer></script>
     <script src="JS/responsive.js" defer></script>
     <script src="JS/show.js" defer></script>
@@ -32,19 +33,89 @@
 
         <?php include 'add-ons/side-bar.php' ?>
 
-        <section class="main-content-section grid" id="main-content-section">
-            <!-- <header id="main-content-header" class="header-main-content search">
-                    <h1 class="search">Slovenia</h1>
-                    <section>
+
+        <section class="main-content-section single headlines" id="main-content-section">
+            <div class="main-content-container">
+                <div class="article-container">
+
+                    <article class="news">
+                        
                         <div>
-                            <figure class="circle" onclick="saveSearchWord(this)">
-                                <i class="fal fa-bookmark"></i>
-                            </figure>
-                            <figure class="rectangle" onclick="followSearchWord(this)">
-                                <i class="fa fa-star"></i> Follow
-                            </figure>
+                            <h3>Hello World!</h3>
+                            <div>
+
+                            </div>
+                            <div class="subtitle">
+                                
+                            </div>
                         </div>
-                    </section>
+
+                    </article>
+
+                </div>
+                
+                <aside id="main-side-content-container">
+                    <article class="weather-article grid relative">
+                        <header class="weather-main-header grid">
+                            <img src="" alt="" class="flex align-center justify-center">
+                            <label class="pointer"></label>
+                            <span class="temperature flex"></span>
+                        </header>
+                        <div class="weather-3-days grid">
+                            <section>
+                                <header></header>
+                                <div class="grid">
+                                    <img src="" alt="" class="flex align-center justify-center">
+                                    <span class="temperature flex"></span>
+                                </div>
+                                <div class="grid">
+                                    <img src="" alt="" class="flex align-center justify-center">
+                                    <span class="flex"></span>
+                                </div>
+                            </section>
+                            <section>
+                                <header></header>
+                                <div class="grid">
+                                    <img src="" alt="" class="flex align-center justify-center">
+                                    <span class="temperature flex"></span>
+                                </div>
+                                <div class="grid">
+                                    <img src="" alt="" class="flex align-center justify-center">
+                                    <span class="flex"></span>
+                                </div>
+                            </section>
+                            <section>
+                                <header></header>
+                                <div class="grid">
+                                    <img src="" alt="" class="flex align-center justify-center">
+                                    <span class="temperature flex"></span>
+                                </div>
+                                <div class="grid">
+                                    <img src="" alt="" class="flex align-center justify-center">
+                                    <span class="flex"></span>
+                                </div>
+                            </section>
+
+                        </div>
+                        <footer class="grid">
+                            <section class="grid">
+                                <div class="pointer active" onclick="changeTemperatureUnit(this)">C</div>
+                                <div class="pointer" onclick="changeTemperatureUnit(this)">F</div>
+                                <div class="pointer" onclick="changeTemperatureUnit(this)">K</div>
+                            </section>
+                            <section>
+                                <a href="https://www.weatherapi.com/" target="_blank"
+                                    class="flex align-center justify-center">WeatherAPI</a>
+                            </section>
+                        </footer>
+                    </article>
+                </aside>
+            </div>
+        </section>
+
+        <!-- <section class="main-content-section grid" id="main-content-section">
+            <header id="main-content-header" class="header-main-content search">
+                    <h1 class="search">Headlines</h1>
             </header> -->
             
             <!-- <figure id="main-content-container">
@@ -61,63 +132,7 @@
                 </article>
 
             </figure> -->
-            <!-- <aside id="main-side-content-container">
-                <article class="weather-article grid relative">
-                    <header class="weather-main-header grid">
-                        <img src="" alt="" class="flex align-center justify-center">
-                        <label class="pointer"></label>
-                        <span class="temperature flex"></span>
-                    </header>
-                    <div class="weather-3-days grid">
-                        <section>
-                            <header></header>
-                            <div class="grid">
-                                <img src="" alt="" class="flex align-center justify-center">
-                                <span class="temperature flex"></span>
-                            </div>
-                            <div class="grid">
-                                <img src="" alt="" class="flex align-center justify-center">
-                                <span class="flex"></span>
-                            </div>
-                        </section>
-                        <section>
-                            <header></header>
-                            <div class="grid">
-                                <img src="" alt="" class="flex align-center justify-center">
-                                <span class="temperature flex"></span>
-                            </div>
-                            <div class="grid">
-                                <img src="" alt="" class="flex align-center justify-center">
-                                <span class="flex"></span>
-                            </div>
-                        </section>
-                        <section>
-                            <header></header>
-                            <div class="grid">
-                                <img src="" alt="" class="flex align-center justify-center">
-                                <span class="temperature flex"></span>
-                            </div>
-                            <div class="grid">
-                                <img src="" alt="" class="flex align-center justify-center">
-                                <span class="flex"></span>
-                            </div>
-                        </section>
-
-                    </div>
-                    <footer class="grid">
-                        <section class="grid">
-                            <div class="pointer active" onclick="changeTemperatureUnit(this)">C</div>
-                            <div class="pointer" onclick="changeTemperatureUnit(this)">F</div>
-                            <div class="pointer" onclick="changeTemperatureUnit(this)">K</div>
-                        </section>
-                        <section>
-                            <a href="https://www.weatherapi.com/" target="_blank"
-                                class="flex align-center justify-center">WeatherAPI</a>
-                        </section>
-                    </footer>
-                </article>
-            </aside> -->
-        </section>
+            
 
     </main>
 

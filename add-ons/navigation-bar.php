@@ -6,7 +6,7 @@
             <div class="menu-burger-icon">
             </div>
         </figure>
-        <a href="#" onclick="openLinks('headlines.php')" class="logo">Fews</a>
+        <a href="#" onclick="openLinks('/headlines.php')" class="logo">Fews</a>
     </div>
 
     <div class="nav-search flex align-center justify-center relative" id="navigation-bar-middle">

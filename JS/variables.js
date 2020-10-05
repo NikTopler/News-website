@@ -8,7 +8,7 @@
     const colors = ['rgb(211, 47, 47)','rgb(123, 31, 162)','rgb(81, 45, 168)','rgb(48, 63, 159)','rgb(25, 118, 210)','rgb(2, 136, 209)','rgb(0, 151, 167)','rgb(0, 121, 107)','rgb(56, 142, 60)','rgb(104, 159, 56)','rgb(175, 180, 43)','rgb(251, 192, 45)','rgb(255, 160, 0)','rgb(245, 124, 0)','rgb(230, 74, 25)','rgb(93, 64, 55)','rgb(97, 97, 97)']
     const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
     const daysAcronyms = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
-    const websiteURL = 'http://localhost:8080/News-website/'
+    const websiteURL = 'http://localhost:8080/News-website'
     // const websiteURL = 'https://news.niktopler.com'
 
     const topStoriesURL = '&t=topstories&'
@@ -66,11 +66,14 @@
         const showCountriesLink = document.getElementById('show-countries-button')
         let sclSpan
         let sclStrong
-        const mainImgContainer = document.getElementById('main-img-container')
+        const mainImgContainer = document.querySelector('#main-img-container.main-img-container')
         if(showCountriesLink !== null) {
             sclSpan = showCountriesLink.firstElementChild.firstElementChild
             sclStrong = showCountriesLink.firstElementChild.lastElementChild
         }
+
+        const imageNameLabel = document.getElementById('image-name-label')
+        const errorSpanUploadImage = document.getElementById('error-span-upload-image')
 
     const main = document.getElementById('main')
     const overlay = document.getElementById('overlay')
