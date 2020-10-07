@@ -22,25 +22,25 @@
             <div class="main-content">
                 <div class="container">
                     <section class="header">   
-                        <div class="img-container"> 
+                        <div class="img-container" onclick="showProfileImg()"> 
                             <?php 
                                 $path = '../';
                                 if(strpos($_SERVER['REQUEST_URI'], 'search') || strpos($_SERVER['REQUEST_URI'], 'headlines')) $path = '';
                             
                                 if($_SESSION['profile_choice'] == 0) 
-                                    echo ('<div class="img xxl" onclick="changeProfileImg()" ><img src="'.$path.$_SESSION['profile_img'].'" class="imga"></div>');
+                                    echo ('<div class="img xxl" onclick=""><img src="'.$path.$_SESSION['profile_img'].'" class="imga"></div>');
                                 else if($_SESSION['profile_choice'] == 1) 
-                                    echo ('<div class="img xxl" onclick="changeProfileImg()" style="background-color: '.$_SESSION['profile_color'].';">
+                                    echo ('<div class="img xxl" onclick="" style="background-color: '.$_SESSION['profile_color'].';">
                                                 <div class="letter">
                                                     <span>'.$_SESSION['letter'].'</span>
                                                 </div>
                                             </div>');
                                 else if($_SESSION['profile_choice'] == 2) 
-                                    echo ('<div class="img xxl" onclick="changeProfileImg()"><img src="'.$_SESSION['google_profile_img'].'" class="imga"></div>');
+                                    echo ('<div class="img xxl" onclick=""><img src="'.$_SESSION['google_profile_img'].'" class="imga"></div>');
                                 else if($_SESSION['profile_choice'] == 3) 
-                                    echo ('<div class="img xxl" onclick="changeProfileImg()"><img src="'.$_SESSION['facebook_profile_img'].'" class="imga"></div>');
+                                    echo ('<div class="img xxl" onclick=""><img src="'.$_SESSION['facebook_profile_img'].'" class="imga"></div>');
                                 else if($_SESSION['profile_choice'] == 4) 
-                                    echo ('<div class="img xxl" onclick="changeProfileImg()"><img src="'.$_SESSION['github_profile_img'].'" class="imga"></div>');
+                                    echo ('<div class="img xxl" onclick=""><img src="'.$_SESSION['github_profile_img'].'" class="imga"></div>');
                             ?>
                             <figure>
                                 <div><i class="fas fa-camera fa-lg" aria-hidden="true"></i></div>
@@ -122,6 +122,7 @@
             </div>
         </main>
         <div class="fixed" id="overlay"></div>
+        <?php  include '../add-ons/profileImg.php' ?>
 
     </body>
 </html>

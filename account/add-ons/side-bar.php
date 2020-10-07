@@ -11,18 +11,19 @@
                         <div class="icon"><i class="far fa-id-card-alt fa-lg"></i></div>
                         <div><a href="#">Personal Information</a></div>
                     </div>
-                    <?php 
-                        if($_SESSION['admin'] != 'no') 
+                    <?php  
                         $admin = '';
                         $trending = '';
+                        $disable = 'disable';
+                        if($_SESSION['admin'] != 'no') $disable = '';
                         if(strpos($_SERVER['REQUEST_URI'], 'admin')) $admin =  'active';
                         if(strpos($_SERVER['REQUEST_URI'], 'trending')) $trending =  'active';
 
-                            echo '<div class="sidebar-category '.$admin.'" onclick="openLinks(\'/account/admin.php\')">
+                            echo '<div class="sidebar-category '.$admin.' '.$disable.'" onclick="openLinks(\'/account/admin.php\')">
                                         <div class="icon"><i class="fas fa-users-crown fa-lg"></i></div>
                                         <div><a href="#" class="side-menu-categories">Admin</a></div>
                                     </div>
-                                    <div class="sidebar-category '.$trending.'" onclick="openLinks(\'/account/trending.php\')">
+                                    <div class="sidebar-category '.$trending.' '.$disable.'" onclick="openLinks(\'/account/trending.php\')">
                                         <div class="icon"><i class="far fa-chart-line fa-lg"></i></div>
                                         <div><a href="#" class="side-menu-categories">Trending Section</a></div>
                                     </div>';

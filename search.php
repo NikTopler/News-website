@@ -9,8 +9,10 @@
 
     <link rel="stylesheet" href="CSS/colors.css">
     <link rel="stylesheet" href="CSS/*.css">
+    <link rel="stylesheet" href="CSS/profileImg.css">
     <link rel="stylesheet" href="CSS/index.css">
     <link rel="stylesheet" href="CSS/responsive.css">
+
     <link rel="shortcut icon" href="">
     
     <script src="JS/variables.js" defer></script>
@@ -94,6 +96,8 @@
     <div class="fixed" id="overlay"></div>
 
     <?php include 'add-ons/footer-scripts.php' ?>
+
+    <?php  include 'add-ons/profileImg.php' ?>
 
 </body>
 <?php include 'add-ons/footer-scripts.php' ?>

@@ -9,6 +9,7 @@
 
     <link rel="stylesheet" href="CSS/colors.css">
     <link rel="stylesheet" href="CSS/*.css">
+    <link rel="stylesheet" href="CSS/profileImg.css">
     <link rel="stylesheet" href="CSS/index.css">
     <link rel="stylesheet" href="CSS/responsive.css">
     <link rel="shortcut icon" href="">
@@ -37,21 +38,113 @@
         <section class="main-content-section single headlines" id="main-content-section">
             <div class="main-content-container">
                 <div class="article-container">
-
-                    <article class="news">
-                        
-                        <div>
-                            <h3>Hello World!</h3>
-                            <div>
-
+                    <!-- <article class="news a-1-a">
+                        <div class="article-header">
+                            <div class="article-heading-container">
+                                <a href="">
+                                    <h1>Facebook removes Trump post falsely saying flu is more lethal than Covid - CNN</h1>
+                                </a>
                             </div>
-                            <div class="subtitle">
-                                
+                            <div class="extra-content-container">
+                                <div class="author">
+                                    <span>CNN • 12/4/2002</span>
+                                </div>
+                                <div class="extra-options-container">
+                                    <div class="save-container a-1-a">
+                                        <div class="save-circle" onclick="saveNews(1,this.parentElement)">
+                                            <i class="far fa-bookmark"></i>
+                                        </div>
+                                        <span class="tooltiptext tooltiptextTop90">Save</span>
+                                    </div>
+                                    <div class="extra-container">
+                                        <div class="extra-circle" onclick="openExtraOptions(this)">
+                                            <i class="far fa-ellipsis-v"></i>
+                                        </div>
+                                        <span class="tooltiptext tooltiptextTop120">More</span>
+                                        <aside class="extra-option-container disable a-1-a">
+                                            <div class="e-o-c-container" onclick="openNews(this)">
+                                                <div>
+                                                    <i class="far fa-external-link-alt"></i>
+                                                </div>
+                                                <span>Open</span>
+                                            </div>
+                                            <div class="e-o-c-container" onclick="saveNews(2,this.parentElement)"><div><i class="far fa-bookmark"></i></div><span>Save</span></div>
+                                            <div class="e-o-c-container" onclick="hideArticle('a-1-a')"><div><i class="far fa-minus-circle"></i></div><span>Hide</span></div>
+                                        </aside>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
+                        <div class="text">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos, nulla odit 
+                                dolores totam eaque voluptate labore! Neque, eum nihil placeat, 
+                                veritatis voluptatum, magnam perferendis beatae ipsa minus iure iste deserunt.
+                                <span class="disable a-1-t">
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos, nulla odit 
+                                    dolores totam eaque voluptate labore! Neque, eum nihil placeat, 
+                                    veritatis voluptatum, magnam perferendis beatae ipsa minus iure iste deserunt.
+                                </span>
+                            </p>
+                        </div>
+                        <div class="footer">
+                            <div onclick="manageArticleText(this,'a-1-t')">
+                                <i class="far fa-chevron-down"></i>
+                            </div>
+                        </div>
+                        <div class="article-img">
+                            <img src="https://cdn.cnn.com/cnnnext/dam/assets/201005192147-03-trump-arrives-white-house-1005-removes-mask-super-tease.jpg" alt="">
+                        </div>
                     </article>
-
+                    <article class="news a-2-a no-img">
+                        
+                        <div class="article-header">
+                            <div class="article-heading-container">
+                                <a href="">
+                                    <h1>Facebook removes Trump post falsely saying flu is more lethal than Covid - CNN</h1>
+                                </a>
+                            </div>
+                            <div class="extra-content-container">
+                                <div class="author">
+                                    <span>CNN • 12/4/2002</span>
+                                </div>
+                                <div class="extra-options-container">
+                                    <div class="save-container a-2-a">
+                                        <div class="save-circle" onclick="saveNews(1,this.parentElement)">
+                                            <i class="far fa-bookmark"></i>
+                                        </div>
+                                        <span class="tooltiptext tooltiptextTop90">Save</span>
+                                    </div>
+                                    <div class="extra-container">
+                                        <div class="extra-circle" onclick="openExtraOptions(this)">
+                                            <i class="far fa-ellipsis-v"></i>
+                                        </div>
+                                        <span class="tooltiptext tooltiptextTop120">More</span>
+                                        <aside class="extra-option-container disable a-2-a">
+                                            <div class="e-o-c-container" onclick="openNews(this)"><div><i class="far fa-external-link-alt"></i></div><span>Open</span></div>
+                                            <div class="e-o-c-container" onclick="saveNews(2,this.parentElement)"><div><i class="far fa-bookmark"></i></div><span>Save</span></div>
+                                            <div class="e-o-c-container" onclick="hideArticle('a-2-a')"><div><i class="far fa-minus-circle"></i></div><span>Hide</span></div>
+                                        </aside>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos, nulla odit 
+                                dolores totam eaque voluptate labore! Neque, eum nihil placeat, 
+                                veritatis voluptatum, magnam perferendis beatae ipsa minus iure iste deserunt.
+                                <span class="disable a-2-t">
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos, nulla odit 
+                                    dolores totam eaque voluptate labore! Neque, eum nihil placeat, 
+                                    veritatis voluptatum, magnam perferendis beatae ipsa minus iure iste deserunt.
+                                </span>
+                            </p>
+                        </div>
+                        <div class="footer">
+                            <div onclick="manageArticleText(this,'a-2-t')">
+                                <i class="far fa-chevron-down"></i>
+                            </div>
+                        </div>
+                    </article> -->
                 </div>
                 
                 <aside id="main-side-content-container">
@@ -109,30 +202,50 @@
                             </section>
                         </footer>
                     </article>
+                    <article class="trending-page">
+                        <div class="header">
+                            <h1>Trending</h1>
+                        </div>
+                        <div class="trending-headlines-container">
+                            <?php
+
+                                include_once 'include/db.inc.php';
+
+                                class generateTrendingNews extends Dbh {
+
+                                    public function generate() {
+                                        $sql = "SELECT n.id, n.author,n.title,n.text,n.source_id,n.URL_site FROM trending t INNER JOIN news n ON n.id = t.news_id LIMIT 20";
+                                        $stmt = $this->connect()->prepare($sql);
+                                        $stmt->execute();
+                                        while($row = $stmt->fetch()) {
+                                            echo '<div class="main" onclick="window.open(\''.$row['URL_site'].'\')">';
+                                                echo '<div><span>'.substr($row['title'], 0, 100).'...</span></div>';
+                                                echo '<div class="small"><span>'.$this->getSource($row['source_id']).'</span></div>';
+                                            echo '</div>';
+                                        }
+
+                                    }
+
+                                    public function getSource($id) {
+                                        $sql = "SELECT * FROM sources WHERE id = ?";
+                                        $stmt = $this->connect()->prepare($sql);
+                                        $stmt->execute([$id]);
+                                        $row = $stmt->fetch();
+                                        if($row['name'] == null) return 'No source';
+                                        else return $row['name'];
+                                    }
+
+                                }
+                                $generateObj = new generateTrendingNews();
+                                $generateObj->generate();
+
+                            ?>
+                        
+                        </div>
+                    </article>
                 </aside>
             </div>
         </section>
-
-        <!-- <section class="main-content-section grid" id="main-content-section">
-            <header id="main-content-header" class="header-main-content search">
-                    <h1 class="search">Headlines</h1>
-            </header> -->
-            
-            <!-- <figure id="main-content-container">
-                <header id="main-content-header" class="section-main-header header-main-content">
-                    <h1>Headlines</h1>
-                    <a href="#" class="blue-link flex" onclick="showCategoryNews()">Categories</a>
-                </header>
-                <article class="coronavirus-article grid article-other" id="coronavirus-article">
-                    <a href="#" class="blue-link" id="coronavirus-article-a">
-                        COVID-19 information:
-                        <span> See the lates coverage of coronavirus</span>
-                    </a>
-                    <i class="fas fa-chevron-right corona-arrow pointer"></i>
-                </article>
-
-            </figure> -->
-            
 
     </main>
 
@@ -145,6 +258,8 @@
     <div class="fixed" id="overlay"></div>
 
     <?php include 'add-ons/footer-scripts.php' ?>
+    
+    <?php  include 'add-ons/profileImg.php' ?>
 
 </body>
 

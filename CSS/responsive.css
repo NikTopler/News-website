@@ -26,7 +26,7 @@
         display: none;
     }
     .article-container {
-        grid-column: 1/13;
+        grid-column: 1/13 !important;
     }
     .main-content-section {
         width: 100%;

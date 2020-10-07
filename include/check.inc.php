@@ -1,4 +1,6 @@
 <?php  include_once 'db.inc.php';
+        session_start();
+
 
 class Check extends Dbh {
 
@@ -97,6 +99,21 @@ class Check extends Dbh {
                     </div>';
         die;
     }
+
+    public function isIdSet() {
+        if(isset($_SESSION['email'])) echo 'je';
+        else echo 'ni';
+        die;
+    }
+
+    public function newsSaveArticle($title) {
+        $sql = 'SELECT * FROM news n INNER JOIN saved_news sn ON n.id = sn.news_id INNER JOIN users u ON u.id = sn.user_id WHERE n.title = ?';
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([$title]);
+        $row = $stmt->fetch();
+        if($row) echo 'saved';
+        else echo 'not saved';
+    }
 }
 
 $checkObj = new Check();
@@ -105,3 +122,5 @@ if($_SERVER['REQUEST_METHOD'] !== 'POST') return;
 if(isset($_POST['email'])) $checkObj->email(json_decode($_POST['email']));
 else if(isset($_POST['login'])) $checkObj->login(json_decode($_POST['login']));
 else if(isset($_POST['pswSet'])) $checkObj->pswSet();
+else if(isset($_POST['isIdSet'])) $checkObj->isIdSet();
+else if(isset($_POST['newsSaveArticle'])) $checkObj->newsSaveArticle($_POST['newsSaveArticle']);

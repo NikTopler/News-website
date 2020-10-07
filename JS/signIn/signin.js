@@ -4,7 +4,7 @@ const password = document.querySelector('.password-container')
 const emailInput = document.getElementById('email-input')
 const passwordInput = document.getElementById('password-input')
 
-const websiteURL = 'http://localhost:8080/News-website/'
+const websiteURL = 'https://news.niktopler.com/'
 
 emailInput.onfocus = () => {
     email.querySelector('.label-container').classList.add('active')

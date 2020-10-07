@@ -9,6 +9,7 @@
 
     <link rel="stylesheet" href="../CSS/colors.css">
     <link rel="stylesheet" href="../CSS/*.css">
+    <link rel="stylesheet" href="../CSS/profileImg.css">
     <link rel="stylesheet" href="../CSS/index.css">
     <link rel="stylesheet" href="../CSS/responsive.css">
 

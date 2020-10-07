@@ -17,6 +17,7 @@
     <div class="fixed" id="overlay"></div>
 
     <?php include '../add-ons/footer-scripts.php' ?>
+    <?php  include '../add-ons/profileImg.php' ?>
 
 </body>
 

@@ -127,24 +127,67 @@ class update extends Dbh {
         if($info[0] == '0') {
             $name = "profile_img";
             $num = 0;
+            if($this->checkForImage($info[1],$info[0]) == 'true') die;
+        } else if($info[0] == '1') {
+            $name = "profile_color";
+            $num = 1;
+
+        } else if($info[0] == '2') {
+            $name = "google_profile_img";
+            $num = 2;
+        } else if($info[0] == '3') { 
+            $name = "facebook_profile_img";
+            $num = 3;
+        } else if($info[0] == '4') { 
+            $name = "github_profile_img";
+            $num = 4;
         }
-        $this->checkForImage();
         $sql = "UPDATE users SET profile_choice = ? WHERE email = ?";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([$num, $_SESSION['email']]);
+
 
         $sql = "UPDATE users SET ".$name." = ? WHERE email = ?";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([$info[1], $_SESSION['email']]);
         $this->setSessionVariables($_SESSION['email']);
-        echo 'success';
+        header("Refresh:0");
     }
-    public function checkForImage() {
+    public function checkForImage($path, $num) {
         $sql = 'SELECT * FROM users WHERE email = ?';
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([$_SESSION['email']]);
         $row = $stmt->fetch();
-        if($row['profile_select'] == 0 && $row['profile_img'] != null) unlink('../'.$row['profile_img']);
+        if($row['profile_img'] == $path) die;
+        if($row['profile_img'] == $path) return 'true';
+        else return 'false';
+    }
+    public function deleteImg($path) { unlink($path); }
+    public function trendingIn($id) {
+        $sql = "INSERT INTO trending(news_id,admin_id) VALUES(?,(SELECT id FROM admins WHERE user_id = (SELECT id FROM users WHERE email = ?))) ";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([$id, $_SESSION['email']]);
+    }
+
+
+    public function saveNews($info) {
+        if($this->checkIfAlreadySaved($info) == 'obstaja') die;
+        $sql = 'INSERT INTO saved_news(user_id,news_id) VALUES ((SELECT id FROM users WHERE email = ?), (SELECT id FROM news WHERE title = ?))';
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([$_SESSION['email'], $info[0]]);
+    }
+    public function unsaveNews($title) {
+        $sql = 'DELETE FROM saved_news WHERE user_id = (SELECT id FROM users WHERE email = ?) AND news_id = (SELECT id FROM news WHERE title = ?)';
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([$_SESSION['email'], $title[0]]);
+    }
+    public function checkIfAlreadySaved($info) {
+        $sql = 'SELECT * FROM news n inner join saved_news sn on n.id = sn.news_id inner join users u on u.id = sn.user_id WHERE sn.user_id = (SELECT id FROM users WHERE email = ?) AND sn.news_id = (SELECT id FROM news WHERE title = ?)';
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([$_SESSION['email'], $info[0]]);
+        $row = $stmt->fetch();
+        if($row) return 'obstaja';
+        else return 'neobstaj';
     }
 }
 
@@ -159,4 +202,8 @@ else if(isset($_POST['oldPsw'])) $updateObj->oldPsw(json_decode($_POST['oldPsw']
 else if(isset($_POST['addAdmin'])) $updateObj->addAdmin($_POST['addAdmin']);
 else if(isset($_POST['removeAdmin'])) $updateObj->removeAdmin($_POST['removeAdmin']);
 else if(isset($_POST['imageUpload'])) $updateObj->imageUpload(json_decode($_POST['imageUpload']));
+else if(isset($_POST['deleteImg'])) $updateObj->deleteImg($_POST['deleteImg']);
+else if(isset($_POST['trendingIn'])) $updateObj->trendingIn($_POST['trendingIn']);
+else if(isset($_POST['saveNews'])) $updateObj->saveNews(json_decode($_POST['saveNews']));
+else if(isset($_POST['unsaveNews'])) $updateObj->unsaveNews(json_decode($_POST['unsaveNews']));
 

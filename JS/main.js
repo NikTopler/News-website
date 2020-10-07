@@ -222,7 +222,6 @@ const php = {
 
 const error = {
     window : () => {
-        // Checkes if correct country acronym is in URL
         if(window.location.search.match(regularExpressions.url.country)) {
             let countryAcronym = window.location.search.match(regularExpressions.url.country)[0].slice(5, 7)
             let country = getAcronymCountry(countryAcronym)
@@ -299,7 +298,6 @@ window.onload = async () => {
     else if (window.location.pathname.includes('help')) help()
     else if (window.location.pathname.includes('search')) mainSearch()
     await user.location()
-    // changeBackgroundColor()    
 }
 
 window.onclick = (e) => {      
@@ -398,10 +396,212 @@ async function headlines() {
     sidebarCategorySelect(document.querySelector('.fa-newspaper').parentElement.parentElement)
 
     historyPushState(window.location.origin + window.location.pathname, '', `?cou=${getCountryAcronym(selectedCountry.innerHTML.trim())}`,`&bg=${backgroundColor}`)
+    apiString = await getApiString()
+    await fetchNewsArticles(apiString)
+    generatArticles(publicArticleArray)
+}
+async function getApiString() {
+    const key = await php.info('news')
+    return apiString = `https://newsapi.org/v2/top-headlines?country=${getCountryAcronym(selectedCountry.innerHTML.trim())}&apiKey=${key}`;
+}
+
+async function generatArticles(array) {
+    if(array == null) return
+    for(let i = 0; i < array.length; i++) {
+
+        let authors = array[i].author
+        let content = array[i].content
+        let description = array[i].description
+        let date = getDate(array[i].publishedAt)
+        let source = array[i].source.name
+        let title = array[i].title
+        let url = array[i].url
+        let imgUrl = array[i].urlToImage
+
+        let bookmarkcolor = 'aaaaa'
+        let defaultClass = 'far'
+        if(checkIfUserIsLoggedIn() !== 'ni') {
+            const res = await isSaved(title)
+            if(res === 'saved') {
+                bookmarkcolor = 'yellow-color'
+                defaultClass = 'fas'
+            } 
+        }
+
+        dbArray = [authors, content, description, date, source, title, url, imgUrl]
+
+        insertIntoDB(dbArray)
+
+        let article = document.createElement('article')
+            article.classList.add('news', `a-${i}-a`)
+            let div = document.createElement('div')
+                div.classList.add('article-header')
+                let headingContainer = document.createElement('div')
+                    headingContainer.classList.add('article-heading-container')
+                    let a = document.createElement('a')
+                        a.href = array[i].url.trim()
+                        let h1 = document.createElement('h1')
+                            h1.innerHTML = array[i].title.trim()
+                    a.appendChild(h1)
+                    headingContainer.appendChild(a)
+                let extraContentContainer = document.createElement('extra-content-containe')
+                    extraContentContainer.classList.add('extra-content-container')   
+                    let author = document.createElement('div')
+                        author.classList.add('author')
+                        author.style.position = 'relative'
+                        let span = document.createElement('span')
+                            span.innerHTML = `${array[i].source.name.trim()} • ${getDate(array[i].publishedAt)}`   
+                        author.appendChild(span)
+                        if(array[i].author != null) {
+                            let tooltiptext = document.createElement('span')
+                            tooltiptext.classList.add('tooltiptext','tooltiptextTop90')
+                            tooltiptext.innerHTML = array[i].author
+                            author.appendChild(tooltiptext)
+                        }
+                    let extraOptionsContainer = document.createElement('div')
+                        extraOptionsContainer.classList.add('extra-options-container')
+                        let saveContainer = document.createElement('div')
+                            saveContainer.classList.add('save-container', `a-${i}-a`)
+                            let saveCircle = document.createElement('div')
+                                saveCircle.classList.add('save-circle')
+                                saveCircle.onclick = () => { saveNews(1, saveContainer) }
+                                let bookmark1 = document.createElement('i')
+                                    bookmark1.classList.add(defaultClass,'fa-bookmark', bookmarkcolor)
+                                let tooltiptextSave1 = document.createElement('span')
+                                    tooltiptextSave1.classList.add('tooltiptext','tooltiptextTop130')
+                                    tooltiptextSave1.innerHTML = 'Save'
+                            saveCircle.appendChild(bookmark1)
+                        saveContainer.appendChild(saveCircle)
+                        saveContainer.appendChild(tooltiptextSave1)
+                        let extraContaner = document.createElement('div')
+                            extraContaner.classList.add('extra-container')
+                            let extraCircle = document.createElement('div')
+                                extraCircle.classList.add('extra-circle')
+                                extraCircle.onclick = () => { openExtraOptions(extraCircle) }
+                                let extraI = document.createElement('i')
+                                    extraI.classList.add('far', 'fa-ellipsis-v')
+                                extraCircle.appendChild(extraI)
+                            let tooltiptextextra1 = document.createElement('span')
+                                tooltiptextextra1.classList.add('tooltiptext','tooltiptextTop130')
+                                tooltiptextextra1.innerHTML = 'Extra options'
+                            let aside = document.createElement('aside')
+                                aside.classList.add('extra-option-container', 'disable', `a-${i}-a`)
+                                let aDiv1 = document.createElement('div')
+                                    aDiv1.classList.add('e-o-c-container')
+                                    aDiv1.onclick = () => { openNews(aDiv1) }
+                                    let div11 = document.createElement('div')
+                                        let i11 = document.createElement('i')
+                                            i11.classList.add('far', 'fa-external-link-alt')
+                                    div11.appendChild(i11)
+                                    let span11 = document.createElement('span')
+                                        span11.innerHTML = 'Open'
+                                div11.appendChild(i11)
+                                aDiv1.appendChild(div11)
+                                aDiv1.appendChild(span11)    
+                                let aDiv2 = document.createElement('div')
+                                    aDiv2.classList.add('e-o-c-container')
+                                    aDiv2.onclick = () => { saveNews(2, aside) }
+                                    let div22 = document.createElement('div')
+                                        let i22 = document.createElement('i')
+                                            i22.classList.add(bookmarkcolor, 'fa-bookmark', defaultClass)
+                                    div22.appendChild(i22)
+                                    let span22 = document.createElement('span')
+                                        span22.innerHTML = 'Save'
+                                div22.appendChild(i22)
+                                aDiv2.appendChild(div22)
+                                aDiv2.appendChild(span22) 
+                                let aDiv3 = document.createElement('div')
+                                    aDiv3.classList.add('e-o-c-container')
+                                    aDiv3.onclick = () => { hideArticle(`a-${i}-a`) }
+                                    let div33 = document.createElement('div')
+                                        let i33 = document.createElement('i')
+                                            i33.classList.add('far', 'fa-minus-circle')
+                                            div33.appendChild(i33)
+                                    let span33 = document.createElement('span')
+                                        span33.innerHTML = 'Hide'
+                                div33.appendChild(i33)
+                                aDiv3.appendChild(div33)
+                                aDiv3.appendChild(span33) 
+                            aside.appendChild(aDiv1)
+                            aside.appendChild(aDiv2)
+                            aside.appendChild(aDiv3)
+                        extraContaner.appendChild(extraCircle)
+                        extraContaner.appendChild(tooltiptextextra1)
+                        extraContaner.appendChild(aside)
+                    extraOptionsContainer.appendChild(saveContainer)
+                    extraOptionsContainer.appendChild(extraContaner)
+                extraContentContainer.appendChild(author)
+                extraContentContainer.appendChild(extraOptionsContainer)
+            div.appendChild(headingContainer)
+            div.appendChild(extraContentContainer)
+            article.appendChild(div)
+        if(array[i].content !== null) {
+            let text = document.createElement('div')
+            text.classList.add('text')
+            let p = document.createElement('p')
+                p.innerHTML = array[i].content.slice(0, -18)
+                if(array[i].description != null) {
+                    let spanT = document.createElement('span')
+                    spanT.classList.add('disable' ,`a-${i}-t`)
+                    spanT.innerHTML = array[i].description.trim()
+                    p.appendChild(spanT)
+                }
+            text.appendChild(p)
+            article.appendChild(text)
+        }
+
+        
+        if(array[i].description !== null) {
+            let footer = document.createElement('div')
+                footer.classList.add('footer')
+                let divF = document.createElement('div')
+                    divF.onclick = () => { manageArticleText(divF, `a-${i}-t`) }
+                    let iF = document.createElement('i')
+                        iF.classList.add('far', 'fa-chevron-down')
+                divF.appendChild(iF)
+            footer.appendChild(divF)
+            article.appendChild(footer)
+        }
+
+
+        if(array[i].urlToImage === null) article.classList.add('no-img')
+        else {
+            let imgD = document.createElement('div')
+            imgD.classList.add('article-img')
+            let img = document.createElement('img')
+                img.src = array[i].urlToImage
+                img.alt = 'img'
+            
+            imgD.appendChild(img)
+            article.appendChild(imgD)
+        } 
+
+        document.querySelector('.article-container').appendChild(article)
+    }
+
+}
+
+function getDate(date) { return date.slice(0, -10) }
+
+async function insertIntoDB(arrayVal) {
+
+    array = JSON.stringify(arrayVal)
+    const res =  await fetch(`${locationOrganiser}include/insert.inc.php`, {                          
+        method: "POST", 
+        body: createFormData('news', array)
+    })
+}
+async function isSaved(title) {
+    const res =  await fetch(`${locationOrganiser}include/check.inc.php`, {                          
+        method: "POST", 
+        body: createFormData('newsSaveArticle', title)
+    })
+    const data = await res.text()
+    return data
 }
 
 /* SEARCH */ 
-    function mainSearch(extra, type) {
+    async function mainSearch(extra, type) {
         let url = ''
         let newSearch = false 
         pathLocation = ''
@@ -433,13 +633,26 @@ async function headlines() {
         let searchInputValue = window.location.search.match(regularExpressions.url.query)[0].slice(3, -1)
         mainSearchInput.value = urlEdit(searchInputValue)
 
+        let n = 0
+        let mainArticleContainer = document.querySelector('.article-container')
+        const num = mainArticleContainer.children.length
+    
+        for(let i = 0; i < num; i++) {
+            if(mainArticleContainer.children[n].tagName === 'ARTICLE') mainArticleContainer.children[n].remove()
+            else n = 1
+        }    
+
+        const key = await php.info('news')
+        apiString = await getApiString()
+        await fetchNewsArticles(`https://newsapi.org/v2/everything?q=${mainSearchInput.value}&apiKey=${key}`)
+        generatArticles(publicArticleArray)
+    
+
         searchBox.update(mainSearchInput.value.trim())
         hideExtraSearchOptions()
         hideSuggestWords()
         suggest.suggest()
 
-        /* Search news articles */
-            // console.log(url[4])
     }
     function createUrlExtraOptions(option) {
         let url
@@ -490,8 +703,21 @@ function library() {
 
 /* CATEGORIES */
 
-function category(word) {
+async function category(word) {
     sidebarCategorySelect(document.querySelector(`.${word}`).parentElement.parentElement)
+    let string = ''
+    const key = await php.info('news')
+
+    if(word == 'fa-shield-cross') string = `https://newsapi.org/v2/everything?q=covid&apiKey=${key}`
+    else if(word == 'fa-globe-europe') string = `https://newsapi.org/v2/everything?q=world&apiKey=${key}`
+    else if(word == 'fa-building') string = `https://newsapi.org/v2/top-headlines?country=${getCountryAcronym(selectedCountry.innerHTML.trim())}&category=business&apiKey=${key}`
+    else if(word == 'fa-microchip') string = `https://newsapi.org/v2/top-headlines?country=${getCountryAcronym(selectedCountry.innerHTML.trim())}&category=technology&apiKey=${key}`
+    else if(word == 'fa-camera-movie') string = `https://newsapi.org/v2/top-headlines?country=${getCountryAcronym(selectedCountry.innerHTML.trim())}&category=entertainment&apiKey=${key}`
+    else if(word == 'fa-tennis-ball') string = `https://newsapi.org/v2/top-headlines?country=${getCountryAcronym(selectedCountry.innerHTML.trim())}&category=sport&apiKey=${key}`
+    else if(word == 'fa-heartbeat') string = `https://newsapi.org/v2/top-headlines?country=${getCountryAcronym(selectedCountry.innerHTML.trim())}&category=health&apiKey=${key}`
+
+    await fetchNewsArticles(string)
+    generatArticles(publicArticleArray)
 }
 
 /* SETTINGS */
@@ -553,12 +779,23 @@ mainSearchInput.onkeyup = (e) => {
     }
 }
 
-function updateCountrySelect(country) {
+async function updateCountrySelect(country) {
     selectedCountry.innerHTML = country
     if(location.pathname.includes('search')) string = '&'
     else string = '?'
     historyPushState(location.origin + location.pathname, location.search.replace(regularExpressions.url.country,`${string}cou=${getCountryAcronym(country)}`), '', '')
     hideSelectCountry()
+    let mainArticleContainer = document.querySelector('.article-container')
+    const num = mainArticleContainer.children.length
+    let n = 0
+    for(let i = 0; i < num; i++) {
+        if(mainArticleContainer.children[n].tagName === 'ARTICLE') mainArticleContainer.children[n].remove()
+        else n = 1
+    }
+    apiString = await getApiString()
+    await fetchNewsArticles(apiString)
+    generatArticles(publicArticleArray)
+
 }
 
 function createUrlPath(type, search) {
@@ -752,52 +989,6 @@ function inputExtraSearchOptionChange() {
 function addDisableSideElements() { mainAsideContent.querySelectorAll('article').forEach(article => article.classList.add('disable')) }
 function removeDisableSideElements() { mainAsideContent.querySelectorAll('article.disable').forEach(article => article.classList.remove('disable')) }
 
-function follow(element) {
-    if(element.lastElementChild.textContent === 'Follow') fillIcons(element.firstElementChild, element.lastElementChild, 'Following')
-    else emptyIcons(element.firstElementChild, element.lastElementChild, 'Follow')
-
-    if(window.location.pathname.includes('search')) followNews()
-    else followCategory()
-}
-function saveNews(element) {
-    if(element.lastElementChild.textContent === 'Save') fillIcons(element.firstElementChild, element.lastElementChild, 'Saved')
-    else emptyIcons(element.firstElementChild, element.lastElementChild, 'Save')
-    //PHP
-}
-function followNews() {
-    //PHP
-}
-function followCategory() {
-    
-}
-
-function fillIcons(icon, text, string) {
-    icon.classList.remove('far')
-    icon.classList.add('fas')
-    text.textContent = string
-}
-function emptyIcons(icon, text, string) {
-    icon.classList.add('far')
-    icon.classList.remove('fas')
-    text.textContent = string
-}
-
-/* API */
-
-// fetchNewsArticles()
-async function fetchNewsArticles() {
-
-    const key = await php.info('news')
-    const response = await fetch(`http://cors-anywhere.herokuapp.com/http://newsapi.org/v2/everything?q=-velenje america "coronavirus"&sortBy=popularity&apiKey=${key}`).catch(() => {
-        // noArticlesFoundNotification()
-    })
-    // const response = await fetch(newsApiLoadUrl).catch(err => {
-    //     noArticlesFoundNotification()
-    // })
-    const json = await response.json()
-    const articles = await json.articles
-}
-
 function createFormData(word, data) { 
     let formData = new FormData
         formData.append(word, data) 
@@ -814,10 +1005,102 @@ function checkIfCategoriesAreOpen() {
                 return true
     return false
  }
-// string.trim().replace(/\s\s+/g, ' ').replace(/%20/g, ' ').replace(/%22/g, '"')
 
-async function logOut(string) {
+async function logout(string) {
     const res = await fetch(`include/logout.inc.php`)
     const data = res.text()
     openLinks(filePath.headlines + string);
 }
+
+
+
+
+
+let imageUploadActive = false
+let currentImageUploadLocation
+let newImg = false
+async function submitProfileImageUploadForm() {
+
+    if(document.getElementById('file-upload').value) {
+        errorSpanUploadImage.classList.remove('light-green-color')
+        let photo = document.getElementById("file-upload").files[0]
+        let formData = new FormData()
+        
+        formData.append('file', photo)
+
+        const response = await fetch('../include/uploadFile.inc.php', {
+            method: "POST", 
+            body: formData
+        })
+        const text = await response.text()
+        if(text === 'too big') errorSpanUploadImage.innerHTML = `${icon} Max file size is 1MB`
+        else if(text === 'error') errorSpanUploadImage.innerHTML = `${icon} There have been some sort of an error`
+        else if(text === 'extension not allowed') errorSpanUploadImage.innerHTML = `${icon} Only jpeg, jpg, png are allowed`
+        else {
+            newImg = true
+            imageUploadActive = true
+            errorSpanUploadImage.classList.remove('red-color')
+            errorSpanUploadImage.classList.add('light-green-color')
+            errorSpanUploadImage.innerHTML = 'Image has been successfully added' 
+            currentImageUploadLocation = text.split(' ')[1]
+            console.log(currentImageUploadLocation)
+            if(document.querySelector('#external-img-container div.costum')) {
+                document.querySelector('#external-img-container div.costum').remove()
+                removeImg('../' + currentImageUploadLocation)
+            } 
+                let div = document.createElement('div')
+                div.style.display = 'flex'
+                div.style.alignItems = 'center'
+                div.style.justifyContent = 'center'
+                div.classList.add('google','costum')
+                div.onclick = () => { selectImg(div) }
+            let img = document.createElement('img')
+                img.src = '../' + currentImageUploadLocation
+                img.alt = 'profile'
+                img.classList.add('img','medium')
+            div.appendChild(img)
+            document.querySelector('#external-img-container').insertBefore(div , document.querySelector('#external-img-container').children[0])
+        }
+        document.getElementById('file-upload').value = null
+
+    } else imageNameLabel.innerHTML = 'No file selected'
+
+}
+function fileChange() {
+    document.querySelector('.insert-photo-container .footer .footer').classList.remove('disable')
+    let a = document.getElementById('file-upload').value.split(`fakepath`).pop().replace(/\\/g, '')
+    a = a.substring(0, 20)+'...'
+    imageNameLabel.innerHTML = a
+}
+
+function selectImg(element) {
+    if(document.querySelector('.check-mark')) document.querySelector('.check-mark').remove()
+    let div = document.createElement('div')
+        div.classList.add('check-mark')
+    let i = document.createElement('i')
+        i.classList.add('far','fa-check')
+    div.appendChild(i)
+    element.appendChild(div)
+}
+
+async function removeImg(name) {
+    await fetch('../include/update.inc.php', {                          
+        method: "POST", 
+        body: createFormData('deleteImg', name)
+    })
+}
+
+
+
+/* API */
+
+
+async function fetchNewsArticles(url) {
+
+    const response = await fetch(url)
+    const json = await response.json()
+    const articles = await json.articles
+    publicArticleArray = articles
+}
+
+let publicArticleArray = []

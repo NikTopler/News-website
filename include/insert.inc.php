@@ -1,16 +1,15 @@
-<?php  include_once 'db.inc.php';
+<?php include_once 'db.inc.php';
 
-class Login extends Dbh{
+class Login extends Dbh {
 
     public function google($userInfo) {
-        require_once '../vendor/autoload.php';
-        $client = new Google_Client(['client_id' => $userInfo[2]]);
-        $payload = $client->verifyIdToken($userInfo[1]);
-        if (!$payload) {
-            echo 'error';
-            return;
-        } 
-
+        // require_once '../vendor/autoload.php';
+        // $client = new Google_Client(['client_id' => $userInfo[2]]);
+        // $payload = $client->verifyIdToken($userInfo[1]);
+        // if (!$payload) {
+        //     echo 'error';
+        //     return;
+        // } 
         $userExist = $this->checkIfUserExistsExternal('google', $userInfo);
         if($userExist == 'empty') $this->insert('google', $userInfo);
         else if($userExist == 'ID') $this->updateID('googleID', $userInfo);
@@ -154,11 +153,46 @@ class Login extends Dbh{
         $i = array_rand($colors);
         return $colors[$i];
     }
+
+    public function news($array) {
+        echo $this->checkIfNewsIsInDB($array);
+        if($this->checkIfNewsIsInDB($array) == 'je') die;
+
+        $this->insertSource($array[4]);
+
+        $sql = 'INSERT INTO news(author,title,subtitle,URL_site,URL_img,date,text,source_id) VALUES(?,?,?,?,?,?,?,(SELECT id FROM sources WHERE name = ?))';
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([$array[0], $array[5], $array[1], $array[6], $array[7], $array[3], $array[2], $array[4]]);
+
+    }
+    public function checkIfNewsIsInDB($array) {
+        $sql = 'SELECT * FROM news WHERE title = ? AND author = ?';
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([$array[5], $array[0]]);
+        $row = $stmt->fetch();
+        if($row) return 'je';
+        else return 'ni';
+    }
+    public function insertSource($name) {
+        if($this->checkIfSourceIsInDB($name) == 'je') return;
+        $sql = 'INSERT INTO sources(name) VALUES (?)';
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([$name]);
+    }
+    public function checkIfSourceIsInDB($name) {
+        $sql = 'SELECT * FROM sources WHERE name = ?';
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([$name]);
+        $row = $stmt->fetch();
+        if($row) return 'je';
+        else return 'ni';
+    }
+
 }
 
 $loginObj = new Login();
-
-if($_SERVER['REQUEST_METHOD'] !== 'POST') return;
+if($_SERVER['REQUEST_METHOD'] !== 'POST') die;
 else if(isset($_POST['google'])) $loginObj->google(json_decode($_POST['google']));
 else if(isset($_POST['facebook'])) $loginObj->facebook(json_decode($_POST['facebook']));
 else if(isset($_POST['standard'])) $loginObj->standard(json_decode($_POST['standard']));
+else if(isset($_POST['news'])) $loginObj->news(json_decode($_POST['news']));

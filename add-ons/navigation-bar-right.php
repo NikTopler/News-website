@@ -12,19 +12,19 @@
                     else $str = '';
 
                     if($_SESSION['profile_choice'] == 0) 
-                        echo ('<div class="img small" '.$str.'><img src="'.$path.$_SESSION['profile_img'].'" class="imga"></div>');
+                        echo ('<div class="img small test" '.$str.'><img src="'.$path.$_SESSION['profile_img'].'" class="imga"></div>');
                     else if($_SESSION['profile_choice'] == 1) 
-                        echo ('<div class="img small" '.$str.' style="background-color: '.$_SESSION['profile_color'].';">
+                        echo ('<div class="img small test" '.$str.' style="background-color: '.$_SESSION['profile_color'].';">
                                     <div class="letter">
                                         <span>'.$_SESSION['letter'].'</span>
                                     </div>
                                 </div>');
                     else if($_SESSION['profile_choice'] == 2) 
-                        echo ('<div class="img small" '.$str.'><img src="'.$_SESSION['google_profile_img'].'" class="imga"></div>');
+                        echo ('<div class="img small test" '.$str.'><img src="'.$_SESSION['google_profile_img'].'" class="imga"></div>');
                     else if($_SESSION['profile_choice'] == 3) 
-                        echo ('<div class="img small"'.$str.'><img src="'.$_SESSION['facebook_profile_img'].'" class="imga"></div>');
+                        echo ('<div class="img small test"'.$str.'><img src="'.$_SESSION['facebook_profile_img'].'" class="imga"></div>');
                     else if($_SESSION['profile_choice'] == 4) 
-                        echo ('<div class="img small" '.$str.'><img src="'.$_SESSION['github_profile_img'].'" class="imga"></div>');
+                        echo ('<div class="img small test" '.$str.'><img src="'.$_SESSION['github_profile_img'].'" class="imga"></div>');
 
                 ?>
                 
@@ -104,7 +104,7 @@
 
         </div>
         <div class="middle-div">
-            <div class="container" <?php if($_SESSION['googleID'] == 0) echo 'onclick="logOut(\'#login\')"' ?>>
+            <div class="container" <?php if($_SESSION['googleID'] == 0) echo 'onclick="logout(\'#login\')"' ?>>
                <div class="google">
                     <div>
                         <i class="fab fa-google icon"></i>
@@ -117,7 +117,7 @@
                     </span>
                </div>
             </div>
-            <div class="container" <?php if($_SESSION['facebookID'] == 0) echo 'onclick="logOut(\'#login\')"' ?>>
+            <div class="container" <?php if($_SESSION['facebookID'] == 0) echo 'onclick="logout(\'#login\')"' ?>>
                 <div class="facebook">
                     <div>
                         <i class="fab fa-facebook icon"></i>
@@ -130,7 +130,7 @@
                     </span>
                 </div>
             </div>
-            <div class="container" <?php if($_SESSION['githubID'] == 0) echo 'onclick="logOut(\'#login\')"' ?>>
+            <div class="container" <?php if($_SESSION['githubID'] == 0) echo 'onclick="logout(\'#login\')"' ?>>
                 <div class="github">
                     <div>
                         <i class="fab fa-github icon"></i>
@@ -146,7 +146,7 @@
         </div>
         <div class="bottom-div">
             <div class="sign-out">
-                <div class="button-container" onclick="<?php if(strpos($_SERVER['REQUEST_URI'], 'account')) echo 'logout(\'\')'; else echo 'logOut(\'\')';?>">
+                <div class="button-container" onclick="<?php if(strpos($_SERVER['REQUEST_URI'], 'account')) echo 'logout(\'\')'; else echo 'logout(\'\')';?>">
                     <span>
                         Sign out
                     </span>

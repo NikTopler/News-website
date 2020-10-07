@@ -89,7 +89,13 @@ body{
         .company-date:hover .tooltiptext,
         .outter-container:hover .tooltiptext,
         .plus-icon-container:hover .tooltiptext,
-        .trash-icon-container:hover .tooltiptext{
+        .trash-icon-container:hover .tooltiptext,
+        .google:hover .tooltiptext,
+        .facebook:hover .tooltiptext,
+        .costum:hover .tooltiptext,
+        .extra-circle:hover +.tooltiptext,
+        .save-circle:hover +.tooltiptext,
+        .author:hover .tooltiptext{
             visibility: visible;
             opacity: 1;
             font-size: 0.7em;
@@ -100,7 +106,7 @@ body{
             width: fit-content;
             border-radius: 3px;
             padding: 4px 6px;
-            z-index: 12;
+            z-index: 100000;
             white-space: nowrap;
             transition: opacity 0.3s; 
             font-size: 0.8rem !important;
@@ -155,6 +161,17 @@ body{
         -webkit-transition: all ease-in-out .2s;
         -o-transition: all ease-in-out .2s;
         transition: all ease-in-out .2s;
+    }
+    .blue-button {
+        padding: 8px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--blue-medium);
+        border-radius: 0.25rem;
+        color: var(--bg);
+        transition: all ease-in-out .15;
+        cursor: pointer;
     }
     
     .background-shadow{

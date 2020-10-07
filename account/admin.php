@@ -122,10 +122,8 @@
                                     }
 
                                 }
-
                                 $generateObj = new generateUsers();
                                 $generateObj->generate();
-
                             ?>
                         </tbody>
                     </table>
@@ -135,7 +133,8 @@
         </div>
 
     </main>
-
+    <?php  include '../add-ons/profileImg.php' ?>
+    <div class="fixed" id="overlay"></div>
 </body>
 
 </html>

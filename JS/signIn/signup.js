@@ -152,7 +152,7 @@ function managePasswordVisibility(element) {
         pswRepeatInput.type = 'password'
     }
 }
-const websiteURL = 'http://localhost:8080/News-website/'
+const websiteURL = 'https://news.niktopler.com/'
 
 function urlOpen(string) { window.location.replace(`${websiteURL}headlines.php${string}`) }
 

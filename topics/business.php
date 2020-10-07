@@ -15,7 +15,7 @@
                                     <i class="far fa-chart-line fa-lg"></i>
                                 </div>
                             <div class="title">
-                                    <h2>Buisiness</h2>
+                                    <h2>Business</h2>
                             </div>
                             </div>
                             <div class="buttons">
@@ -44,6 +44,7 @@
     <div class="fixed" id="overlay"></div>
 
     <?php include '../add-ons/footer-scripts.php' ?>
+    <?php  include '../add-ons/profileImg.php' ?>
 
 </body>
 

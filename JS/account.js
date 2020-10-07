@@ -229,7 +229,6 @@ const check = {
             body: createFormData(string, array)
         })
         const data = await res.text()
-        console.log(data)
         if(data === 'success') openLinks('/account/personal.php')
         else error.passwordOldAfter()
     }
@@ -390,10 +389,11 @@ async function admin(action, email) {
 
 let imageUploadActive = false
 let currentImageUploadLocation
+let newImg = false
 async function submitProfileImageUploadForm() {
 
     if(document.getElementById('file-upload').value) {
-
+        errorSpanUploadImage.classList.remove('light-green-color')
         let photo = document.getElementById("file-upload").files[0]
         let formData = new FormData()
         
@@ -408,30 +408,55 @@ async function submitProfileImageUploadForm() {
         else if(text === 'error') errorSpanUploadImage.innerHTML = `${icon} There have been some sort of an error`
         else if(text === 'extension not allowed') errorSpanUploadImage.innerHTML = `${icon} Only jpeg, jpg, png are allowed`
         else {
+            newImg = true
             imageUploadActive = true
             errorSpanUploadImage.classList.remove('red-color')
             errorSpanUploadImage.classList.add('light-green-color')
             errorSpanUploadImage.innerHTML = 'Image has been successfully added' 
-             
             currentImageUploadLocation = text.split(' ')[1]
-            
-            array = JSON.stringify(['0', currentImageUploadLocation])
-            const res = await fetch('../include/update.inc.php', {
-                method: "POST", 
-                body: createFormData('imageUpload', array)
-            })
-            const data = await res.text()
-            console.log(data)        
+            console.log(currentImageUploadLocation)
+            if(document.querySelector('#external-img-container div.costum')) {
+                document.querySelector('#external-img-container div.costum').remove()
+                removeImg('../' + currentImageUploadLocation)
+            } 
+                let div = document.createElement('div')
+                div.style.display = 'flex'
+                div.style.alignItems = 'center'
+                div.style.justifyContent = 'center'
+                div.classList.add('google','costum')
+                div.onclick = () => { selectImg(div) }
+            let img = document.createElement('img')
+                img.src = '../' + currentImageUploadLocation
+                img.alt = 'profile'
+                img.classList.add('img','medium')
+            div.appendChild(img)
+            document.querySelector('#external-img-container').insertBefore(div , document.querySelector('#external-img-container').children[0])
         }
-        document.getElementById('file-upload').value = ''
+        document.getElementById('file-upload').value = null
 
     } else imageNameLabel.innerHTML = 'No file selected'
 
 }
 function fileChange() {
-    console.log(document.querySelector('.insert-photo-container .footer'))
     document.querySelector('.insert-photo-container .footer .footer').classList.remove('disable')
     let a = document.getElementById('file-upload').value.split(`fakepath`).pop().replace(/\\/g, '')
     a = a.substring(0, 20)+'...'
     imageNameLabel.innerHTML = a
+}
+
+function selectImg(element) {
+    if(document.querySelector('.check-mark')) document.querySelector('.check-mark').remove()
+    let div = document.createElement('div')
+        div.classList.add('check-mark')
+    let i = document.createElement('i')
+        i.classList.add('far','fa-check')
+    div.appendChild(i)
+    element.appendChild(div)
+}
+
+async function removeImg(name) {
+    await fetch('../include/update.inc.php', {                          
+        method: "POST", 
+        body: createFormData('deleteImg', name)
+    })
 }
