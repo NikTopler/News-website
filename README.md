@@ -9,7 +9,7 @@ Weather is shown based on your location. You can switch between Celsius (°C), F
 ## INSTALLATION
 Download the files and place them in a folder. Import the database into MySQL.
 You will need to set up your own API keys on <a href="https://newsapi.org/">News API</a>, <a href="https://www.weatherapi.com/">Weather API</a>
-If you want to use the Google and Facebook login, you will have to request your own API key for both of them. Once you do that and replace it, it should work.ž
+If you want to use the Google and Facebook login, you will have to request your own API key for both of them. Once you do that and replace it, it should work.
 
 ## CONTRIBUTING
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
